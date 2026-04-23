@@ -38,7 +38,7 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-white placeholder-grey-300">
             <FormField
                 label="Correo"
                 id="email"
