@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LoginForm from "../components/organisms/LoginForm";
 
 const LoginPage = () => {
@@ -8,6 +9,18 @@ const LoginPage = () => {
                     Iniciar sesión
                 </h1>
                 <LoginForm />
+
+                <div className="mt-6 text-center text-gray-400">
+                    <p className="text-sm">
+                        ¿No tienes cuenta?{" "}
+                        <Link
+                            to="/register"
+                            className="text-white font-semibold hover:text-gray-200 transition"
+                        >
+                            Registrarse aquí
+                        </Link>
+                    </p>
+                </div>
             </section>
         </main>
     );

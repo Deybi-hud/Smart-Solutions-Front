@@ -1,56 +1,71 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormField from "../molecules/FormField";
 import Button from "../atoms/Button";
+import ErrorMessage from "../atoms/ErrorMessage";
+import { useRegisterMutation } from "../../api/authApi";
+import { validateRegisterForm } from "../../utils/validations";
 
 const RegisterForm = () => {
+    const navigate = useNavigate();
+    const [register, { isLoading }] = useRegisterMutation();
+
     const [form, setForm] = useState({
         name: "",
+        lastName: "",
         email: "",
         password: "",
         confirmPassword: "",
+        phone: "",
     });
 
     const [errors, setErrors] = useState({});
+    const [generalError, setGeneralError] = useState("");
 
     const handleChange = (e) => {
         setForm({
             ...form,
             [e.target.name]: e.target.value,
         });
+        if (errors[e.target.name]) {
+            setErrors({
+                ...errors,
+                [e.target.name]: null,
+            });
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setGeneralError("");
 
-        const newErrors = {};
-
-        if (!form.name.trim()) {
-            newErrors.name = "El nombre es obligatorio";
+        const validationErrors = validateRegisterForm(form);
+        if (validationErrors) {
+            setErrors(validationErrors);
+            return;
         }
 
-        if (!form.email.trim()) {
-            newErrors.email = "El correo es obligatorio";
-        }
-
-        if (!form.password.trim()) {
-            newErrors.password = "La contraseña es obligatoria";
-        } else if (form.password.length < 6) {
-            newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-        }
-
-        if (form.password !== form.confirmPassword) {
-            newErrors.confirmPassword = "Las contraseñas no coinciden";
-        }
-
-        setErrors(newErrors);
-
-        if (Object.keys(newErrors).length === 0) {
-            console.log("Registro válido", form);
+        try {
+            await register({
+                name: form.name,
+                lastName: form.lastName,
+                email: form.email,
+                password: form.password,
+                confirmPassword: form.confirmPassword,
+                phone: form.phone,
+            }).unwrap();
+            navigate("/login");
+        } catch (err) {
+            setGeneralError(
+                err?.data?.message || "Error al registrarse. Intenta de nuevo."
+            );
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 text-white placeholder-grey-300">
+        <form onSubmit={handleSubmit} className="space-y-4 text-white">
+            {generalError && <ErrorMessage message={generalError} />}
+
             <FormField
                 label="Nombre"
                 id="name"
@@ -59,6 +74,18 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 placeholder="Ingresa tu nombre"
                 error={errors.name}
+                disabled={isLoading}
+            />
+
+            <FormField
+                label="Apellido"
+                id="lastName"
+                name="lastName"
+                value={form.lastName}
+                onChange={handleChange}
+                placeholder="Ingresa tu apellido"
+                error={errors.lastName}
+                disabled={isLoading}
             />
 
             <FormField
@@ -70,6 +97,18 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 placeholder="Ingresa tu correo"
                 error={errors.email}
+                disabled={isLoading}
+            />
+
+            <FormField
+                label="Teléfono"
+                id="phone"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="Ingresa tu teléfono"
+                error={errors.phone}
+                disabled={isLoading}
             />
 
             <FormField
@@ -81,7 +120,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 placeholder="Ingresa tu contraseña"
                 error={errors.password}
-                labelClassName="text-white"
+                disabled={isLoading}
             />
 
             <FormField
@@ -93,10 +132,11 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 placeholder="Confirma tu contraseña"
                 error={errors.confirmPassword}
+                disabled={isLoading}
             />
 
-            <Button type="submit" className="w-full">
-                Registrarse
+            <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Registrando..." : "Registrarse"}
             </Button>
         </form>
     );
