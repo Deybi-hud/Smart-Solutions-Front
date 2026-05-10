@@ -1,44 +1,63 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormField from "../molecules/FormField";
 import Button from "../atoms/Button";
+import ErrorMessage from "../atoms/ErrorMessage";
+import { useLoginMutation } from "../../store/api/authApi";
+import { validateLoginForm } from "../../utils/validations";
 
 const LoginForm = () => {
+    const navigate = useNavigate();
+    const [login, { isLoading }] = useLoginMutation();
+
     const [form, setForm] = useState({
         email: "",
         password: "",
     });
 
     const [errors, setErrors] = useState({});
+    const [generalError, setGeneralError] = useState("");
 
     const handleChange = (e) => {
         setForm({
             ...form,
             [e.target.name]: e.target.value,
         });
+        if (errors[e.target.name]) {
+            setErrors({
+                ...errors,
+                [e.target.name]: null,
+            });
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setGeneralError("");
 
-        const newErrors = {};
-
-        if (!form.email.trim()) {
-            newErrors.email = "El correo es obligatorio";
+        const validationErrors = validateLoginForm(form.email, form.password);
+        if (validationErrors) {
+            setErrors(validationErrors);
+            return;
         }
 
-        if (!form.password.trim()) {
-            newErrors.password = "La contraseña es obligatoria";
-        }
-
-        setErrors(newErrors);
-
-        if (Object.keys(newErrors).length === 0) {
-            console.log("Login válido");
+        try {
+            await login({
+                email: form.email,
+                password: form.password,
+            }).unwrap();
+            navigate("/home");
+        } catch (err) {
+            setGeneralError(
+                err?.data?.message || "Error al iniciar sesión. Intenta de nuevo."
+            );
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 text-white placeholder-grey-300">
+        <form onSubmit={handleSubmit} className="space-y-4 text-white">
+            {generalError && <ErrorMessage message={generalError} />}
+
             <FormField
                 label="Correo"
                 id="email"
@@ -48,6 +67,7 @@ const LoginForm = () => {
                 onChange={handleChange}
                 placeholder="Ingresa tu correo"
                 error={errors.email}
+                disabled={isLoading}
             />
 
             <FormField
@@ -59,10 +79,11 @@ const LoginForm = () => {
                 onChange={handleChange}
                 placeholder="Ingresa tu contraseña"
                 error={errors.password}
+                disabled={isLoading}
             />
 
-            <Button type="submit" className="w-full">
-                Iniciar sesión
+            <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
         </form>
     );

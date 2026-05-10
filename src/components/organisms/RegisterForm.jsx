@@ -1,105 +1,162 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormField from "../molecules/FormField";
+import LocationSelector from "../molecules/LocationSelector";
 import Button from "../atoms/Button";
+import ErrorMessage from "../atoms/ErrorMessage";
+import { useRegisterMutation } from "../../store/api/authApi";
+import { validateRegisterForm } from "../../utils/validations";
 
 const RegisterForm = () => {
-    const [form, setForm] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-    });
+  const navigate = useNavigate();
+  const [register, { isLoading }] = useRegisterMutation();
 
-    const [errors, setErrors] = useState({});
+  const [form, setForm] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+  });
+  const [addressId, setAddressId] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState("");
 
-    const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value,
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: null });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setGeneralError("");
+
+    const validationErrors = validateRegisterForm(form);
+    if (validationErrors) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    if (!addressId) {
+      setErrors((prev) => ({ ...prev, address: "Debes seleccionar una sucursal." }));
+      return;
+    }
+
+    try {
+      await register({
+        name: form.name,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+        confirmPassword: form.confirmPassword,
+        phone: form.phone,
+        addressId,
+      }).unwrap();
+      navigate("/login");
+    } catch (err) {
+      const data = err?.data;
+      if (data?.details) {
+        const backendErrors = {};
+        Object.entries(data.details).forEach(([key, msg]) => {
+          backendErrors[key] = msg;
         });
-    };
+        setErrors(backendErrors);
+      } else {
+        setGeneralError(data?.message || "Error al registrarse. Intenta de nuevo.");
+      }
+    }
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 text-white">
+      {generalError && <ErrorMessage message={generalError} />}
 
-        const newErrors = {};
+      <FormField
+        label="Nombre"
+        id="name"
+        name="name"
+        value={form.name}
+        onChange={handleChange}
+        placeholder="Tu nombre"
+        error={errors.name}
+        disabled={isLoading}
+      />
 
-        if (!form.name.trim()) {
-            newErrors.name = "El nombre es obligatorio";
-        }
+      <FormField
+        label="Apellido"
+        id="lastName"
+        name="lastName"
+        value={form.lastName}
+        onChange={handleChange}
+        placeholder="Tu apellido"
+        error={errors.lastName}
+        disabled={isLoading}
+      />
 
-        if (!form.email.trim()) {
-            newErrors.email = "El correo es obligatorio";
-        }
+      <FormField
+        label="Correo"
+        id="email"
+        name="email"
+        type="email"
+        value={form.email}
+        onChange={handleChange}
+        placeholder="tu@correo.com"
+        error={errors.email}
+        disabled={isLoading}
+      />
 
-        if (!form.password.trim()) {
-            newErrors.password = "La contraseña es obligatoria";
-        } else if (form.password.length < 6) {
-            newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-        }
+      <FormField
+        label="Teléfono (9 dígitos)"
+        id="phone"
+        name="phone"
+        value={form.phone}
+        onChange={handleChange}
+        placeholder="912345678"
+        error={errors.phone}
+        disabled={isLoading}
+      />
 
-        if (form.password !== form.confirmPassword) {
-            newErrors.confirmPassword = "Las contraseñas no coinciden";
-        }
+      <FormField
+        label="Contraseña"
+        id="password"
+        name="password"
+        type="password"
+        value={form.password}
+        onChange={handleChange}
+        placeholder="Mínimo 8 caracteres, una mayúscula y un número"
+        error={errors.password}
+        disabled={isLoading}
+      />
 
-        setErrors(newErrors);
+      <FormField
+        label="Confirmar contraseña"
+        id="confirmPassword"
+        name="confirmPassword"
+        type="password"
+        value={form.confirmPassword}
+        onChange={handleChange}
+        placeholder="Repite tu contraseña"
+        error={errors.confirmPassword}
+        disabled={isLoading}
+      />
 
-        if (Object.keys(newErrors).length === 0) {
-            console.log("Registro válido", form);
-        }
-    };
+      <LocationSelector
+        onAddressSelect={(id) => {
+          setAddressId(id);
+          if (errors.address) setErrors((prev) => ({ ...prev, address: null }));
+        }}
+        error={errors.address}
+        disabled={isLoading}
+      />
 
-    return (
-        <form onSubmit={handleSubmit} className="space-y-4 text-white placeholder-grey-300">
-            <FormField
-                label="Nombre"
-                id="name"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Ingresa tu nombre"
-                error={errors.name}
-            />
-
-            <FormField
-                label="Correo"
-                id="email"
-                name="email"
-                type="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Ingresa tu correo"
-                error={errors.email}
-            />
-
-            <FormField
-                label="Contraseña"
-                id="password"
-                name="password"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="Ingresa tu contraseña"
-                error={errors.password}
-                labelClassName="text-white"
-            />
-
-            <FormField
-                label="Confirmar contraseña"
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirma tu contraseña"
-                error={errors.confirmPassword}
-            />
-
-            <Button type="submit" className="w-full">
-                Registrarse
-            </Button>
-        </form>
-    );
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Registrando..." : "Registrarse"}
+      </Button>
+    </form>
+  );
 };
 
 export default RegisterForm;
