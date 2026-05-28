@@ -1,0 +1,12 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - deploy
+jobs:
+  build:
+    runs-on: ubuntu-lastest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2

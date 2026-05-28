@@ -1,4 +1,12 @@
-FROM 
+FROM node:20-alpine  AS build
 WORKDIR /app
-RUN npm update
-RUN 
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine AS runtime
+WORKDIR /app
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 8080 
+CMD ["nginx", "-g", "daemon off;"]  
