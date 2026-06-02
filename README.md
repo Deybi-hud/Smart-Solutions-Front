@@ -36,7 +36,7 @@ npm install
 npm run dev
 ```
 
-El servidor se ejecutará en `http://localhost:5173` con recarga en caliente habilitada.
+El servidor se ejecutará en `d1cvogky5serqv.cloudfront.net/` 
 
 ## Compilación
 
