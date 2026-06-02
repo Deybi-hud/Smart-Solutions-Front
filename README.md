@@ -1,17 +1,93 @@
-# React + Vite
+# Smart Solutions - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación frontend de Smart Solutions desarrollada con React y Vite.
 
-Currently, two official plugins are available:
+## Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Frontend moderno y eficiente para la plataforma Smart Solutions, utilizando tecnologías de última generación para garantizar un rendimiento óptimo y una experiencia de usuario superior.
 
-## React Compiler
+## Stack Tecnológico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React** - Librería de interfaz de usuario
+- **Vite** - Herramienta de construcción y desarrollo
+- **TypeScript** - Tipado estático (recomendado)
+- **ESLint** - Linter de código
 
-## Expanding the ESLint configuration
+## Requisitos Previos
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Node.js v16 o superior
+- npm o yarn
 
+## Instalación
+
+```bash
+# Clonar el repositorio
+git clone <url-repositorio>
+
+# Instalar dependencias
+npm install
+
+# Alternativamente con yarn
+yarn install
+```
+
+## Desarrollo
+
+```bash
+# Iniciar servidor de desarrollo con HMR
+npm run dev
+
+# O con yarn
+yarn dev
+```
+
+El servidor se ejecutará en `http://localhost:5173` con recarga en caliente habilitada.
+
+## Compilación
+
+```bash
+# Generar build de producción
+npm run build
+
+# Vista previa del build
+npm run preview
+```
+
+## Configuración de Calidad
+
+### ESLint
+
+Se incluyen reglas de linting predefinidas. Para proyectos en producción, se recomienda utilizar TypeScript con reglas de análisis de tipos.
+
+### Opciones de Plugins
+
+Actualmente disponibles dos opciones de plugins oficiales:
+
+- `@vitejs/plugin-react` - Usa Oxc para mejor rendimiento
+- `@vitejs/plugin-react-swc` - Usa SWC como alternativa
+
+## Notas
+
+- React Compiler no está habilitado por defecto debido a su impacto en rendimiento de desarrollo y compilación
+- Para habilitar React Compiler, consulta la [documentación oficial](https://react.dev/learn/react-compiler/installation)
+
+## Estructura del Proyecto
+
+```
+src/
+  ├── components/     # Componentes reutilizables
+  ├── pages/         # Páginas principales
+  ├── hooks/         # Hooks personalizados
+  ├── services/      # Servicios y API calls
+  ├── utils/         # Utilidades
+  ├── styles/        # Estilos globales
+  └── App.tsx        # Componente principal
+```
+
+## Contribución
+
+Sigue las pautas de codificación del proyecto y asegúrate de que el linting sea válido antes de hacer commits.
+
+## Licencia
+
+Todos los derechos reservados.
