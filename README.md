@@ -10,13 +10,14 @@ Frontend moderno y eficiente para la plataforma Smart Solutions, utilizando tecn
 
 - **React** - Librería de interfaz de usuario
 - **Vite** - Herramienta de construcción y desarrollo
-- **TypeScript** - Tipado estático (recomendado)
 - **ESLint** - Linter de código
+- **Amazon S3** - Almacenamiento de archivos estáticos
+- **CloudFront** - CDN para distribución de contenido
 
 ## Requisitos Previos
 
 - Node.js v16 o superior
-- npm o yarn
+- npm
 
 ## Instalación
 
@@ -26,9 +27,6 @@ git clone <url-repositorio>
 
 # Instalar dependencias
 npm install
-
-# Alternativamente con yarn
-yarn install
 ```
 
 ## Desarrollo
@@ -36,9 +34,6 @@ yarn install
 ```bash
 # Iniciar servidor de desarrollo con HMR
 npm run dev
-
-# O con yarn
-yarn dev
 ```
 
 El servidor se ejecutará en `http://localhost:5173` con recarga en caliente habilitada.
@@ -57,14 +52,11 @@ npm run preview
 
 ### ESLint
 
-Se incluyen reglas de linting predefinidas. Para proyectos en producción, se recomienda utilizar TypeScript con reglas de análisis de tipos.
+Se incluyen reglas de linting predefinidas para mantener la calidad del código.
 
-### Opciones de Plugins
+## Despliegue
 
-Actualmente disponibles dos opciones de plugins oficiales:
-
-- `@vitejs/plugin-react` - Usa Oxc para mejor rendimiento
-- `@vitejs/plugin-react-swc` - Usa SWC como alternativa
+El frontend se despliega automáticamente en **Amazon S3** con distribución a través de **CloudFront**, garantizando una entrega rápida y confiable del contenido a nivel global.
 
 ## Notas
 
@@ -81,13 +73,9 @@ src/
   ├── services/      # Servicios y API calls
   ├── utils/         # Utilidades
   ├── styles/        # Estilos globales
-  └── App.tsx        # Componente principal
+  └── App.jsx        # Componente principal
 ```
 
 ## Contribución
 
 Sigue las pautas de codificación del proyecto y asegúrate de que el linting sea válido antes de hacer commits.
-
-## Licencia
-
-Todos los derechos reservados.
