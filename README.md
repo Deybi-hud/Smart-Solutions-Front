@@ -26,7 +26,7 @@ Frontend moderno y eficiente para la plataforma Smart Solutions, utilizando tecn
 git clone <url-repositorio>
 
 # Instalar dependencias
-npm install
+npm ci
 ```
 
 ## Desarrollo
