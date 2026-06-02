@@ -1,17 +1,81 @@
-# React + Vite
+# Smart Solutions - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación frontend de Smart Solutions desarrollada con React y Vite.
 
-Currently, two official plugins are available:
+## Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Frontend moderno y eficiente para la plataforma Smart Solutions, utilizando tecnologías de última generación para garantizar un rendimiento óptimo y una experiencia de usuario superior.
 
-## React Compiler
+## Stack Tecnológico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React** - Librería de interfaz de usuario
+- **Vite** - Herramienta de construcción y desarrollo
+- **ESLint** - Linter de código
+- **Amazon S3** - Almacenamiento de archivos estáticos
+- **CloudFront** - CDN para distribución de contenido
 
-## Expanding the ESLint configuration
+## Requisitos Previos
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Node.js v16 o superior
+- npm
 
+## Instalación
+
+```bash
+# Clonar el repositorio
+git clone <url-repositorio>
+
+# Instalar dependencias
+npm install
+```
+
+## Desarrollo
+
+```bash
+# Iniciar servidor de desarrollo con HMR
+npm run dev
+```
+
+El servidor se ejecutará en `d1cvogky5serqv.cloudfront.net/` 
+
+## Compilación
+
+```bash
+# Generar build de producción
+npm run build
+
+# Vista previa del build
+npm run preview
+```
+
+## Configuración de Calidad
+
+### ESLint
+
+Se incluyen reglas de linting predefinidas para mantener la calidad del código.
+
+## Despliegue
+
+El frontend se despliega automáticamente en **Amazon S3** con distribución a través de **CloudFront**, garantizando una entrega rápida y confiable del contenido a nivel global.
+
+## Notas
+
+- React Compiler no está habilitado por defecto debido a su impacto en rendimiento de desarrollo y compilación
+- Para habilitar React Compiler, consulta la [documentación oficial](https://react.dev/learn/react-compiler/installation)
+
+## Estructura del Proyecto
+
+```
+src/
+  ├── components/     # Componentes reutilizables
+  ├── pages/         # Páginas principales
+  ├── hooks/         # Hooks personalizados
+  ├── services/      # Servicios y API calls
+  ├── utils/         # Utilidades
+  ├── styles/        # Estilos globales
+  └── App.jsx        # Componente principal
+```
+
+## Contribución
+
+Sigue las pautas de codificación del proyecto y asegúrate de que el linting sea válido antes de hacer commits.
