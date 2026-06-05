@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws/,
+  baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws/",
   credentials: "include",
   prepareHeaders: (headers) => {
     headers.set("Content-Type", "application/json");
