@@ -1,36 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authApi } from "../api/authApi";
 
-const loadUser = () => {
-  try {
-    const stored = localStorage.getItem("ss_user");
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-};
-
-const saveUser = (user) => {
-  try {
-    localStorage.setItem("ss_user", JSON.stringify(user));
-  } catch {}
-};
-
-const clearUser = () => {
-  try {
-    localStorage.removeItem("ss_user");
-  } catch {}
-};
-
-const storedUser = loadUser();
-
-const initialState = {
-  user: storedUser,
-  isAuthenticated: !!storedUser,
-  isLoading: false,
-  error: null,
-};
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
