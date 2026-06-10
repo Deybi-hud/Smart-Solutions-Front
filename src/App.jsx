@@ -1,4 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useGetProfileQuery } from "./api/userApi"; 
+
 import LandingPage from "./pages/LandingPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -11,6 +14,19 @@ import CheckoutPage from "./pages/CheckoutPage";
 import PaymentResultPage from "./pages/PaymentResultPage";
 
 const App = () => {
+  useGetProfileQuery();
+
+  const { isLoading } = useSelector((state) => state.auth);
+
+  if (isLoading) {
+    return (
+      <div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <h2>Verificando sesión...</h2>
+        {/* Aquí puedes poner tu componente Spinner si tienes uno */}
+      </div>
+    );
+  }
+
   return (
     <Routes>
       <Route path="/checkout" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
