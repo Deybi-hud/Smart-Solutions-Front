@@ -7,10 +7,16 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import PrivateRoute from "./components/organisms/PrivateRoute";
 import AdminRoute from "./components/organisms/AdminRoute";
+import CheckoutPage from "./pages/CheckoutPage";
+import PaymentResultPage from "./pages/PaymentResultPage";
 
 const App = () => {
   return (
     <Routes>
+      <Route path="/checkout" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
+      <Route path="/payment/success" element={<PaymentResultPage status="success" />} />
+      <Route path="/payment/failure" element={<PaymentResultPage status="failure" />} />
+      <Route path="/payment/pending" element={<PaymentResultPage status="pending" />} />
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
