@@ -1,4 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useGetProfileQuery } from "./store/api/userApi";
 import LandingPage from "./pages/LandingPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -7,16 +9,21 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import PrivateRoute from "./components/organisms/PrivateRoute";
 import AdminRoute from "./components/organisms/AdminRoute";
-import CheckoutPage from "./pages/CheckoutPage";
-import PaymentResultPage from "./pages/PaymentResultPage";
 
 const App = () => {
+  useGetProfileQuery();
+  const { isLoading } = useSelector((state) => state.auth);
+
+  if (isLoading) {
+    return (
+      <div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <h2>Verificando sesión...</h2>
+      </div>
+    );
+  }
+
   return (
     <Routes>
-      <Route path="/checkout" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
-      <Route path="/payment/success" element={<PaymentResultPage status="success" />} />
-      <Route path="/payment/failure" element={<PaymentResultPage status="failure" />} />
-      <Route path="/payment/pending" element={<PaymentResultPage status="pending" />} />
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />

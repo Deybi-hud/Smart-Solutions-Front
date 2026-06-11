@@ -1,15 +1,20 @@
-import FormLabel from "../atoms/FormLabel";
-import Input from "../atoms/Input";
-import ErrorMessage from "../atoms/ErrorMessage";
+import TextField from "@mui/material/TextField";
 
-const FormField = ({ label, id, error, className = "", ...props }) => {
-    return (
-        <div className={`flex flex-col gap-1 ${className}`}>
-            {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-            <Input id={id} {...props} />
-            <ErrorMessage>{error}</ErrorMessage>
-        </div>
-    );
+const FormField = ({ label, id, error, className, ...props }) => {
+  return (
+    <TextField
+      id={id}
+      label={label}
+      error={!!error}
+      helperText={error || ""}
+      fullWidth
+      size="small"
+      variant="outlined"
+      className={className}
+      FormHelperTextProps={{ sx: { mx: 0 } }}
+      {...props}
+    />
+  );
 };
 
 export default FormField;

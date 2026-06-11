@@ -1,24 +1,30 @@
 import { useState } from "react";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import MuiButton from "@mui/material/Button";
 import { useSearchByEmailQuery, useSearchByPhoneQuery } from "../../store/api/userApi";
 
 const UserResult = ({ user }) => {
   if (!user) return null;
+  const rows = [
+    { label: "Nombre", value: `${user.name} ${user.lastName}` },
+    { label: "Correo", value: user.email },
+    { label: "Teléfono", value: user.phone },
+    { label: "Sucursal", value: user.sucursalName },
+  ];
   return (
-    <div className="bg-gray-800 rounded-lg p-4 space-y-2 mt-4">
-      {[
-        { label: "Nombre", value: `${user.name} ${user.lastName}` },
-        { label: "Correo", value: user.email },
-        { label: "Teléfono", value: user.phone },
-        { label: "Sucursal", value: user.sucursalName },
-      ].map(({ label, value }) =>
-        value ? (
-          <div key={label} className="flex gap-2">
-            <span className="text-gray-400 text-sm w-20 shrink-0">{label}:</span>
-            <span className="text-white text-sm">{value}</span>
-          </div>
-        ) : null
-      )}
-    </div>
+    <Box sx={{ backgroundColor: "#1f2937", borderRadius: "6px", p: 2, mt: 2 }}>
+      <Stack spacing={1}>
+        {rows.filter((r) => r.value).map(({ label, value }) => (
+          <Box key={label} sx={{ display: "flex", gap: 1 }}>
+            <Typography variant="body2" sx={{ color: "#9ca3af", width: "80px", flexShrink: 0 }}>{label}:</Typography>
+            <Typography variant="body2" sx={{ color: "#f9fafb" }}>{value}</Typography>
+          </Box>
+        ))}
+      </Stack>
+    </Box>
   );
 };
 
@@ -33,28 +39,25 @@ const SearchByEmail = () => {
   };
 
   return (
-    <div className="bg-gray-900 rounded-xl p-5 space-y-3">
-      <h3 className="text-white font-semibold text-lg">Buscar por correo</h3>
-      <form onSubmit={handleSearch} className="flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="usuario@correo.com"
-          type="email"
-          className="flex-1 rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white outline-none focus:border-blue-500"
-        />
-        <button type="submit" disabled={isLoading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-500 disabled:opacity-50 transition">
+    <Box sx={{ backgroundColor: "#111827", borderRadius: "8px", p: 3 }}>
+      <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600, mb: 2 }}>
+        Buscar por correo
+      </Typography>
+      <Stack component="form" onSubmit={handleSearch} direction="row" spacing={1}>
+        <TextField value={input} onChange={(e) => setInput(e.target.value)}
+          placeholder="usuario@correo.com" type="email" size="small" fullWidth variant="outlined" />
+        <MuiButton type="submit" variant="contained" disabled={isLoading}
+          sx={{ whiteSpace: "nowrap", boxShadow: "none" }}>
           {isLoading ? "..." : "Buscar"}
-        </button>
-      </form>
+        </MuiButton>
+      </Stack>
       {isError && (
-        <p className="text-red-400 text-sm">
+        <Typography variant="body2" sx={{ color: "#ef4444", mt: 1 }}>
           {error?.data?.message || "Usuario no encontrado."}
-        </p>
+        </Typography>
       )}
       <UserResult user={data} />
-    </div>
+    </Box>
   );
 };
 
@@ -69,37 +72,34 @@ const SearchByPhone = () => {
   };
 
   return (
-    <div className="bg-gray-900 rounded-xl p-5 space-y-3">
-      <h3 className="text-white font-semibold text-lg">Buscar por teléfono</h3>
-      <form onSubmit={handleSearch} className="flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="912345678"
-          maxLength={9}
-          className="flex-1 rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white outline-none focus:border-blue-500"
-        />
-        <button type="submit" disabled={isLoading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-500 disabled:opacity-50 transition">
+    <Box sx={{ backgroundColor: "#111827", borderRadius: "8px", p: 3 }}>
+      <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600, mb: 2 }}>
+        Buscar por teléfono
+      </Typography>
+      <Stack component="form" onSubmit={handleSearch} direction="row" spacing={1}>
+        <TextField value={input} onChange={(e) => setInput(e.target.value)}
+          placeholder="912345678" inputProps={{ maxLength: 9 }} size="small" fullWidth variant="outlined" />
+        <MuiButton type="submit" variant="contained" disabled={isLoading}
+          sx={{ whiteSpace: "nowrap", boxShadow: "none" }}>
           {isLoading ? "..." : "Buscar"}
-        </button>
-      </form>
+        </MuiButton>
+      </Stack>
       {isError && (
-        <p className="text-red-400 text-sm">
+        <Typography variant="body2" sx={{ color: "#ef4444", mt: 1 }}>
           {error?.data?.message || "Usuario no encontrado."}
-        </p>
+        </Typography>
       )}
       <UserResult user={data} />
-    </div>
+    </Box>
   );
 };
 
 const UsersPanel = () => {
   return (
-    <div className="space-y-6">
+    <Stack spacing={3}>
       <SearchByEmail />
       <SearchByPhone />
-    </div>
+    </Stack>
   );
 };
 

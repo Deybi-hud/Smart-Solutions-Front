@@ -1,30 +1,38 @@
 import { useState } from "react";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import MuiButton from "@mui/material/Button";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Divider from "@mui/material/Divider";
 import {
   useGetRegionsQuery, useCreateRegionMutation, useUpdateRegionMutation, useDeleteRegionMutation,
   useGetCommunesQuery, useCreateCommuneMutation, useUpdateCommuneMutation, useDeleteCommuneMutation,
   useGetAddressesQuery, useCreateAddressMutation, useUpdateAddressMutation, useDeleteAddressMutation,
 } from "../../store/api/locationApi";
 
+const panelSx = { backgroundColor: "#111827", borderRadius: "8px", p: 3 };
+const rowSx = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, py: 1.5 };
+
 const EditableRow = ({ label, onSave, onCancel, initialValue = "", isLoading }) => {
   const [value, setValue] = useState(initialValue);
   return (
-    <div className="flex gap-2 items-center">
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={label}
-        disabled={isLoading}
-        className="flex-1 rounded-md border border-gray-600 bg-gray-800 px-3 py-1.5 text-sm text-white outline-none focus:border-blue-500 disabled:opacity-50"
-      />
-      <button onClick={() => onSave(value)} disabled={isLoading || !value.trim()}
-        className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-500 disabled:opacity-40 transition">
+    <Stack direction="row" spacing={1}>
+      <TextField value={value} onChange={(e) => setValue(e.target.value)}
+        placeholder={label} disabled={isLoading} size="small" fullWidth />
+      <MuiButton onClick={() => onSave(value)} disabled={isLoading || !value.trim()}
+        variant="contained" size="small" sx={{ whiteSpace: "nowrap", boxShadow: "none" }}>
         {isLoading ? "..." : "Guardar"}
-      </button>
-      <button onClick={onCancel} disabled={isLoading}
-        className="border border-gray-600 text-gray-400 px-3 py-1.5 rounded-md text-sm hover:border-gray-400 transition">
+      </MuiButton>
+      <MuiButton onClick={onCancel} disabled={isLoading} variant="outlined" size="small"
+        sx={{ whiteSpace: "nowrap", borderColor: "#374151", color: "#9ca3af" }}>
         Cancelar
-      </button>
-    </div>
+      </MuiButton>
+    </Stack>
   );
 };
 
@@ -39,60 +47,55 @@ const RegionsPanel = () => {
 
   const handleCreate = async (value) => {
     setError("");
-    try {
-      await createRegion({ regionName: value }).unwrap();
-      setAdding(false);
-    } catch (e) {
-      setError(e?.data?.message || "Error al crear región.");
-    }
+    try { await createRegion({ regionName: value }).unwrap(); setAdding(false); }
+    catch (e) { setError(e?.data?.message || "Error al crear región."); }
   };
 
   const handleUpdate = async (id, value) => {
     setError("");
-    try {
-      await updateRegion({ id, data: { regionName: value } }).unwrap();
-      setEditingId(null);
-    } catch (e) {
-      setError(e?.data?.message || "Error al actualizar.");
-    }
+    try { await updateRegion({ id, data: { regionName: value } }).unwrap(); setEditingId(null); }
+    catch (e) { setError(e?.data?.message || "Error al actualizar."); }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar esta región? También se eliminarán sus comunas y sucursales.")) return;
-    try { await deleteRegion(id).unwrap(); } catch (e) { setError(e?.data?.message || "Error al eliminar."); }
+    try { await deleteRegion(id).unwrap(); }
+    catch (e) { setError(e?.data?.message || "Error al eliminar."); }
   };
 
   return (
-    <div className="bg-gray-900 rounded-xl p-5 space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-white font-semibold text-lg">Regiones</h3>
-        <button onClick={() => setAdding(true)} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-500 transition">
+    <Box sx={panelSx}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
+        <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>Regiones</Typography>
+        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small" sx={{ boxShadow: "none" }}>
           + Agregar
-        </button>
-      </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+        </MuiButton>
+      </Stack>
+      {error && <Typography variant="body2" sx={{ color: "#ef4444", mb: 1 }}>{error}</Typography>}
       {adding && (
-        <EditableRow label="Nombre de región" onSave={handleCreate} onCancel={() => setAdding(false)} isLoading={creating} />
+        <Box mb={2}>
+          <EditableRow label="Nombre de región" onSave={handleCreate} onCancel={() => setAdding(false)} isLoading={creating} />
+        </Box>
       )}
-      <ul className="space-y-2">
+      <Stack divider={<Divider />}>
         {regions.map((r) => (
-          <li key={r.id} className="flex items-center justify-between gap-2 border-b border-gray-700 pb-2">
+          <Box key={r.id} sx={rowSx}>
             {editingId === r.id ? (
               <EditableRow label="Nombre de región" initialValue={r.regionName}
                 onSave={(v) => handleUpdate(r.id, v)} onCancel={() => setEditingId(null)} isLoading={updating} />
             ) : (
               <>
-                <span className="text-gray-200 text-sm">{r.regionName}</span>
-                <div className="flex gap-2">
-                  <button onClick={() => setEditingId(r.id)} className="text-blue-400 text-xs hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(r.id)} className="text-red-400 text-xs hover:text-red-300">Eliminar</button>
-                </div>
+                <Typography variant="body2" sx={{ color: "#e5e7eb" }}>{r.regionName}</Typography>
+                <Stack direction="row" spacing={1}>
+                  <MuiButton size="small" onClick={() => setEditingId(r.id)} sx={{ color: "#60a5fa", minWidth: 0 }}>Editar</MuiButton>
+                  <MuiButton size="small" onClick={() => handleDelete(r.id)} sx={{ color: "#ef4444", minWidth: 0 }}>Eliminar</MuiButton>
+                </Stack>
               </>
             )}
-          </li>
+          </Box>
         ))}
-      </ul>
-    </div>
+      </Stack>
+    </Box>
   );
 };
 
@@ -109,6 +112,17 @@ const CommunesPanel = () => {
   const [editName, setEditName] = useState("");
   const [editRegionId, setEditRegionId] = useState("");
   const [error, setError] = useState("");
+
+  const RegionSelect = ({ value, onChange }) => (
+    <FormControl size="small" sx={{ minWidth: "140px" }}>
+      <InputLabel>Región</InputLabel>
+      <Select value={value} onChange={onChange} label="Región"
+        MenuProps={{ PaperProps: { sx: { backgroundColor: "#1f2937" } } }}>
+        <MenuItem value=""><em style={{ color: "#9ca3af" }}>Región</em></MenuItem>
+        {regions.map((r) => <MenuItem key={r.id} value={r.id}>{r.regionName}</MenuItem>)}
+      </Select>
+    </FormControl>
+  );
 
   const handleCreate = async () => {
     setError("");
@@ -130,65 +144,67 @@ const CommunesPanel = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar esta comuna?")) return;
-    try { await deleteCommune(id).unwrap(); } catch (e) { setError(e?.data?.message || "Error al eliminar."); }
+    try { await deleteCommune(id).unwrap(); }
+    catch (e) { setError(e?.data?.message || "Error al eliminar."); }
   };
 
   const startEdit = (c) => { setEditingId(c.id); setEditName(c.communeName); setEditRegionId(String(c.regionId)); };
 
-  const SelectRegion = ({ value, onChange }) => (
-    <select value={value} onChange={onChange}
-      className="rounded-md border border-gray-600 bg-gray-800 px-2 py-1.5 text-sm text-white outline-none focus:border-blue-500">
-      <option value="">Región</option>
-      {regions.map((r) => <option key={r.id} value={r.id}>{r.regionName}</option>)}
-    </select>
-  );
-
   return (
-    <div className="bg-gray-900 rounded-xl p-5 space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-white font-semibold text-lg">Comunas</h3>
-        <button onClick={() => setAdding(true)} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-500 transition">
+    <Box sx={panelSx}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
+        <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>Comunas</Typography>
+        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small" sx={{ boxShadow: "none" }}>
           + Agregar
-        </button>
-      </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+        </MuiButton>
+      </Stack>
+      {error && <Typography variant="body2" sx={{ color: "#ef4444", mb: 1 }}>{error}</Typography>}
       {adding && (
-        <div className="flex gap-2 flex-wrap">
-          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Nombre de comuna" disabled={creating}
-            className="flex-1 min-w-32 rounded-md border border-gray-600 bg-gray-800 px-3 py-1.5 text-sm text-white outline-none focus:border-blue-500 disabled:opacity-50" />
-          <SelectRegion value={newRegionId} onChange={(e) => setNewRegionId(e.target.value)} />
-          <button onClick={handleCreate} disabled={creating} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-500 disabled:opacity-40 transition">
+        <Stack direction="row" spacing={1} mb={2} flexWrap="wrap">
+          <TextField value={newName} onChange={(e) => setNewName(e.target.value)}
+            placeholder="Nombre de comuna" disabled={creating} size="small" sx={{ flex: 1, minWidth: "160px" }} />
+          <RegionSelect value={newRegionId} onChange={(e) => setNewRegionId(e.target.value)} />
+          <MuiButton onClick={handleCreate} disabled={creating} variant="contained" size="small" sx={{ boxShadow: "none" }}>
             {creating ? "..." : "Guardar"}
-          </button>
-          <button onClick={() => setAdding(false)} className="border border-gray-600 text-gray-400 px-3 py-1.5 rounded-md text-sm hover:border-gray-400 transition">Cancelar</button>
-        </div>
+          </MuiButton>
+          <MuiButton onClick={() => setAdding(false)} variant="outlined" size="small"
+            sx={{ borderColor: "#374151", color: "#9ca3af" }}>
+            Cancelar
+          </MuiButton>
+        </Stack>
       )}
-      <ul className="space-y-2">
+      <Stack divider={<Divider />}>
         {communes.map((c) => (
-          <li key={c.id} className="flex items-center justify-between gap-2 border-b border-gray-700 pb-2">
+          <Box key={c.id} sx={rowSx}>
             {editingId === c.id ? (
-              <div className="flex gap-2 flex-wrap flex-1">
-                <input value={editName} onChange={(e) => setEditName(e.target.value)} disabled={updating}
-                  className="flex-1 min-w-32 rounded-md border border-gray-600 bg-gray-800 px-2 py-1.5 text-sm text-white outline-none focus:border-blue-500 disabled:opacity-50" />
-                <SelectRegion value={editRegionId} onChange={(e) => setEditRegionId(e.target.value)} />
-                <button onClick={() => handleUpdate(c.id)} disabled={updating} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-500 disabled:opacity-40 transition">
+              <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ flex: 1 }}>
+                <TextField value={editName} onChange={(e) => setEditName(e.target.value)}
+                  disabled={updating} size="small" sx={{ flex: 1, minWidth: "160px" }} />
+                <RegionSelect value={editRegionId} onChange={(e) => setEditRegionId(e.target.value)} />
+                <MuiButton onClick={() => handleUpdate(c.id)} disabled={updating} variant="contained" size="small" sx={{ boxShadow: "none" }}>
                   {updating ? "..." : "Guardar"}
-                </button>
-                <button onClick={() => setEditingId(null)} className="border border-gray-600 text-gray-400 px-3 py-1.5 rounded-md text-sm hover:border-gray-400 transition">Cancelar</button>
-              </div>
+                </MuiButton>
+                <MuiButton onClick={() => setEditingId(null)} variant="outlined" size="small"
+                  sx={{ borderColor: "#374151", color: "#9ca3af" }}>
+                  Cancelar
+                </MuiButton>
+              </Stack>
             ) : (
               <>
-                <span className="text-gray-200 text-sm">{c.communeName} <span className="text-gray-500 text-xs">— {c.regionName}</span></span>
-                <div className="flex gap-2">
-                  <button onClick={() => startEdit(c)} className="text-blue-400 text-xs hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(c.id)} className="text-red-400 text-xs hover:text-red-300">Eliminar</button>
-                </div>
+                <Typography variant="body2" sx={{ color: "#e5e7eb" }}>
+                  {c.communeName}{" "}
+                  <Typography component="span" variant="caption" sx={{ color: "#6b7280" }}>— {c.regionName}</Typography>
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <MuiButton size="small" onClick={() => startEdit(c)} sx={{ color: "#60a5fa", minWidth: 0 }}>Editar</MuiButton>
+                  <MuiButton size="small" onClick={() => handleDelete(c.id)} sx={{ color: "#ef4444", minWidth: 0 }}>Eliminar</MuiButton>
+                </Stack>
               </>
             )}
-          </li>
+          </Box>
         ))}
-      </ul>
-    </div>
+      </Stack>
+    </Box>
   );
 };
 
@@ -205,15 +221,18 @@ const AddressesPanel = () => {
   const [editForm, setEditForm] = useState(emptyForm);
   const [error, setError] = useState("");
 
-  const SelectCommune = ({ value, onChange }) => (
-    <select value={value} onChange={onChange}
-      className="rounded-md border border-gray-600 bg-gray-800 px-2 py-1.5 text-sm text-white outline-none focus:border-blue-500">
-      <option value="">Comuna</option>
-      {communes.map((c) => <option key={c.id} value={c.id}>{c.communeName}</option>)}
-    </select>
+  const CommuneSelect = ({ value, onChange }) => (
+    <FormControl size="small" sx={{ minWidth: "140px" }}>
+      <InputLabel>Comuna</InputLabel>
+      <Select value={value} onChange={onChange} label="Comuna"
+        MenuProps={{ PaperProps: { sx: { backgroundColor: "#1f2937" } } }}>
+        <MenuItem value=""><em style={{ color: "#9ca3af" }}>Comuna</em></MenuItem>
+        {communes.map((c) => <MenuItem key={c.id} value={c.id}>{c.communeName}</MenuItem>)}
+      </Select>
+    </FormControl>
   );
 
-  const fields = [
+  const addressFields = [
     { key: "sucursalName", placeholder: "Nombre sucursal" },
     { key: "street", placeholder: "Calle" },
     { key: "number", placeholder: "Número" },
@@ -243,7 +262,8 @@ const AddressesPanel = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar esta sucursal?")) return;
-    try { await deleteAddress(id).unwrap(); } catch (e) { setError(e?.data?.message || "Error al eliminar."); }
+    try { await deleteAddress(id).unwrap(); }
+    catch (e) { setError(e?.data?.message || "Error al eliminar."); }
   };
 
   const startEdit = (a) => {
@@ -251,69 +271,76 @@ const AddressesPanel = () => {
     setEditForm({ sucursalName: a.sucursalName, street: a.street, number: a.number, communeId: String(a.communeId) });
   };
 
-  const AddressForm = ({ values, onChange, onCommune, onSave, onCancel, loading }) => (
-    <div className="flex gap-2 flex-wrap">
-      {fields.map(({ key, placeholder }) => (
-        <input key={key} value={values[key]} onChange={(e) => onChange(key, e.target.value)} placeholder={placeholder} disabled={loading}
-          className="flex-1 min-w-28 rounded-md border border-gray-600 bg-gray-800 px-2 py-1.5 text-sm text-white outline-none focus:border-blue-500 disabled:opacity-50" />
-      ))}
-      <SelectCommune value={values.communeId} onChange={onCommune} />
-      <button onClick={onSave} disabled={loading} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-500 disabled:opacity-40 transition">
-        {loading ? "..." : "Guardar"}
-      </button>
-      <button onClick={onCancel} className="border border-gray-600 text-gray-400 px-3 py-1.5 rounded-md text-sm hover:border-gray-400 transition">Cancelar</button>
-    </div>
-  );
-
   const communeName = (id) => communes.find((c) => String(c.id) === String(id))?.communeName || "";
 
+  const AddressForm = ({ values, onChange, onCommune, onSave, onCancel, loading }) => (
+    <Stack direction="row" spacing={1} flexWrap="wrap">
+      {addressFields.map(({ key, placeholder }) => (
+        <TextField key={key} value={values[key]} onChange={(e) => onChange(key, e.target.value)}
+          placeholder={placeholder} disabled={loading} size="small" sx={{ flex: 1, minWidth: "120px" }} />
+      ))}
+      <CommuneSelect value={values.communeId} onChange={onCommune} />
+      <MuiButton onClick={onSave} disabled={loading} variant="contained" size="small" sx={{ boxShadow: "none" }}>
+        {loading ? "..." : "Guardar"}
+      </MuiButton>
+      <MuiButton onClick={onCancel} variant="outlined" size="small"
+        sx={{ borderColor: "#374151", color: "#9ca3af" }}>
+        Cancelar
+      </MuiButton>
+    </Stack>
+  );
+
   return (
-    <div className="bg-gray-900 rounded-xl p-5 space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-white font-semibold text-lg">Sucursales</h3>
-        <button onClick={() => setAdding(true)} className="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm hover:bg-blue-500 transition">
+    <Box sx={panelSx}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
+        <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>Sucursales</Typography>
+        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small" sx={{ boxShadow: "none" }}>
           + Agregar
-        </button>
-      </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+        </MuiButton>
+      </Stack>
+      {error && <Typography variant="body2" sx={{ color: "#ef4444", mb: 1 }}>{error}</Typography>}
       {adding && (
-        <AddressForm values={form} onChange={(k, v) => setForm({ ...form, [k]: v })}
-          onCommune={(e) => setForm({ ...form, communeId: e.target.value })}
-          onSave={handleCreate} onCancel={() => setAdding(false)} loading={creating} />
+        <Box mb={2}>
+          <AddressForm values={form} onChange={(k, v) => setForm({ ...form, [k]: v })}
+            onCommune={(e) => setForm({ ...form, communeId: e.target.value })}
+            onSave={handleCreate} onCancel={() => setAdding(false)} loading={creating} />
+        </Box>
       )}
-      <ul className="space-y-2">
+      <Stack divider={<Divider />}>
         {addresses.map((a) => (
-          <li key={a.id} className="flex items-center justify-between gap-2 border-b border-gray-700 pb-2">
+          <Box key={a.id} sx={rowSx}>
             {editingId === a.id ? (
               <AddressForm values={editForm} onChange={(k, v) => setEditForm({ ...editForm, [k]: v })}
                 onCommune={(e) => setEditForm({ ...editForm, communeId: e.target.value })}
                 onSave={() => handleUpdate(a.id)} onCancel={() => setEditingId(null)} loading={updating} />
             ) : (
               <>
-                <span className="text-gray-200 text-sm">
+                <Typography variant="body2" sx={{ color: "#e5e7eb" }}>
                   {a.sucursalName} — {a.street} {a.number}
-                  <span className="text-gray-500 text-xs ml-1">({communeName(a.communeId)})</span>
-                </span>
-                <div className="flex gap-2">
-                  <button onClick={() => startEdit(a)} className="text-blue-400 text-xs hover:text-blue-300">Editar</button>
-                  <button onClick={() => handleDelete(a.id)} className="text-red-400 text-xs hover:text-red-300">Eliminar</button>
-                </div>
+                  <Typography component="span" variant="caption" sx={{ color: "#6b7280", ml: 0.5 }}>
+                    ({communeName(a.communeId)})
+                  </Typography>
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <MuiButton size="small" onClick={() => startEdit(a)} sx={{ color: "#60a5fa", minWidth: 0 }}>Editar</MuiButton>
+                  <MuiButton size="small" onClick={() => handleDelete(a.id)} sx={{ color: "#ef4444", minWidth: 0 }}>Eliminar</MuiButton>
+                </Stack>
               </>
             )}
-          </li>
+          </Box>
         ))}
-      </ul>
-    </div>
+      </Stack>
+    </Box>
   );
 };
 
 const LocationPanel = () => {
   return (
-    <div className="space-y-6">
+    <Stack spacing={3}>
       <RegionsPanel />
       <CommunesPanel />
       <AddressesPanel />
-    </div>
+    </Stack>
   );
 };
 

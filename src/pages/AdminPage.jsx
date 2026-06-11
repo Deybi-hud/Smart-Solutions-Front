@@ -1,47 +1,40 @@
 import { useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
 import LocationPanel from "../components/organisms/LocationPanel";
 import UsersPanel from "../components/organisms/UsersPanel";
 
-const TABS = [
-  { key: "locations", label: "Regiones / Comunas / Sucursales" },
-  { key: "users", label: "Usuarios" },
-];
-
 const AdminPage = () => {
-  const [activeTab, setActiveTab] = useState("locations");
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-950">
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#030712" }}>
       <NavBar />
-      <main className="flex-1 py-8 px-4">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold text-white mb-6">Panel de Administración</h1>
+      <Box component="main" sx={{ flex: 1, py: 4, px: 2 }}>
+        <Box sx={{ maxWidth: "768px", mx: "auto" }}>
+          <Typography variant="h4" sx={{ color: "#ffffff", fontWeight: 700, mb: 3 }}>
+            Panel de Administración
+          </Typography>
 
-          {/* Tabs */}
-          <div className="flex gap-2 mb-6 border-b border-gray-700">
-            {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`pb-3 px-1 text-sm font-medium border-b-2 transition ${
-                  activeTab === tab.key
-                    ? "border-blue-500 text-blue-400"
-                    : "border-transparent text-gray-400 hover:text-white"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+          <Tabs
+            value={activeTab}
+            onChange={(_, v) => setActiveTab(v)}
+            sx={{ mb: 3, borderBottom: "1px solid #1f2937" }}
+          >
+            <Tab label="Regiones / Comunas / Sucursales" />
+            <Tab label="Usuarios" />
+          </Tabs>
 
-          {activeTab === "locations" && <LocationPanel />}
-          {activeTab === "users" && <UsersPanel />}
-        </div>
-      </main>
+          {activeTab === 0 && <LocationPanel />}
+          {activeTab === 1 && <UsersPanel />}
+        </Box>
+      </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

@@ -1,20 +1,25 @@
-const Button = ({ children, className = "", type = "button", disabled = false, ...props }) => {
-    const disabledStyles = disabled ? "opacity-60 cursor-not-allowed hover:bg-white" : "hover:bg-gray-200";
+import MuiButton from "@mui/material/Button";
 
-    return (
-        <button
-            {...props}
-            type={type}
-            disabled={disabled}
-            className={`rounded-md px-3 py-1.5 text-sm font-semibold text-black 
-            bg-white 
-            focus-visible:outline-gray-400 focus-visible:outline-2
-            ${disabledStyles}
-            ${className}`}
-        >
-            {children}
-        </button>
-    );
+const Button = ({ children, type = "button", disabled = false, onClick, ...props }) => {
+  return (
+    <MuiButton
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      variant="contained"
+      fullWidth
+      sx={{
+        backgroundColor: "#ffffff",
+        color: "#000000",
+        boxShadow: "none",
+        "&:hover": { backgroundColor: "#e5e7eb", boxShadow: "none" },
+        "&.Mui-disabled": { backgroundColor: "#ffffff", opacity: 0.6, color: "#000000" },
+      }}
+      {...props}
+    >
+      {children}
+    </MuiButton>
+  );
 };
 
 export default Button;
