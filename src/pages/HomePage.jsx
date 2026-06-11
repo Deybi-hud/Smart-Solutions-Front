@@ -5,14 +5,12 @@ import Grid from "@mui/material/Grid";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
 
-// Tarjetas del dashboard principal
 const cards = [
   { title: "Planes activos", desc: "Revisa tus planes y progreso desde tu perfil." },
   { title: "Sucursales", desc: "Encuentra la sucursal más cercana a ti." },
   { title: "Soporte", desc: "Contáctanos cuando lo necesites." },
 ];
 
-// Ítems de la sección "¿Quiénes somos?"
 const aboutItems = [
   { title: "Misión", desc: "Proporcionar un camino para poder alcanzar sus objetivos." },
   { title: "Visión", desc: "Ser la empresa número uno en innovación, sustentabilidad y cuidado personal." },
@@ -23,7 +21,6 @@ const HomePage = () => {
   const [showAbout, setShowAbout] = useState(false);
 
   return (
-    // Fondo general de la página: blanco rosado muy suave
     <Box
       sx={{
         minHeight: "100vh",
@@ -36,10 +33,8 @@ const HomePage = () => {
 
       <Box component="main" sx={{ flex: 1, py: { xs: 4, sm: 6 }, px: 2 }}>
         {!showAbout ? (
-          // ── Vista principal: bienvenida + tarjetas ─────────────────────────
           <Box sx={{ maxWidth: "900px", mx: "auto" }}>
 
-            {/* Bloque de bienvenida centrado */}
             <Box sx={{ textAlign: "center", py: 6 }}>
               <Typography
                 variant="h3"
@@ -52,15 +47,13 @@ const HomePage = () => {
               </Typography>
             </Box>
 
-            {/* Grid de tarjetas del dashboard */}
             <Grid container spacing={3} sx={{ mt: 1 }}>
               {cards.map((card) => (
                 <Grid item xs={12} sm={4} key={card.title}>
-                  {/* Tarjeta individual: fondo blanco, borde salmón suave */}
                   <Box
                     sx={{
                       backgroundColor: "#FFFFFF",
-                      border: "1px solid #EDD9D5",  // Borde divisor rosado
+                      border: "1px solid #EDD9D5",
                       borderRadius: "12px",
                       p: 3,
                       height: "100%",
@@ -81,7 +74,6 @@ const HomePage = () => {
             </Grid>
           </Box>
         ) : (
-          // ── Vista "¿Quiénes somos?" ────────────────────────────────────────
           <Box sx={{ maxWidth: "900px", mx: "auto" }}>
             <Typography
               variant="h4"
@@ -98,15 +90,13 @@ const HomePage = () => {
               atención 24/7.
             </Typography>
 
-            {/* Tarjetas de misión / visión / valores */}
             <Grid container spacing={3}>
               {aboutItems.map((item) => (
                 <Grid item xs={12} sm={4} key={item.title}>
-                  {/* Tarjeta con borde izquierdo salmón como detalle */}
                   <Box
                     sx={{
-                      backgroundColor: "#FAF0EE",    // Fondo panel interno
-                      borderLeft: "3px solid #F4A896", // Acento salmón izquierdo
+                      backgroundColor: "#FAF0EE",
+                      borderLeft: "3px solid #F4A896",
                       borderRadius: "8px",
                       p: 3,
                     }}

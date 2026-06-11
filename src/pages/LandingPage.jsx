@@ -8,18 +8,16 @@ import Footer from "../components/organisms/Footer";
 
 const LandingPage = () => {
   return (
-    // Contenedor raíz: fondo rosado muy suave, ocupa toda la pantalla
     <Box
       sx={{
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FDF6F4",   // Fondo base (blanco con toque rosado)
+        backgroundColor: "#FDF6F4",
       }}
     >
       <NavBar showAuthLinks />
 
-      {/* Hero section: centrado vertical y horizontal */}
       <Box
         component="section"
         sx={{
@@ -33,11 +31,10 @@ const LandingPage = () => {
           py: 10,
         }}
       >
-        {/* Título principal con acento en salmón */}
         <Typography
           variant="h2"
           sx={{
-            color: "#3D2B2B",          // Texto oscuro cálido
+            color: "#3D2B2B",
             fontWeight: 700,
             mb: 3,
             fontSize: { xs: "2.25rem", sm: "3rem", lg: "3.75rem" },
@@ -46,17 +43,15 @@ const LandingPage = () => {
         >
           Soluciones inteligentes{" "}
           <Box component="br" sx={{ display: { xs: "none", sm: "block" } }} />
-          {/* Frase destacada en color salmón-rosa */}
           <Box component="span" sx={{ color: "#D4627A" }}>
             para tu bienestar
           </Box>
         </Typography>
 
-        {/* Subtítulo descriptivo */}
         <Typography
           variant="h6"
           sx={{
-            color: "#9C7878",          // Texto secundario gris rosado
+            color: "#9C7878",
             fontWeight: 400,
             maxWidth: "600px",
             mb: 5,
@@ -69,7 +64,6 @@ const LandingPage = () => {
 
         {/* Botones de acción */}
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          {/* CTA principal: fondo rosa, texto blanco */}
           <MuiButton
             component={Link}
             to="/register"
@@ -80,7 +74,6 @@ const LandingPage = () => {
             Comenzar ahora
           </MuiButton>
 
-          {/* CTA secundario: borde salmón, sin relleno */}
           <MuiButton
             component={Link}
             to="/login"

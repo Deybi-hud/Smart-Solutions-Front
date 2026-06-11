@@ -12,8 +12,6 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
   const isAdmin = user?.role === "ADMINISTRADOR";
 
   return (
-    // AppBar: barra de navegación fija en la parte superior
-    // Fondo blanco con borde inferior rosa pálido (definido en theme.js / MuiAppBar)
     <AppBar position="sticky" elevation={0}>
       <Toolbar
         sx={{
@@ -23,13 +21,12 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
           px: 2,
         }}
       >
-        {/* Logo / Nombre de marca — color rosa primario */}
         <Typography
           component={Link}
           to="/home"
           variant="h6"
           sx={{
-            color: "#D4627A",          // Rosa primario (mismo que theme primary)
+            color: "#D4627A",
             fontWeight: 700,
             textDecoration: "none",
             flexGrow: 1,
@@ -37,16 +34,13 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
         >
           Smart Solutions
         </Typography>
-
-        {/* Zona de botones de navegación a la derecha */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {showAuthLinks ? (
-            // Vista pública: mostrar botones de login y registro
             <>
               <MuiButton
                 component={Link}
                 to="/login"
-                sx={{ color: "#9C7878" }}     // Texto gris rosado
+                sx={{ color: "#9C7878" }}
               >
                 Iniciar sesión
               </MuiButton>
@@ -60,7 +54,6 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
               </MuiButton>
             </>
           ) : (
-            // Vista autenticada: mostrar links según rol
             <>
               {onAboutClick && (
                 <MuiButton
@@ -70,7 +63,6 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
                   ¿Quiénes somos?
                 </MuiButton>
               )}
-              {/* Solo visible para administradores */}
               {isAdmin && (
                 <MuiButton
                   onClick={() => navigate("/admin")}

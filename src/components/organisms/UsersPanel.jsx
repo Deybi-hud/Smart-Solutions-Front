@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import MuiButton from "@mui/material/Button";
 import { useSearchByEmailQuery, useSearchByPhoneQuery } from "../../store/api/userApi";
 
-// ── Tarjeta de resultado de usuario ───────────────────────────────────────
 const UserResult = ({ user }) => {
   if (!user) return null;
 
@@ -18,11 +17,10 @@ const UserResult = ({ user }) => {
   ];
 
   return (
-    // Tarjeta de resultado: fondo salmón muy suave
     <Box
       sx={{
-        backgroundColor: "#FAF0EE",       // Fondo panel interno salmón suave
-        border: "1px solid #EDD9D5",      // Borde divisor rosado
+        backgroundColor: "#FAF0EE",
+        border: "1px solid #EDD9D5",
         borderRadius: "8px",
         p: 2,
         mt: 2,
@@ -31,14 +29,12 @@ const UserResult = ({ user }) => {
       <Stack spacing={1}>
         {rows.filter((r) => r.value).map(({ label, value }) => (
           <Box key={label} sx={{ display: "flex", gap: 1 }}>
-            {/* Etiqueta del campo */}
             <Typography
               variant="body2"
               sx={{ color: "#9C7878", width: "80px", flexShrink: 0 }}
             >
               {label}:
             </Typography>
-            {/* Valor del campo */}
             <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
               {value}
             </Typography>
@@ -49,7 +45,6 @@ const UserResult = ({ user }) => {
   );
 };
 
-// ── Búsqueda por email ─────────────────────────────────────────────────────
 const SearchByEmail = () => {
   const [input, setInput] = useState("");
   const [query, setQuery] = useState(null);
@@ -61,7 +56,6 @@ const SearchByEmail = () => {
   };
 
   return (
-    // Panel de búsqueda: fondo blanco con borde rosa
     <Box
       sx={{
         backgroundColor: "#FFFFFF",
@@ -74,7 +68,6 @@ const SearchByEmail = () => {
         Buscar por correo
       </Typography>
 
-      {/* Formulario de búsqueda inline */}
       <Stack component="form" onSubmit={handleSearch} direction="row" spacing={1}>
         <TextField
           value={input}
@@ -95,7 +88,6 @@ const SearchByEmail = () => {
         </MuiButton>
       </Stack>
 
-      {/* Mensaje de error si no se encuentra el usuario */}
       {isError && (
         <Typography variant="body2" sx={{ color: "#C0392B", mt: 1 }}>
           {error?.data?.message || "Usuario no encontrado."}
@@ -107,7 +99,6 @@ const SearchByEmail = () => {
   );
 };
 
-// ── Búsqueda por teléfono ──────────────────────────────────────────────────
 const SearchByPhone = () => {
   const [input, setInput] = useState("");
   const [query, setQuery] = useState(null);
@@ -162,7 +153,6 @@ const SearchByPhone = () => {
   );
 };
 
-// ── Panel principal de usuarios ────────────────────────────────────────────
 const UsersPanel = () => (
   <Stack spacing={3}>
     <SearchByEmail />

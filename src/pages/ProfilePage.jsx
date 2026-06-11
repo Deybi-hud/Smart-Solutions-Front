@@ -65,7 +65,6 @@ const ProfilePage = () => {
     navigate("/login");
   };
 
-  // Campos a mostrar en la vista de perfil
   const profileFields = profile
     ? [
         { label: "Nombre", value: `${profile.name} ${profile.lastName}` },
@@ -83,7 +82,6 @@ const ProfilePage = () => {
   ];
 
   return (
-    // Fondo de página: blanco rosado muy suave
     <Box
       sx={{
         minHeight: "100vh",
@@ -109,9 +107,7 @@ const ProfilePage = () => {
             </Typography>
           )}
 
-          {/* ── Vista de datos del perfil ─────────────────────────────────── */}
           {profile && !editing && (
-            // Tarjeta del perfil: fondo blanco con borde rosa suave
             <Box
               sx={{
                 backgroundColor: "#FFFFFF",
@@ -127,23 +123,19 @@ const ProfilePage = () => {
                 Mi Perfil
               </Typography>
 
-              {/* Alerta de éxito al guardar cambios */}
               {success && (
                 <Alert severity="success" sx={{ mb: 2, borderRadius: "8px" }}>
                   {success}
                 </Alert>
               )}
 
-              {/* Lista de campos del perfil con divisores */}
               <Stack sx={{ mb: 4 }}>
                 {profileFields.map(({ label, value }, i) => (
                   <Box key={label}>
                     <Box sx={{ py: 2 }}>
-                      {/* Etiqueta del campo */}
                       <Typography variant="caption" sx={{ color: "#9C7878" }}>
                         {label}
                       </Typography>
-                      {/* Valor del campo */}
                       <Typography
                         variant="body1"
                         sx={{ fontWeight: 500, color: "#3D2B2B" }}
@@ -151,15 +143,12 @@ const ProfilePage = () => {
                         {value}
                       </Typography>
                     </Box>
-                    {/* Divisor entre campos excepto el último */}
                     {i < profileFields.length - 1 && <Divider />}
                   </Box>
                 ))}
               </Stack>
 
-              {/* Botones de acción del perfil */}
               <Stack spacing={1.5}>
-                {/* Botón editar: fondo rosa primario */}
                 <MuiButton
                   onClick={handleEdit}
                   variant="contained"
@@ -168,7 +157,6 @@ const ProfilePage = () => {
                   Editar datos
                 </MuiButton>
 
-                {/* Botón cerrar sesión: fondo rojo suave */}
                 <MuiButton
                   onClick={handleLogout}
                   variant="contained"
@@ -184,9 +172,7 @@ const ProfilePage = () => {
             </Box>
           )}
 
-          {/* ── Vista de edición de datos ─────────────────────────────────── */}
           {editing && (
-            // Tarjeta de edición: misma estructura visual que la de perfil
             <Box
               sx={{
                 backgroundColor: "#FFFFFF",
@@ -202,14 +188,12 @@ const ProfilePage = () => {
                 Editar datos
               </Typography>
 
-              {/* Alerta de error al guardar */}
               {error && (
                 <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
                   {error}
                 </Alert>
               )}
 
-              {/* Formulario de edición */}
               <Stack component="form" onSubmit={handleSave} spacing={2}>
                 {editFields.map(({ label, name, placeholder }) => (
                   <TextField
@@ -226,7 +210,6 @@ const ProfilePage = () => {
                   />
                 ))}
 
-                {/* Botones de guardar / cancelar */}
                 <Stack direction="row" spacing={1.5} sx={{ pt: 1 }}>
                   <MuiButton
                     type="submit"

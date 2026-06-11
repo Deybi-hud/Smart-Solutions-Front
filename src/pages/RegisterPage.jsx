@@ -7,7 +7,6 @@ import Footer from "../components/organisms/Footer";
 
 const RegisterPage = () => {
   return (
-    // Fondo de página: blanco rosado muy suave
     <Box
       sx={{
         minHeight: "100vh",
@@ -27,7 +26,6 @@ const RegisterPage = () => {
           py: 6,
         }}
       >
-        {/* Tarjeta del formulario de registro */}
         <Paper
           elevation={0}
           sx={{
@@ -35,10 +33,9 @@ const RegisterPage = () => {
             maxWidth: "512px",
             borderRadius: "14px",
             p: 4,
-            border: "1px solid #EDD9D5",  // Borde divisor rosa suave
+            border: "1px solid #EDD9D5",
           }}
         >
-          {/* Logo como enlace a la landing */}
           <Typography
             component={Link}
             to="/"
@@ -55,7 +52,6 @@ const RegisterPage = () => {
             Smart Solutions
           </Typography>
 
-          {/* Título del formulario */}
           <Typography
             variant="h5"
             sx={{ color: "#3D2B2B", fontWeight: 700, mb: 3, textAlign: "center" }}
@@ -65,7 +61,6 @@ const RegisterPage = () => {
 
           <RegisterForm />
 
-          {/* Enlace de vuelta al login */}
           <Typography
             variant="body2"
             sx={{ color: "#9C7878", textAlign: "center", mt: 3 }}

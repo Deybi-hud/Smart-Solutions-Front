@@ -15,17 +15,13 @@ import {
   useGetAddressesQuery, useCreateAddressMutation, useUpdateAddressMutation, useDeleteAddressMutation,
 } from "../../store/api/locationApi";
 
-// ── Estilos reutilizables ──────────────────────────────────────────────────
-
-// Fondo del panel de cada sección (Regiones / Comunas / Sucursales)
 const panelSx = {
-  backgroundColor: "#FFFFFF",          // Panel blanco
-  border: "1px solid #EDD9D5",         // Borde divisor rosa suave
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #EDD9D5",
   borderRadius: "10px",
   p: 3,
 };
 
-// Fila de un ítem dentro del panel
 const rowSx = {
   display: "flex",
   alignItems: "center",
@@ -34,14 +30,12 @@ const rowSx = {
   py: 1.5,
 };
 
-// Estilos del menú desplegable de selects
 const selectMenuSx = {
   PaperProps: {
-    sx: { backgroundColor: "#FAF0EE" }, // Fondo salmón muy suave en el dropdown
+    sx: { backgroundColor: "#FAF0EE" },
   },
 };
 
-// ── Componente de fila editable ────────────────────────────────────────────
 const EditableRow = ({ label, onSave, onCancel, initialValue = "", isLoading }) => {
   const [value, setValue] = useState(initialValue);
   return (
@@ -76,7 +70,6 @@ const EditableRow = ({ label, onSave, onCancel, initialValue = "", isLoading }) 
   );
 };
 
-// ── Panel de Regiones ──────────────────────────────────────────────────────
 const RegionsPanel = () => {
   const { data: regions = [] } = useGetRegionsQuery();
   const [createRegion, { isLoading: creating }] = useCreateRegionMutation();
@@ -105,10 +98,8 @@ const RegionsPanel = () => {
   };
 
   return (
-    // Tarjeta del panel de regiones
     <Box sx={panelSx}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-        {/* Título de la sección */}
         <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600 }}>
           Regiones
         </Typography>
@@ -117,14 +108,12 @@ const RegionsPanel = () => {
         </MuiButton>
       </Stack>
 
-      {/* Mensaje de error inline */}
       {error && (
         <Typography variant="body2" sx={{ color: "#C0392B", mb: 1 }}>
           {error}
         </Typography>
       )}
 
-      {/* Formulario inline para agregar nueva región */}
       {adding && (
         <Box mb={2}>
           <EditableRow
@@ -136,12 +125,10 @@ const RegionsPanel = () => {
         </Box>
       )}
 
-      {/* Lista de regiones existentes */}
       <Stack divider={<Divider />}>
         {regions.map((r) => (
           <Box key={r.id} sx={rowSx}>
             {editingId === r.id ? (
-              // Fila en modo edición
               <EditableRow
                 label="Nombre de región"
                 initialValue={r.regionName}
@@ -150,13 +137,11 @@ const RegionsPanel = () => {
                 isLoading={updating}
               />
             ) : (
-              // Fila en modo lectura
               <>
                 <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
                   {r.regionName}
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                  {/* Botón editar: azul suave */}
                   <MuiButton
                     size="small"
                     onClick={() => setEditingId(r.id)}
@@ -164,7 +149,6 @@ const RegionsPanel = () => {
                   >
                     Editar
                   </MuiButton>
-                  {/* Botón eliminar: rojo suave */}
                   <MuiButton
                     size="small"
                     onClick={() => handleDelete(r.id)}
@@ -182,7 +166,6 @@ const RegionsPanel = () => {
   );
 };
 
-// ── Panel de Comunas ───────────────────────────────────────────────────────
 const CommunesPanel = () => {
   const { data: regions = [] } = useGetRegionsQuery();
   const { data: communes = [] } = useGetCommunesQuery();
@@ -197,7 +180,6 @@ const CommunesPanel = () => {
   const [editRegionId, setEditRegionId] = useState("");
   const [error, setError] = useState("");
 
-  // Selector de región reutilizable dentro del panel
   const RegionSelect = ({ value, onChange }) => (
     <FormControl size="small" sx={{ minWidth: "140px" }}>
       <InputLabel>Región</InputLabel>
@@ -271,7 +253,6 @@ const CommunesPanel = () => {
               <>
                 <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
                   {c.communeName}{" "}
-                  {/* Nombre de la región en texto secundario */}
                   <Typography component="span" variant="caption" sx={{ color: "#9C7878" }}>
                     — {c.regionName}
                   </Typography>
@@ -289,7 +270,6 @@ const CommunesPanel = () => {
   );
 };
 
-// ── Panel de Sucursales ────────────────────────────────────────────────────
 const AddressesPanel = () => {
   const { data: communes = [] } = useGetCommunesQuery();
   const { data: addresses = [] } = useGetAddressesQuery();
@@ -411,7 +391,6 @@ const AddressesPanel = () => {
   );
 };
 
-// ── Componente principal que une los tres paneles ──────────────────────────
 const LocationPanel = () => (
   <Stack spacing={3}>
     <RegionsPanel />
