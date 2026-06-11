@@ -14,13 +14,11 @@ export const userApi = createApi({
   baseQuery,
   tagTypes: ["Profile", "Users"],
   endpoints: (builder) => ({
-    // Perfil propio
     getProfile: builder.query({
       query: () => "/api/v1/users/profile",
       providesTags: ["Profile"],
     }),
 
-    // Actualizar contacto propio (name, lastName, phone)
     updateContact: builder.mutation({
       query: (data) => ({
         url: "/api/v1/users/profile/update",
@@ -30,7 +28,6 @@ export const userApi = createApi({
       invalidatesTags: ["Profile"],
     }),
 
-    // Logout
     logout: builder.mutation({
       query: () => ({
         url: "/api/v1/users/logout",
@@ -38,25 +35,21 @@ export const userApi = createApi({
       }),
     }),
 
-    // Admin: buscar por email
     searchByEmail: builder.query({
       query: (email) => `/api/v1/admin/users/search-email/${email}`,
       providesTags: ["Users"],
     }),
 
-    // Admin: buscar por teléfono
     searchByPhone: builder.query({
       query: (phone) => `/api/v1/admin/users/search-phone/${phone}`,
       providesTags: ["Users"],
     }),
 
-    // Admin: listar todos
     listUsers: builder.query({
       query: () => "/api/v1/admin/users",
       providesTags: ["Users"],
     }),
 
-    // Admin: actualizar usuario por email
     updateUserByEmail: builder.mutation({
       query: ({ email, data }) => ({
         url: `/api/v1/admin/users/update-by-email/${email}`,
