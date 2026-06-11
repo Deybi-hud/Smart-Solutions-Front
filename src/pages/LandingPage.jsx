@@ -1,36 +1,86 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import MuiButton from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-950">
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#030712" }}>
       <NavBar showAuthLinks />
-        <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-20">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Soluciones inteligentes <br />
-            <span className="text-blue-400">para tu bienestar</span>
-          </h1>
-          <p className="text-gray-300 text-lg sm:text-xl max-w-2xl mb-10">
-            Planes personalizados, guía experta y acompañamiento 24/7 para que alcances tus metas físicas.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              to="/register"
-              className="bg-blue-600 text-white px-8 py-3 rounded-md text-base font-semibold hover:bg-blue-500 transition"
-            >
-              Comenzar ahora
-            </Link>
-            <Link
-              to="/login"
-              className="border border-gray-600 text-gray-300 px-8 py-3 rounded-md text-base font-semibold hover:border-blue-500 hover:text-white transition"
-            >
-              Ya tengo cuenta
-            </Link>
-          </div>
-        </section>
+      <Box
+        component="section"
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          px: 2,
+          py: 10,
+        }}
+      >
+        <Typography
+          variant="h2"
+          sx={{
+            color: "#ffffff",
+            fontWeight: 700,
+            mb: 3,
+            fontSize: { xs: "2.25rem", sm: "3rem", lg: "3.75rem" },
+            lineHeight: 1.15,
+          }}
+        >
+          Soluciones inteligentes{" "}
+          <Box component="br" sx={{ display: { xs: "none", sm: "block" } }} />
+          <Box component="span" sx={{ color: "#a4e77e" }}>para tu bienestar</Box>
+        </Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#d1d5db",
+            fontWeight: 400,
+            maxWidth: "600px",
+            mb: 5,
+            lineHeight: 1.6,
+          }}
+        >
+          Planes personalizados, guía experta y acompañamiento 24/7 para que alcances tus metas físicas.
+        </Typography>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <MuiButton
+            component={Link}
+            to="/register"
+            variant="contained"
+            size="large"
+            sx={{
+              px: 4,
+              boxShadow: "none",
+              "&:hover": { boxShadow: "none" },
+            }}
+          >
+            Comenzar ahora
+          </MuiButton>
+          <MuiButton
+            component={Link}
+            to="/login"
+            variant="outlined"
+            size="large"
+            sx={{
+              px: 4,
+              borderColor: "#ffffff",
+              color: "#d1d5db",
+              "&:hover": { borderColor: "#ffffff", color: "#ffffff" },
+            }}
+          >
+            Ya tengo cuenta
+          </MuiButton>
+        </Stack>
+      </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 

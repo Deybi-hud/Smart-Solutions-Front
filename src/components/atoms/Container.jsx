@@ -1,17 +1,26 @@
-const Container = ({ children, className = "", size = "md" }) => {
-    const sizeClasses = {
-        sm: "max-w-sm",
-        md: "max-w-md",
-        lg: "max-w-lg",
-        xl: "max-w-xl",
-        full: "w-full"
-    };
+import Box from "@mui/material/Box";
 
-    return (
-        <div className={`w-full ${sizeClasses[size]} mx-auto ${className}`}>
-            {children}
-        </div>
-    );
+const sizeMap = {
+  sm: "384px",
+  md: "448px",
+  lg: "512px",
+  xl: "576px",
+  full: "100%",
+};
+
+const Container = ({ children, className, size = "md" }) => {
+  return (
+    <Box
+      className={className}
+      sx={{
+        width: "100%",
+        maxWidth: sizeMap[size],
+        mx: "auto",
+      }}
+    >
+      {children}
+    </Box>
+  );
 };
 
 export default Container;

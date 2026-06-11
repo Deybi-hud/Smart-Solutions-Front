@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
+import MuiButton from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
 import { useGetProfileQuery, useUpdateContactMutation, useLogoutMutation } from "../store/api/userApi";
@@ -50,75 +57,102 @@ const ProfilePage = () => {
     navigate("/login");
   };
 
+  const profileFields = profile
+    ? [
+        { label: "Nombre", value: `${profile.name} ${profile.lastName}` },
+        { label: "Correo", value: profile.email },
+        { label: "Teléfono", value: profile.phone },
+        { label: "Sucursal", value: profile.sucursalName },
+      ].filter((f) => f.value)
+    : [];
+
+  const editFields = [
+    { label: "Nombre", name: "name", placeholder: "Tu nombre" },
+    { label: "Apellido", name: "lastName", placeholder: "Tu apellido" },
+    { label: "Teléfono (9 dígitos)", name: "phone", placeholder: "912345678" },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-950">
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#030712" }}>
       <NavBar />
-      <main className="flex-1 py-8 sm:py-12 px-4">
-        <div className="max-w-md mx-auto">
-          {isLoading && <p className="text-gray-400 text-center">Cargando perfil...</p>}
-          {isError && <p className="text-red-500 text-center">Error al cargar el perfil.</p>}
+      <Box component="main" sx={{ flex: 1, py: { xs: 4, sm: 6 }, px: 2 }}>
+        <Box sx={{ maxWidth: "448px", mx: "auto" }}>
+          {isLoading && (
+            <Typography sx={{ color: "#9ca3af", textAlign: "center" }}>Cargando perfil...</Typography>
+          )}
+          {isError && (
+            <Typography sx={{ color: "#ef4444", textAlign: "center" }}>Error al cargar el perfil.</Typography>
+          )}
 
           {profile && !editing && (
-            <div className="bg-gray-900 rounded-xl p-6 text-white">
-              <h2 className="text-2xl font-bold mb-6">Mi Perfil</h2>
-              {success && <p className="mb-4 text-sm text-green-400">{success}</p>}
-              <div className="space-y-4 mb-8">
-                {[
-                  { label: "Nombre", value: `${profile.name} ${profile.lastName}` },
-                  { label: "Correo", value: profile.email },
-                  { label: "Teléfono", value: profile.phone },
-                  { label: "Sucursal", value: profile.sucursalName },
-                ].map(({ label, value }) =>
-                  value ? (
-                    <div key={label} className="border-b border-gray-700 pb-4">
-                      <p className="text-sm text-gray-400">{label}</p>
-                      <p className="text-base font-medium">{value}</p>
-                    </div>
-                  ) : null
-                )}
-              </div>
-              <div className="flex flex-col gap-3">
-                <button onClick={handleEdit} className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-500 transition">
+            <Box sx={{ backgroundColor: "#111827", borderRadius: "12px", p: 3, color: "#ffffff" }}>
+              <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>Mi Perfil</Typography>
+              {success && <Alert severity="success" sx={{ mb: 2, borderRadius: "8px" }}>{success}</Alert>}
+              <Stack sx={{ mb: 4 }}>
+                {profileFields.map(({ label, value }, i) => (
+                  <Box key={label}>
+                    <Box sx={{ py: 2 }}>
+                      <Typography variant="caption" sx={{ color: "#9ca3af" }}>{label}</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>{value}</Typography>
+                    </Box>
+                    {i < profileFields.length - 1 && <Divider />}
+                  </Box>
+                ))}
+              </Stack>
+              <Stack spacing={1.5}>
+                <MuiButton onClick={handleEdit} variant="contained" fullWidth
+                  sx={{ boxShadow: "none", "&:hover": { boxShadow: "none" } }}>
                   Editar datos
-                </button>
-                <button onClick={handleLogout} className="w-full bg-red-600 text-white py-2 rounded-md font-semibold hover:bg-red-500 transition">
+                </MuiButton>
+                <MuiButton onClick={handleLogout} variant="contained" fullWidth
+                  sx={{
+                    backgroundColor: "#dc2626",
+                    boxShadow: "none",
+                    "&:hover": { backgroundColor: "#b91c1c", boxShadow: "none" },
+                  }}>
                   Cerrar sesión
-                </button>
-              </div>
-            </div>
+                </MuiButton>
+              </Stack>
+            </Box>
           )}
 
           {editing && (
-            <div className="bg-gray-900 rounded-xl p-6 text-white">
-              <h2 className="text-2xl font-bold mb-6">Editar datos</h2>
-              {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
-              <form onSubmit={handleSave} className="space-y-4">
-                {[
-                  { label: "Nombre", name: "name", placeholder: "Tu nombre" },
-                  { label: "Apellido", name: "lastName", placeholder: "Tu apellido" },
-                  { label: "Teléfono (9 dígitos)", name: "phone", placeholder: "912345678" },
-                ].map(({ label, name, placeholder }) => (
-                  <div key={name} className="flex flex-col gap-1">
-                    <label className="text-sm text-gray-400">{label}</label>
-                    <input name={name} value={form[name]} onChange={handleChange} placeholder={placeholder} disabled={updating}
-                      className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white outline-none focus:border-blue-500 disabled:opacity-50" />
-                  </div>
+            <Box sx={{ backgroundColor: "#111827", borderRadius: "12px", p: 3, color: "#ffffff" }}>
+              <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>Editar datos</Typography>
+              {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
+              <Stack component="form" onSubmit={handleSave} spacing={2}>
+                {editFields.map(({ label, name, placeholder }) => (
+                  <TextField
+                    key={name}
+                    label={label}
+                    name={name}
+                    value={form[name]}
+                    onChange={handleChange}
+                    placeholder={placeholder}
+                    disabled={updating}
+                    size="small"
+                    fullWidth
+                    variant="outlined"
+                  />
                 ))}
-                <div className="flex gap-3 pt-2">
-                  <button type="submit" disabled={updating} className="flex-1 bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-500 transition disabled:opacity-50">
+                <Stack direction="row" spacing={1.5} sx={{ pt: 1 }}>
+                  <MuiButton type="submit" disabled={updating} variant="contained" fullWidth
+                    sx={{ boxShadow: "none", "&:hover": { boxShadow: "none" } }}>
                     {updating ? "Guardando..." : "Guardar"}
-                  </button>
-                  <button type="button" onClick={() => setEditing(false)} disabled={updating} className="flex-1 border border-gray-600 text-gray-300 py-2 rounded-md font-semibold hover:border-gray-400 transition">
+                  </MuiButton>
+                  <MuiButton type="button" onClick={() => setEditing(false)} disabled={updating}
+                    variant="outlined" fullWidth
+                    sx={{ borderColor: "#374151", color: "#d1d5db", "&:hover": { borderColor: "#6b7280" } }}>
                     Cancelar
-                  </button>
-                </div>
-              </form>
-            </div>
+                  </MuiButton>
+                </Stack>
+              </Stack>
+            </Box>
           )}
-        </div>
-      </main>
+        </Box>
+      </Box>
       <Footer />
-    </div>
+    </Box>
   );
 };
 
