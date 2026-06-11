@@ -7,7 +7,15 @@ import Footer from "../components/organisms/Footer";
 
 const LoginPage = () => {
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#030712" }}>
+    // Fondo de página: blanco rosado muy suave
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#FDF6F4",
+      }}
+    >
       <Box
         component="main"
         sx={{
@@ -19,15 +27,18 @@ const LoginPage = () => {
           py: 6,
         }}
       >
+        {/* Tarjeta central del formulario: fondo blanco con sombra suave */}
         <Paper
           elevation={0}
           sx={{
             width: "100%",
             maxWidth: "448px",
-            borderRadius: "12px",
-            p: 3,
+            borderRadius: "14px",
+            p: 4,
+            border: "1px solid #EDD9D5",  // Borde rosa suave alrededor de la tarjeta
           }}
         >
+          {/* Logo / Nombre de la app como enlace a la landing */}
           <Typography
             component={Link}
             to="/"
@@ -35,7 +46,7 @@ const LoginPage = () => {
             sx={{
               display: "block",
               textAlign: "center",
-              color: "#4f8ef7",
+              color: "#D4627A",             // Rosa primario
               fontWeight: 700,
               textDecoration: "none",
               mb: 3,
@@ -43,23 +54,40 @@ const LoginPage = () => {
           >
             Smart Solutions
           </Typography>
-          <Typography variant="h5" sx={{ color: "#ffffff", fontWeight: 700, mb: 3, textAlign: "center" }}>
+
+          {/* Título del formulario */}
+          <Typography
+            variant="h5"
+            sx={{ color: "#3D2B2B", fontWeight: 700, mb: 3, textAlign: "center" }}
+          >
             Iniciar sesión
           </Typography>
+
           <LoginForm />
-          <Typography variant="body2" sx={{ color: "#9ca3af", textAlign: "center", mt: 3 }}>
+
+          {/* Enlace a registro */}
+          <Typography
+            variant="body2"
+            sx={{ color: "#9C7878", textAlign: "center", mt: 3 }}
+          >
             ¿No tienes cuenta?{" "}
             <Typography
               component={Link}
               to="/register"
               variant="body2"
-              sx={{ color: "#ffffff", fontWeight: 600, textDecoration: "none", "&:hover": { color: "#4f8ef7" } }}
+              sx={{
+                color: "#D4627A",
+                fontWeight: 600,
+                textDecoration: "none",
+                "&:hover": { color: "#B8455E" },
+              }}
             >
               Regístrate aquí
             </Typography>
           </Typography>
         </Paper>
       </Box>
+
       <Footer />
     </Box>
   );

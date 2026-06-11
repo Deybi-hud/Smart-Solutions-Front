@@ -15,27 +15,68 @@ import {
   useGetAddressesQuery, useCreateAddressMutation, useUpdateAddressMutation, useDeleteAddressMutation,
 } from "../../store/api/locationApi";
 
-const panelSx = { backgroundColor: "#111827", borderRadius: "8px", p: 3 };
-const rowSx = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, py: 1.5 };
+// ── Estilos reutilizables ──────────────────────────────────────────────────
 
+// Fondo del panel de cada sección (Regiones / Comunas / Sucursales)
+const panelSx = {
+  backgroundColor: "#FFFFFF",          // Panel blanco
+  border: "1px solid #EDD9D5",         // Borde divisor rosa suave
+  borderRadius: "10px",
+  p: 3,
+};
+
+// Fila de un ítem dentro del panel
+const rowSx = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 1,
+  py: 1.5,
+};
+
+// Estilos del menú desplegable de selects
+const selectMenuSx = {
+  PaperProps: {
+    sx: { backgroundColor: "#FAF0EE" }, // Fondo salmón muy suave en el dropdown
+  },
+};
+
+// ── Componente de fila editable ────────────────────────────────────────────
 const EditableRow = ({ label, onSave, onCancel, initialValue = "", isLoading }) => {
   const [value, setValue] = useState(initialValue);
   return (
     <Stack direction="row" spacing={1}>
-      <TextField value={value} onChange={(e) => setValue(e.target.value)}
-        placeholder={label} disabled={isLoading} size="small" fullWidth />
-      <MuiButton onClick={() => onSave(value)} disabled={isLoading || !value.trim()}
-        variant="contained" size="small" sx={{ whiteSpace: "nowrap", boxShadow: "none" }}>
+      <TextField
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={label}
+        disabled={isLoading}
+        size="small"
+        fullWidth
+      />
+      <MuiButton
+        onClick={() => onSave(value)}
+        disabled={isLoading || !value.trim()}
+        variant="contained"
+        size="small"
+        sx={{ whiteSpace: "nowrap" }}
+      >
         {isLoading ? "..." : "Guardar"}
       </MuiButton>
-      <MuiButton onClick={onCancel} disabled={isLoading} variant="outlined" size="small"
-        sx={{ whiteSpace: "nowrap", borderColor: "#374151", color: "#9ca3af" }}>
+      <MuiButton
+        onClick={onCancel}
+        disabled={isLoading}
+        variant="outlined"
+        size="small"
+        sx={{ whiteSpace: "nowrap" }}
+      >
         Cancelar
       </MuiButton>
     </Stack>
   );
 };
 
+// ── Panel de Regiones ──────────────────────────────────────────────────────
 const RegionsPanel = () => {
   const { data: regions = [] } = useGetRegionsQuery();
   const [createRegion, { isLoading: creating }] = useCreateRegionMutation();
@@ -64,31 +105,73 @@ const RegionsPanel = () => {
   };
 
   return (
+    // Tarjeta del panel de regiones
     <Box sx={panelSx}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-        <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>Regiones</Typography>
-        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small" sx={{ boxShadow: "none" }}>
+        {/* Título de la sección */}
+        <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600 }}>
+          Regiones
+        </Typography>
+        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small">
           + Agregar
         </MuiButton>
       </Stack>
-      {error && <Typography variant="body2" sx={{ color: "#ef4444", mb: 1 }}>{error}</Typography>}
+
+      {/* Mensaje de error inline */}
+      {error && (
+        <Typography variant="body2" sx={{ color: "#C0392B", mb: 1 }}>
+          {error}
+        </Typography>
+      )}
+
+      {/* Formulario inline para agregar nueva región */}
       {adding && (
         <Box mb={2}>
-          <EditableRow label="Nombre de región" onSave={handleCreate} onCancel={() => setAdding(false)} isLoading={creating} />
+          <EditableRow
+            label="Nombre de región"
+            onSave={handleCreate}
+            onCancel={() => setAdding(false)}
+            isLoading={creating}
+          />
         </Box>
       )}
+
+      {/* Lista de regiones existentes */}
       <Stack divider={<Divider />}>
         {regions.map((r) => (
           <Box key={r.id} sx={rowSx}>
             {editingId === r.id ? (
-              <EditableRow label="Nombre de región" initialValue={r.regionName}
-                onSave={(v) => handleUpdate(r.id, v)} onCancel={() => setEditingId(null)} isLoading={updating} />
+              // Fila en modo edición
+              <EditableRow
+                label="Nombre de región"
+                initialValue={r.regionName}
+                onSave={(v) => handleUpdate(r.id, v)}
+                onCancel={() => setEditingId(null)}
+                isLoading={updating}
+              />
             ) : (
+              // Fila en modo lectura
               <>
-                <Typography variant="body2" sx={{ color: "#e5e7eb" }}>{r.regionName}</Typography>
+                <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
+                  {r.regionName}
+                </Typography>
                 <Stack direction="row" spacing={1}>
-                  <MuiButton size="small" onClick={() => setEditingId(r.id)} sx={{ color: "#60a5fa", minWidth: 0 }}>Editar</MuiButton>
-                  <MuiButton size="small" onClick={() => handleDelete(r.id)} sx={{ color: "#ef4444", minWidth: 0 }}>Eliminar</MuiButton>
+                  {/* Botón editar: azul suave */}
+                  <MuiButton
+                    size="small"
+                    onClick={() => setEditingId(r.id)}
+                    sx={{ color: "#7B8FC8", minWidth: 0 }}
+                  >
+                    Editar
+                  </MuiButton>
+                  {/* Botón eliminar: rojo suave */}
+                  <MuiButton
+                    size="small"
+                    onClick={() => handleDelete(r.id)}
+                    sx={{ color: "#C0392B", minWidth: 0 }}
+                  >
+                    Eliminar
+                  </MuiButton>
                 </Stack>
               </>
             )}
@@ -99,6 +182,7 @@ const RegionsPanel = () => {
   );
 };
 
+// ── Panel de Comunas ───────────────────────────────────────────────────────
 const CommunesPanel = () => {
   const { data: regions = [] } = useGetRegionsQuery();
   const { data: communes = [] } = useGetCommunesQuery();
@@ -113,13 +197,15 @@ const CommunesPanel = () => {
   const [editRegionId, setEditRegionId] = useState("");
   const [error, setError] = useState("");
 
+  // Selector de región reutilizable dentro del panel
   const RegionSelect = ({ value, onChange }) => (
     <FormControl size="small" sx={{ minWidth: "140px" }}>
       <InputLabel>Región</InputLabel>
-      <Select value={value} onChange={onChange} label="Región"
-        MenuProps={{ PaperProps: { sx: { backgroundColor: "#1f2937" } } }}>
-        <MenuItem value=""><em style={{ color: "#9ca3af" }}>Región</em></MenuItem>
-        {regions.map((r) => <MenuItem key={r.id} value={r.id}>{r.regionName}</MenuItem>)}
+      <Select value={value} onChange={onChange} label="Región" MenuProps={selectMenuSx}>
+        <MenuItem value=""><em style={{ color: "#9C7878" }}>Región</em></MenuItem>
+        {regions.map((r) => (
+          <MenuItem key={r.id} value={r.id}>{r.regionName}</MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
@@ -153,24 +239,19 @@ const CommunesPanel = () => {
   return (
     <Box sx={panelSx}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-        <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>Comunas</Typography>
-        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small" sx={{ boxShadow: "none" }}>
-          + Agregar
-        </MuiButton>
+        <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600 }}>Comunas</Typography>
+        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small">+ Agregar</MuiButton>
       </Stack>
-      {error && <Typography variant="body2" sx={{ color: "#ef4444", mb: 1 }}>{error}</Typography>}
+      {error && <Typography variant="body2" sx={{ color: "#C0392B", mb: 1 }}>{error}</Typography>}
       {adding && (
         <Stack direction="row" spacing={1} mb={2} flexWrap="wrap">
           <TextField value={newName} onChange={(e) => setNewName(e.target.value)}
             placeholder="Nombre de comuna" disabled={creating} size="small" sx={{ flex: 1, minWidth: "160px" }} />
           <RegionSelect value={newRegionId} onChange={(e) => setNewRegionId(e.target.value)} />
-          <MuiButton onClick={handleCreate} disabled={creating} variant="contained" size="small" sx={{ boxShadow: "none" }}>
+          <MuiButton onClick={handleCreate} disabled={creating} variant="contained" size="small">
             {creating ? "..." : "Guardar"}
           </MuiButton>
-          <MuiButton onClick={() => setAdding(false)} variant="outlined" size="small"
-            sx={{ borderColor: "#374151", color: "#9ca3af" }}>
-            Cancelar
-          </MuiButton>
+          <MuiButton onClick={() => setAdding(false)} variant="outlined" size="small">Cancelar</MuiButton>
         </Stack>
       )}
       <Stack divider={<Divider />}>
@@ -181,23 +262,23 @@ const CommunesPanel = () => {
                 <TextField value={editName} onChange={(e) => setEditName(e.target.value)}
                   disabled={updating} size="small" sx={{ flex: 1, minWidth: "160px" }} />
                 <RegionSelect value={editRegionId} onChange={(e) => setEditRegionId(e.target.value)} />
-                <MuiButton onClick={() => handleUpdate(c.id)} disabled={updating} variant="contained" size="small" sx={{ boxShadow: "none" }}>
+                <MuiButton onClick={() => handleUpdate(c.id)} disabled={updating} variant="contained" size="small">
                   {updating ? "..." : "Guardar"}
                 </MuiButton>
-                <MuiButton onClick={() => setEditingId(null)} variant="outlined" size="small"
-                  sx={{ borderColor: "#374151", color: "#9ca3af" }}>
-                  Cancelar
-                </MuiButton>
+                <MuiButton onClick={() => setEditingId(null)} variant="outlined" size="small">Cancelar</MuiButton>
               </Stack>
             ) : (
               <>
-                <Typography variant="body2" sx={{ color: "#e5e7eb" }}>
+                <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
                   {c.communeName}{" "}
-                  <Typography component="span" variant="caption" sx={{ color: "#6b7280" }}>— {c.regionName}</Typography>
+                  {/* Nombre de la región en texto secundario */}
+                  <Typography component="span" variant="caption" sx={{ color: "#9C7878" }}>
+                    — {c.regionName}
+                  </Typography>
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                  <MuiButton size="small" onClick={() => startEdit(c)} sx={{ color: "#60a5fa", minWidth: 0 }}>Editar</MuiButton>
-                  <MuiButton size="small" onClick={() => handleDelete(c.id)} sx={{ color: "#ef4444", minWidth: 0 }}>Eliminar</MuiButton>
+                  <MuiButton size="small" onClick={() => startEdit(c)} sx={{ color: "#7B8FC8", minWidth: 0 }}>Editar</MuiButton>
+                  <MuiButton size="small" onClick={() => handleDelete(c.id)} sx={{ color: "#C0392B", minWidth: 0 }}>Eliminar</MuiButton>
                 </Stack>
               </>
             )}
@@ -208,6 +289,7 @@ const CommunesPanel = () => {
   );
 };
 
+// ── Panel de Sucursales ────────────────────────────────────────────────────
 const AddressesPanel = () => {
   const { data: communes = [] } = useGetCommunesQuery();
   const { data: addresses = [] } = useGetAddressesQuery();
@@ -224,9 +306,8 @@ const AddressesPanel = () => {
   const CommuneSelect = ({ value, onChange }) => (
     <FormControl size="small" sx={{ minWidth: "140px" }}>
       <InputLabel>Comuna</InputLabel>
-      <Select value={value} onChange={onChange} label="Comuna"
-        MenuProps={{ PaperProps: { sx: { backgroundColor: "#1f2937" } } }}>
-        <MenuItem value=""><em style={{ color: "#9ca3af" }}>Comuna</em></MenuItem>
+      <Select value={value} onChange={onChange} label="Comuna" MenuProps={selectMenuSx}>
+        <MenuItem value=""><em style={{ color: "#9C7878" }}>Comuna</em></MenuItem>
         {communes.map((c) => <MenuItem key={c.id} value={c.id}>{c.communeName}</MenuItem>)}
       </Select>
     </FormControl>
@@ -280,25 +361,20 @@ const AddressesPanel = () => {
           placeholder={placeholder} disabled={loading} size="small" sx={{ flex: 1, minWidth: "120px" }} />
       ))}
       <CommuneSelect value={values.communeId} onChange={onCommune} />
-      <MuiButton onClick={onSave} disabled={loading} variant="contained" size="small" sx={{ boxShadow: "none" }}>
+      <MuiButton onClick={onSave} disabled={loading} variant="contained" size="small">
         {loading ? "..." : "Guardar"}
       </MuiButton>
-      <MuiButton onClick={onCancel} variant="outlined" size="small"
-        sx={{ borderColor: "#374151", color: "#9ca3af" }}>
-        Cancelar
-      </MuiButton>
+      <MuiButton onClick={onCancel} variant="outlined" size="small">Cancelar</MuiButton>
     </Stack>
   );
 
   return (
     <Box sx={panelSx}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-        <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>Sucursales</Typography>
-        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small" sx={{ boxShadow: "none" }}>
-          + Agregar
-        </MuiButton>
+        <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600 }}>Sucursales</Typography>
+        <MuiButton onClick={() => setAdding(true)} variant="contained" size="small">+ Agregar</MuiButton>
       </Stack>
-      {error && <Typography variant="body2" sx={{ color: "#ef4444", mb: 1 }}>{error}</Typography>}
+      {error && <Typography variant="body2" sx={{ color: "#C0392B", mb: 1 }}>{error}</Typography>}
       {adding && (
         <Box mb={2}>
           <AddressForm values={form} onChange={(k, v) => setForm({ ...form, [k]: v })}
@@ -315,15 +391,16 @@ const AddressesPanel = () => {
                 onSave={() => handleUpdate(a.id)} onCancel={() => setEditingId(null)} loading={updating} />
             ) : (
               <>
-                <Typography variant="body2" sx={{ color: "#e5e7eb" }}>
+                <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
                   {a.sucursalName} — {a.street} {a.number}
-                  <Typography component="span" variant="caption" sx={{ color: "#6b7280", ml: 0.5 }}>
+                  {/* Nombre de la comuna en texto secundario */}
+                  <Typography component="span" variant="caption" sx={{ color: "#9C7878", ml: 0.5 }}>
                     ({communeName(a.communeId)})
                   </Typography>
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                  <MuiButton size="small" onClick={() => startEdit(a)} sx={{ color: "#60a5fa", minWidth: 0 }}>Editar</MuiButton>
-                  <MuiButton size="small" onClick={() => handleDelete(a.id)} sx={{ color: "#ef4444", minWidth: 0 }}>Eliminar</MuiButton>
+                  <MuiButton size="small" onClick={() => startEdit(a)} sx={{ color: "#7B8FC8", minWidth: 0 }}>Editar</MuiButton>
+                  <MuiButton size="small" onClick={() => handleDelete(a.id)} sx={{ color: "#C0392B", minWidth: 0 }}>Eliminar</MuiButton>
                 </Stack>
               </>
             )}
@@ -334,14 +411,13 @@ const AddressesPanel = () => {
   );
 };
 
-const LocationPanel = () => {
-  return (
-    <Stack spacing={3}>
-      <RegionsPanel />
-      <CommunesPanel />
-      <AddressesPanel />
-    </Stack>
-  );
-};
+// ── Componente principal que une los tres paneles ──────────────────────────
+const LocationPanel = () => (
+  <Stack spacing={3}>
+    <RegionsPanel />
+    <CommunesPanel />
+    <AddressesPanel />
+  </Stack>
+);
 
 export default LocationPanel;
