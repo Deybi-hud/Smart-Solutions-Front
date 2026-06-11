@@ -10,7 +10,11 @@ import MuiButton from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
-import { useGetProfileQuery, useUpdateContactMutation, useLogoutMutation } from "../store/api/userApi";
+import {
+  useGetProfileQuery,
+  useUpdateContactMutation,
+  useLogoutMutation,
+} from "../store/api/userApi";
 import { logout } from "../store/slices/authSlice";
 
 const ProfilePage = () => {
@@ -26,7 +30,11 @@ const ProfilePage = () => {
   const [error, setError] = useState("");
 
   const handleEdit = () => {
-    setForm({ name: profile.name || "", lastName: profile.lastName || "", phone: profile.phone || "" });
+    setForm({
+      name: profile.name || "",
+      lastName: profile.lastName || "",
+      phone: profile.phone || "",
+    });
     setEditing(true);
     setSuccess("");
     setError("");
@@ -57,6 +65,7 @@ const ProfilePage = () => {
     navigate("/login");
   };
 
+  // Campos a mostrar en la vista de perfil
   const profileFields = profile
     ? [
         { label: "Nombre", value: `${profile.name} ${profile.lastName}` },
@@ -66,6 +75,7 @@ const ProfilePage = () => {
       ].filter((f) => f.value)
     : [];
 
+  // Campos editables
   const editFields = [
     { label: "Nombre", name: "name", placeholder: "Tu nombre" },
     { label: "Apellido", name: "lastName", placeholder: "Tu apellido" },
@@ -73,53 +83,133 @@ const ProfilePage = () => {
   ];
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#030712" }}>
+    // Fondo de página: blanco rosado muy suave
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#FDF6F4",
+      }}
+    >
       <NavBar />
+
       <Box component="main" sx={{ flex: 1, py: { xs: 4, sm: 6 }, px: 2 }}>
         <Box sx={{ maxWidth: "448px", mx: "auto" }}>
+
+          {/* Estado de carga */}
           {isLoading && (
-            <Typography sx={{ color: "#9ca3af", textAlign: "center" }}>Cargando perfil...</Typography>
+            <Typography sx={{ color: "#9C7878", textAlign: "center" }}>
+              Cargando perfil...
+            </Typography>
           )}
           {isError && (
-            <Typography sx={{ color: "#ef4444", textAlign: "center" }}>Error al cargar el perfil.</Typography>
+            <Typography sx={{ color: "#C0392B", textAlign: "center" }}>
+              Error al cargar el perfil.
+            </Typography>
           )}
 
+          {/* ── Vista de datos del perfil ─────────────────────────────────── */}
           {profile && !editing && (
-            <Box sx={{ backgroundColor: "#111827", borderRadius: "12px", p: 3, color: "#ffffff" }}>
-              <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>Mi Perfil</Typography>
-              {success && <Alert severity="success" sx={{ mb: 2, borderRadius: "8px" }}>{success}</Alert>}
+            // Tarjeta del perfil: fondo blanco con borde rosa suave
+            <Box
+              sx={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: "14px",
+                p: 3,
+                border: "1px solid #EDD9D5",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: 700, color: "#3D2B2B", mb: 3 }}
+              >
+                Mi Perfil
+              </Typography>
+
+              {/* Alerta de éxito al guardar cambios */}
+              {success && (
+                <Alert severity="success" sx={{ mb: 2, borderRadius: "8px" }}>
+                  {success}
+                </Alert>
+              )}
+
+              {/* Lista de campos del perfil con divisores */}
               <Stack sx={{ mb: 4 }}>
                 {profileFields.map(({ label, value }, i) => (
                   <Box key={label}>
                     <Box sx={{ py: 2 }}>
-                      <Typography variant="caption" sx={{ color: "#9ca3af" }}>{label}</Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 500 }}>{value}</Typography>
+                      {/* Etiqueta del campo */}
+                      <Typography variant="caption" sx={{ color: "#9C7878" }}>
+                        {label}
+                      </Typography>
+                      {/* Valor del campo */}
+                      <Typography
+                        variant="body1"
+                        sx={{ fontWeight: 500, color: "#3D2B2B" }}
+                      >
+                        {value}
+                      </Typography>
                     </Box>
+                    {/* Divisor entre campos excepto el último */}
                     {i < profileFields.length - 1 && <Divider />}
                   </Box>
                 ))}
               </Stack>
+
+              {/* Botones de acción del perfil */}
               <Stack spacing={1.5}>
-                <MuiButton onClick={handleEdit} variant="contained" fullWidth
-                  sx={{ boxShadow: "none", "&:hover": { boxShadow: "none" } }}>
+                {/* Botón editar: fondo rosa primario */}
+                <MuiButton
+                  onClick={handleEdit}
+                  variant="contained"
+                  fullWidth
+                >
                   Editar datos
                 </MuiButton>
-                <MuiButton onClick={handleLogout} variant="contained" fullWidth
+
+                {/* Botón cerrar sesión: fondo rojo suave */}
+                <MuiButton
+                  onClick={handleLogout}
+                  variant="contained"
+                  fullWidth
                   sx={{
-                    backgroundColor: "#dc2626",
-                    boxShadow: "none",
-                    "&:hover": { backgroundColor: "#b91c1c", boxShadow: "none" },
-                  }}>
+                    backgroundColor: "#C0392B",
+                    "&:hover": { backgroundColor: "#9B2A1E" },
+                  }}
+                >
                   Cerrar sesión
                 </MuiButton>
               </Stack>
             </Box>
           )}
 
+          {/* ── Vista de edición de datos ─────────────────────────────────── */}
           {editing && (
-            <Box sx={{ backgroundColor: "#111827", borderRadius: "12px", p: 3, color: "#ffffff" }}>
-              <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>Editar datos</Typography>
-              {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
+            // Tarjeta de edición: misma estructura visual que la de perfil
+            <Box
+              sx={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: "14px",
+                p: 3,
+                border: "1px solid #EDD9D5",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: 700, color: "#3D2B2B", mb: 3 }}
+              >
+                Editar datos
+              </Typography>
+
+              {/* Alerta de error al guardar */}
+              {error && (
+                <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>
+                  {error}
+                </Alert>
+              )}
+
+              {/* Formulario de edición */}
               <Stack component="form" onSubmit={handleSave} spacing={2}>
                 {editFields.map(({ label, name, placeholder }) => (
                   <TextField
@@ -135,14 +225,24 @@ const ProfilePage = () => {
                     variant="outlined"
                   />
                 ))}
+
+                {/* Botones de guardar / cancelar */}
                 <Stack direction="row" spacing={1.5} sx={{ pt: 1 }}>
-                  <MuiButton type="submit" disabled={updating} variant="contained" fullWidth
-                    sx={{ boxShadow: "none", "&:hover": { boxShadow: "none" } }}>
+                  <MuiButton
+                    type="submit"
+                    disabled={updating}
+                    variant="contained"
+                    fullWidth
+                  >
                     {updating ? "Guardando..." : "Guardar"}
                   </MuiButton>
-                  <MuiButton type="button" onClick={() => setEditing(false)} disabled={updating}
-                    variant="outlined" fullWidth
-                    sx={{ borderColor: "#374151", color: "#d1d5db", "&:hover": { borderColor: "#6b7280" } }}>
+                  <MuiButton
+                    type="button"
+                    onClick={() => setEditing(false)}
+                    disabled={updating}
+                    variant="outlined"
+                    fullWidth
+                  >
                     Cancelar
                   </MuiButton>
                 </Stack>
@@ -151,6 +251,7 @@ const ProfilePage = () => {
           )}
         </Box>
       </Box>
+
       <Footer />
     </Box>
   );

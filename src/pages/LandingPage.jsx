@@ -8,8 +8,18 @@ import Footer from "../components/organisms/Footer";
 
 const LandingPage = () => {
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#030712" }}>
+    // Contenedor raíz: fondo rosado muy suave, ocupa toda la pantalla
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#FDF6F4",   // Fondo base (blanco con toque rosado)
+      }}
+    >
       <NavBar showAuthLinks />
+
+      {/* Hero section: centrado vertical y horizontal */}
       <Box
         component="section"
         sx={{
@@ -23,10 +33,11 @@ const LandingPage = () => {
           py: 10,
         }}
       >
+        {/* Título principal con acento en salmón */}
         <Typography
           variant="h2"
           sx={{
-            color: "#ffffff",
+            color: "#3D2B2B",          // Texto oscuro cálido
             fontWeight: 700,
             mb: 3,
             fontSize: { xs: "2.25rem", sm: "3rem", lg: "3.75rem" },
@@ -35,50 +46,53 @@ const LandingPage = () => {
         >
           Soluciones inteligentes{" "}
           <Box component="br" sx={{ display: { xs: "none", sm: "block" } }} />
-          <Box component="span" sx={{ color: "#a4e77e" }}>para tu bienestar</Box>
+          {/* Frase destacada en color salmón-rosa */}
+          <Box component="span" sx={{ color: "#D4627A" }}>
+            para tu bienestar
+          </Box>
         </Typography>
+
+        {/* Subtítulo descriptivo */}
         <Typography
           variant="h6"
           sx={{
-            color: "#d1d5db",
+            color: "#9C7878",          // Texto secundario gris rosado
             fontWeight: 400,
             maxWidth: "600px",
             mb: 5,
             lineHeight: 1.6,
           }}
         >
-          Planes personalizados, guía experta y acompañamiento 24/7 para que alcances tus metas físicas.
+          Planes personalizados, guía experta y acompañamiento 24/7 para que
+          alcances tus metas físicas.
         </Typography>
+
+        {/* Botones de acción */}
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          {/* CTA principal: fondo rosa, texto blanco */}
           <MuiButton
             component={Link}
             to="/register"
             variant="contained"
             size="large"
-            sx={{
-              px: 4,
-              boxShadow: "none",
-              "&:hover": { boxShadow: "none" },
-            }}
+            sx={{ px: 4 }}
           >
             Comenzar ahora
           </MuiButton>
+
+          {/* CTA secundario: borde salmón, sin relleno */}
           <MuiButton
             component={Link}
             to="/login"
             variant="outlined"
             size="large"
-            sx={{
-              px: 4,
-              borderColor: "#ffffff",
-              color: "#d1d5db",
-              "&:hover": { borderColor: "#ffffff", color: "#ffffff" },
-            }}
+            sx={{ px: 4 }}
           >
             Ya tengo cuenta
           </MuiButton>
         </Stack>
       </Box>
+
       <Footer />
     </Box>
   );

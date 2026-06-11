@@ -12,39 +12,77 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
   const isAdmin = user?.role === "ADMINISTRADOR";
 
   return (
+    // AppBar: barra de navegación fija en la parte superior
+    // Fondo blanco con borde inferior rosa pálido (definido en theme.js / MuiAppBar)
     <AppBar position="sticky" elevation={0}>
-      <Toolbar sx={{ maxWidth: "900px", width: "100%", mx: "auto", px: 2, backgroundColor: "#0a1518" }}>
+      <Toolbar
+        sx={{
+          maxWidth: "900px",
+          width: "100%",
+          mx: "auto",
+          px: 2,
+        }}
+      >
+        {/* Logo / Nombre de marca — color rosa primario */}
         <Typography
           component={Link}
           to="/home"
           variant="h6"
-          sx={{ color: "#fa60ad", fontWeight: 700, textDecoration: "none", flexGrow: 1 }}
+          sx={{
+            color: "#D4627A",          // Rosa primario (mismo que theme primary)
+            fontWeight: 700,
+            textDecoration: "none",
+            flexGrow: 1,
+          }}
         >
           Smart Solutions
         </Typography>
+
+        {/* Zona de botones de navegación a la derecha */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {showAuthLinks ? (
+            // Vista pública: mostrar botones de login y registro
             <>
-              <MuiButton component={Link} to="/login" sx={{ color: "#d1d5db" }}>
+              <MuiButton
+                component={Link}
+                to="/login"
+                sx={{ color: "#9C7878" }}     // Texto gris rosado
+              >
                 Iniciar sesión
               </MuiButton>
-              <MuiButton component={Link} to="/register" variant="contained" color="primary">
+              <MuiButton
+                component={Link}
+                to="/register"
+                variant="contained"
+                color="primary"
+              >
                 Registrarse
               </MuiButton>
             </>
           ) : (
+            // Vista autenticada: mostrar links según rol
             <>
               {onAboutClick && (
-                <MuiButton onClick={onAboutClick} sx={{ color: "#d1d5db" }}>
+                <MuiButton
+                  onClick={onAboutClick}
+                  sx={{ color: "#9C7878" }}
+                >
                   ¿Quiénes somos?
                 </MuiButton>
               )}
+              {/* Solo visible para administradores */}
               {isAdmin && (
-                <MuiButton onClick={() => navigate("/admin")} sx={{ color: "#d1d5db" }}>
+                <MuiButton
+                  onClick={() => navigate("/admin")}
+                  sx={{ color: "#9C7878" }}
+                >
                   Admin
                 </MuiButton>
               )}
-              <MuiButton onClick={() => navigate("/profile")} sx={{ color: "#d1d5db" }}>
+              <MuiButton
+                onClick={() => navigate("/profile")}
+                sx={{ color: "#9C7878" }}
+              >
                 Perfil
               </MuiButton>
             </>
