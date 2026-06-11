@@ -21,47 +21,47 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react@19.2.7))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@reduxjs/toolkit':
-        specifier: ^2.11.2
+        specifier: ^2.12.0
         version: 2.12.0(react-redux@9.3.0(@types/react@19.2.17)(react@19.2.7)(redux@5.0.1))(react@19.2.7)
       react:
-        specifier: ^19.2.4
+        specifier: ^19.2.7
         version: 19.2.7
       react-dom:
-        specifier: ^19.2.4
+        specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
       react-redux:
-        specifier: ^9.2.0
+        specifier: ^9.3.0
         version: 9.3.0(@types/react@19.2.17)(react@19.2.7)(redux@5.0.1)
       react-router-dom:
-        specifier: ^7.14.2
+        specifier: ^7.17.0
         version: 7.17.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.4
         version: 9.39.4
       '@types/react':
-        specifier: ^19.2.14
+        specifier: ^19.2.17
         version: 19.2.17
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
-        specifier: ^6.0.1
+        specifier: ^6.0.2
         version: 6.0.2(vite@8.0.16)
       eslint:
         specifier: ^9.39.4
         version: 9.39.4
       eslint-plugin-react-hooks:
-        specifier: ^7.0.1
+        specifier: ^7.1.1
         version: 7.1.1(eslint@9.39.4)
       eslint-plugin-react-refresh:
         specifier: ^0.5.2
         version: 0.5.2(eslint@9.39.4)
       globals:
-        specifier: ^17.4.0
+        specifier: ^17.6.0
         version: 17.6.0
       vite:
-        specifier: ^8.0.4
+        specifier: ^8.0.16
         version: 8.0.16
 
 packages:
@@ -365,8 +365,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@napi-rs/wasm-runtime@1.1.4':
-    resolution: {integrity: sha512-3NQNNgA1YSlJb/kMH1ildASP9HW7/7kYnRI2szWJaofaS1hWmbGI4H+d3+22aGzXXN9IJ+n+GiFVcGipJP18ow==}
+  '@napi-rs/wasm-runtime@1.1.5':
+    resolution: {integrity: sha512-AWPoBRJ9tsnVhor4sjO7rkni+7p+2IAEFj6cx06UgP10jkQHqay/36uRV/bFkgrh18D9vb4cr8Q0Pthskgzy+Q==}
     peerDependencies:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
@@ -1612,7 +1612,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.17
 
-  '@napi-rs/wasm-runtime@1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
+  '@napi-rs/wasm-runtime@1.1.5(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
     dependencies:
       '@emnapi/core': 1.10.0
       '@emnapi/runtime': 1.10.0
@@ -1675,7 +1675,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.10.0
       '@emnapi/runtime': 1.10.0
-      '@napi-rs/wasm-runtime': 1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+      '@napi-rs/wasm-runtime': 1.1.5(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
     optional: true
 
   '@rolldown/binding-win32-arm64-msvc@1.0.3':
