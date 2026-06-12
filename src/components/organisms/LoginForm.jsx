@@ -5,6 +5,7 @@ import Button from "../atoms/Button";
 import ErrorMessage from "../atoms/ErrorMessage";
 import { useLoginMutation } from "../../store/api/authApi";
 import { validateLoginForm } from "../../utils/validations";
+import Stack from "@mui/material/Stack";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -55,7 +56,7 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 text-white">
+        <Stack component="form" onSubmit={handleSubmit} spacing={2.5}>
             {generalError && <ErrorMessage message={generalError} />}
 
             <FormField
@@ -82,10 +83,10 @@ const LoginForm = () => {
                 disabled={isLoading}
             />
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading}>
                 {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
             </Button>
-        </form>
+        </Stack>
     );
 };
 

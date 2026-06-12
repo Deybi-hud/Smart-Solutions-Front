@@ -2,6 +2,9 @@ import { useAuth } from "../../hooks/useAuth";
 import Button from "../atoms/Button";
 import Container from "../atoms/Container";
 import { useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 
 const UserProfile = () => {
     const { user, logout } = useAuth();
@@ -15,67 +18,95 @@ const UserProfile = () => {
     if (!user) {
         return (
             <Container size="md">
-                <div className="text-center text-white">
-                    <p>Cargando información del usuario...</p>
-                </div>
+                <Box sx={{ textAlign: "center", py: 4 }}>
+                    <Typography variant="body1" sx={{ color: "#9C7878" }}>
+                        Cargando información del usuario...
+                    </Typography>
+                </Box>
             </Container>
         );
     }
 
     return (
         <Container size="md">
-            <div className="bg-gray-900 rounded-xl p-6 text-white">
-                <h2 className="text-2xl font-bold mb-6">Mi Perfil</h2>
+            <Box 
+                sx={{ 
+                    backgroundColor: "#FFFFFF", 
+                    border: "1px solid #EDD9D5", 
+                    borderRadius: "14px", 
+                    p: 4 
+                }}
+            >
+                <Typography variant="h5" sx={{ color: "#3D2B2B", fontWeight: 700, mb: 4 }}>
+                    Mi Perfil
+                </Typography>
 
-                <div className="space-y-4 mb-8">
-                    <div className="border-b border-gray-700 pb-4">
-                        <p className="text-sm text-gray-400">Correo</p>
-                        <p className="text-lg font-medium">{user.email}</p>
-                    </div>
+                <Stack spacing={3} sx={{ mb: 4 }}>
+                    <Box sx={{ borderBottom: "1px solid #EDD9D5", pb: 2 }}>
+                        <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+                            Correo
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: "#3D2B2B", fontWeight: 500 }}>
+                            {user.email}
+                        </Typography>
+                    </Box>
 
                     {user.name && (
-                        <div className="border-b border-gray-700 pb-4">
-                            <p className="text-sm text-gray-400">Nombre</p>
-                            <p className="text-lg font-medium">{user.name}</p>
-                        </div>
+                        <Box sx={{ borderBottom: "1px solid #EDD9D5", pb: 2 }}>
+                            <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+                                Nombre
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#3D2B2B", fontWeight: 500 }}>
+                                {user.name}
+                            </Typography>
+                        </Box>
                     )}
 
                     {user.lastName && (
-                        <div className="border-b border-gray-700 pb-4">
-                            <p className="text-sm text-gray-400">Apellido</p>
-                            <p className="text-lg font-medium">{user.lastName}</p>
-                        </div>
+                        <Box sx={{ borderBottom: "1px solid #EDD9D5", pb: 2 }}>
+                            <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+                                Apellido
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#3D2B2B", fontWeight: 500 }}>
+                                {user.lastName}
+                            </Typography>
+                        </Box>
                     )}
 
                     {user.phone && (
-                        <div className="border-b border-gray-700 pb-4">
-                            <p className="text-sm text-gray-400">Teléfono</p>
-                            <p className="text-lg font-medium">{user.phone}</p>
-                        </div>
-                    )}
-
-                    {user.phoneNumber && (
-                        <div className="border-b border-gray-700 pb-4">
-                            <p className="text-sm text-gray-400">Teléfono</p>
-                            <p className="text-lg font-medium">{user.phoneNumber}</p>
-                        </div>
+                        <Box sx={{ borderBottom: "1px solid #EDD9D5", pb: 2 }}>
+                            <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+                                Teléfono
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#3D2B2B", fontWeight: 500 }}>
+                                {user.phone}
+                            </Typography>
+                        </Box>
                     )}
 
                     {user.role && (
-                        <div className="border-b border-gray-700 pb-4">
-                            <p className="text-sm text-gray-400">Rol</p>
-                            <p className="text-lg font-medium capitalize">{user.role.toLowerCase()}</p>
-                        </div>
+                        <Box sx={{ borderBottom: "1px solid #EDD9D5", pb: 2 }}>
+                            <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+                                Rol
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#3D2B2B", fontWeight: 500 }}>
+                                {user.role}
+                            </Typography>
+                        </Box>
                     )}
-                </div>
+                </Stack>
 
                 <Button 
                     onClick={handleLogout} 
-                    className="w-full !bg-red-600 !text-white hover:!bg-red-700"
+                    sx={{ 
+                        backgroundColor: "#C0392B", 
+                        color: "#FFFFFF",
+                        "&:hover": { backgroundColor: "#A93226" }
+                    }}
                 >
                     Cerrar sesión
                 </Button>
-            </div>
+            </Box>
         </Container>
     );
 };

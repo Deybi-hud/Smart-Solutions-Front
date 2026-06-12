@@ -16,14 +16,14 @@ const Dropdown = ({ label, id, value, onChange, options, placeholder, disabled =
         onChange={onChange}
         MenuProps={{
           PaperProps: {
-            sx: { backgroundColor: "#1f2937", color: "#f9fafb" },
+            sx: { backgroundColor: "#FAF0EE" },
           },
         }}
       >
         <MenuItem value="">
-          <em style={{ color: "#9ca3af" }}>{placeholder || "Selecciona una opción"}</em>
+          <em style={{ color: "#9C7878" }}>{placeholder || "Selecciona una opción"}</em>
         </MenuItem>
-        {options.map((opt) => (
+        {options && options.map((opt) => (
           <MenuItem key={opt.value} value={opt.value}>
             {opt.label}
           </MenuItem>
