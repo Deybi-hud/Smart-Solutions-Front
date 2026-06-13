@@ -13,12 +13,12 @@ export const subscriptionsApi = createApi({
     tagTypes: ["Subscriptions"],
     endpoints: (builder) => ({
         getUserSubscription: builder.query({
-            query: (userId) => `/api/v1/subscriptions/${userId}/subscription`,
+            query: (userId) => "/api/v1/subscriptions/" + userId + "/subscription",
             providesTags: ["Subscriptions"],
         }),
         activateSubscription: builder.mutation({
             query: ({ userId, planId }) => ({
-                url: `/api/v1/subscriptions/${userId}/subscription/activate`,
+                url: "/api/v1/subscriptions/" + userId + "/subscription/activate",
                 method: "POST",
                 body: { planId },
             }),
@@ -26,7 +26,7 @@ export const subscriptionsApi = createApi({
         }),
         cancelSubscription: builder.mutation({
             query: (userId) => ({
-                url: `/api/v1/subscriptions/${userId}/subscription/cancel`,
+                url: "/api/v1/subscriptions/" + userId + "/subscription/cancel",
                 method: "POST",
             }),
             invalidatesTags: ["Subscriptions"],

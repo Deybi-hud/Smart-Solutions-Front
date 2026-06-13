@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import FormField from "../molecules/FormField";
 import LocationSelector from "../molecules/LocationSelector";
 import Button from "../atoms/Button";
 import ErrorMessage from "../atoms/ErrorMessage";
 import { useRegisterMutation } from "../../store/api/authApi";
+import { userApi } from "../../store/api/userApi";
 import { validateRegisterForm } from "../../utils/validations";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [register, { isLoading }] = useRegisterMutation();
 
   const [form, setForm] = useState({
@@ -55,7 +58,8 @@ const RegisterForm = () => {
         phone: form.phone,
         addressId,
       }).unwrap();
-      navigate("/login");
+      dispatch(userApi.util.invalidateTags(["Profile"]));
+      navigate("/home");
     } catch (err) {
       const data = err?.data;
       if (data?.details) {

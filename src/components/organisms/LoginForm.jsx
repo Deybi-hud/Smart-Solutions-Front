@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import FormField from "../molecules/FormField";
 import Button from "../atoms/Button";
 import ErrorMessage from "../atoms/ErrorMessage";
 import { useLoginMutation } from "../../store/api/authApi";
+import { userApi } from "../../store/api/userApi";
 import { validateLoginForm } from "../../utils/validations";
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [login, { isLoading }] = useLoginMutation();
 
     const [form, setForm] = useState({
@@ -46,6 +49,7 @@ const LoginForm = () => {
                 email: form.email,
                 password: form.password,
             }).unwrap();
+            dispatch(userApi.util.invalidateTags(["Profile"]));
             navigate("/home");
         } catch (err) {
             setGeneralError(

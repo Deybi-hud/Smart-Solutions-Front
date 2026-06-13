@@ -14,13 +14,22 @@ import AdminRoute from "./components/organisms/AdminRoute";
 const App = () => {
   useGetProfileQuery();
 
-  const { isLoading } = useSelector((state) => state.auth);
-
+  const { isLoading, isAuthenticated } = useSelector((state) => state.auth);
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#1a1a2e] text-white">
-        <p className="text-xl font-semibold">Cargando sesión...</p>
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#FDF6F4",
+        }}
+      >
+        <p style={{ color: "#9C7878", fontSize: "1.1rem", fontWeight: 500 }}>
+          Cargando sesión...
+        </p>
       </div>
     );
   }
@@ -28,8 +37,14 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/home" replace /> : <LoginPage />}
+      />
+      <Route
+        path="/register"
+        element={isAuthenticated ? <Navigate to="/home" replace /> : <RegisterPage />}
+      />
       <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
       <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
       <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />

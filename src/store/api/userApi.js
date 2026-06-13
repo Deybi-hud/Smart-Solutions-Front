@@ -36,12 +36,12 @@ export const userApi = createApi({
     }),
 
     searchByEmail: builder.query({
-      query: (email) => `/api/v1 / admin / users / search - email / ${email}`,
+      query: (email) => "/api/v1/admin/users/search-email/" + email,
       providesTags: ["Users"],
     }),
 
     searchByPhone: builder.query({
-      query: (phone) => `/api/v1 / admin / users / search - phone / ${phone}`,
+      query: (phone) => "/api/v1/admin/users/search-phone/" + phone,
       providesTags: ["Users"],
     }),
 
@@ -52,7 +52,7 @@ export const userApi = createApi({
 
     updateUserByEmail: builder.mutation({
       query: ({ email, data }) => ({
-        url: `/api/v1 / admin / users / update - by - email / ${email}`,
+        url: "/api/v1/admin/users/update-by-email/" + email,
         method: "PATCH",
         body: data,
       }),

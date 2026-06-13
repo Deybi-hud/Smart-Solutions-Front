@@ -17,7 +17,7 @@ export const plansApi = createApi({
             providesTags: ["Plans"],
         }),
         getPlanById: builder.query({
-            query: (id) => `/api/v1/plans/${id}`,
+            query: (id) => "/api/v1/plans/" + id,
             providesTags: ["Plans"],
         }),
         getAllPlansAdmin: builder.query({
@@ -34,7 +34,7 @@ export const plansApi = createApi({
         }),
         updatePlan: builder.mutation({
             query: ({ id, ...data }) => ({
-                url: `/api/v1/plans/${id}`,
+                url: "/api/v1/plans/" + id,
                 method: "PUT",
                 body: data,
             }),
