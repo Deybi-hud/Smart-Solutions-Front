@@ -17,11 +17,11 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
   const { data: addresses = [], isLoading: loadingAddresses } = useGetAddressesQuery();
 
   const filteredCommunes = communes.filter(
-    (c) => String(c.regionId) === String(regionId)
+    (c) => String(c.region?.id || c.regionId) === String(regionId)
   );
 
   const filteredAddresses = addresses.filter(
-    (a) => String(a.communeId) === String(communeId)
+    (a) => String(a.commune?.id || a.communeId) === String(communeId)
   );
 
   useEffect(() => {
