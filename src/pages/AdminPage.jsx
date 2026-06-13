@@ -7,6 +7,7 @@ import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
 import LocationPanel from "../components/organisms/LocationPanel";
 import UsersPanel from "../components/organisms/UsersPanel";
+import PlansPanel from "../components/organisms/PlansPanel";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -23,7 +24,7 @@ const AdminPage = () => {
       <NavBar />
 
       <Box component="main" sx={{ flex: 1, py: 4, px: 2 }}>
-        <Box sx={{ maxWidth: "768px", mx: "auto" }}>
+        <Box sx={{ maxWidth: "960px", mx: "auto" }}>
 
           <Typography
             variant="h4"
@@ -36,13 +37,17 @@ const AdminPage = () => {
             value={activeTab}
             onChange={(_, v) => setActiveTab(v)}
             sx={{ mb: 3, borderBottom: "1px solid #EDD9D5" }}
+            variant="scrollable"
+            scrollButtons="auto"
           >
             <Tab label="Regiones / Comunas / Sucursales" />
             <Tab label="Usuarios" />
+            <Tab label="Planes" />
           </Tabs>
 
           {activeTab === 0 && <LocationPanel />}
           {activeTab === 1 && <UsersPanel />}
+          {activeTab === 2 && <PlansPanel />}
         </Box>
       </Box>
 
