@@ -7,34 +7,14 @@ import Footer from "../components/organisms/Footer";
 
 const RegisterPage = () => {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#FDF6F4",
-      }}
-    >
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "background.default" }}>
       <Box
         component="main"
-        sx={{
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          px: 2,
-          py: 6,
-        }}
+        sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", px: 2, py: 6 }}
       >
         <Paper
-          elevation={0}
-          sx={{
-            width: "100%",
-            maxWidth: "512px",
-            borderRadius: "14px",
-            p: 4,
-            border: "1px solid #EDD9D5",
-          }}
+          variant="outlined"
+          sx={{ width: "100%", maxWidth: "512px", borderRadius: "14px", p: 4 }}
         >
           <Typography
             component={Link}
@@ -43,8 +23,7 @@ const RegisterPage = () => {
             sx={{
               display: "block",
               textAlign: "center",
-              color: "#D4627A",
-              fontWeight: 700,
+              color: "primary.main",
               textDecoration: "none",
               mb: 3,
             }}
@@ -52,29 +31,23 @@ const RegisterPage = () => {
             Smart Solutions
           </Typography>
 
-          <Typography
-            variant="h5"
-            sx={{ color: "#3D2B2B", fontWeight: 700, mb: 3, textAlign: "center" }}
-          >
+          <Typography variant="h5" sx={{ color: "text.primary", mb: 3, textAlign: "center" }}>
             Crear cuenta
           </Typography>
 
           <RegisterForm />
 
-          <Typography
-            variant="body2"
-            sx={{ color: "#9C7878", textAlign: "center", mt: 3 }}
-          >
+          <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "center", mt: 3 }}>
             ¿Ya tienes cuenta?{" "}
             <Typography
               component={Link}
               to="/login"
               variant="body2"
               sx={{
-                color: "#D4627A",
+                color: "primary.main",
                 fontWeight: 600,
                 textDecoration: "none",
-                "&:hover": { color: "#B8455E" },
+                "&:hover": { color: "primary.dark" },
               }}
             >
               Inicia sesión aquí

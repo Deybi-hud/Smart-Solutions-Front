@@ -14,14 +14,9 @@ const Dropdown = ({ label, id, value, onChange, options, placeholder, disabled =
         value={value}
         label={label}
         onChange={onChange}
-        MenuProps={{
-          PaperProps: {
-            sx: { backgroundColor: "#1f2937", color: "#f9fafb" },
-          },
-        }}
       >
-        <MenuItem value="">
-          <em style={{ color: "#9ca3af" }}>{placeholder || "Selecciona una opción"}</em>
+        <MenuItem value="" disabled>
+          <em>{placeholder || "Selecciona una opción"}</em>
         </MenuItem>
         {options.map((opt) => (
           <MenuItem key={opt.value} value={opt.value}>

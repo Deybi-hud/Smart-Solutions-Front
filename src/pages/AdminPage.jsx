@@ -13,30 +13,19 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#FDF6F4",
-      }}
-    >
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "background.default" }}>
       <NavBar />
 
       <Box component="main" sx={{ flex: 1, py: 4, px: 2 }}>
         <Box sx={{ maxWidth: "960px", mx: "auto" }}>
-
-          <Typography
-            variant="h4"
-            sx={{ color: "#3D2B2B", fontWeight: 700, mb: 3 }}
-          >
+          <Typography variant="h4" sx={{ color: "text.primary", mb: 3 }}>
             Panel de Administración
           </Typography>
 
           <Tabs
             value={activeTab}
             onChange={(_, v) => setActiveTab(v)}
-            sx={{ mb: 3, borderBottom: "1px solid #EDD9D5" }}
+            sx={{ mb: 3, borderBottom: "1px solid", borderBottomColor: "divider" }}
             variant="scrollable"
             scrollButtons="auto"
           >

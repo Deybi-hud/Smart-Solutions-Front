@@ -8,14 +8,7 @@ import Footer from "../components/organisms/Footer";
 
 const LandingPage = () => {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#FDF6F4",
-      }}
-    >
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "background.default" }}>
       <NavBar showAuthLinks />
 
       <Box
@@ -34,53 +27,31 @@ const LandingPage = () => {
         <Typography
           variant="h2"
           sx={{
-            color: "#3D2B2B",
-            fontWeight: 700,
+            color: "text.primary",
             mb: 3,
             fontSize: { xs: "2.25rem", sm: "3rem", lg: "3.75rem" },
-            lineHeight: 1.15,
           }}
         >
           Soluciones inteligentes{" "}
           <Box component="br" sx={{ display: { xs: "none", sm: "block" } }} />
-          <Box component="span" sx={{ color: "#D4627A" }}>
+          <Box component="span" sx={{ color: "primary.main" }}>
             para tu bienestar
           </Box>
         </Typography>
 
         <Typography
           variant="h6"
-          sx={{
-            color: "#9C7878",
-            fontWeight: 400,
-            maxWidth: "600px",
-            mb: 5,
-            lineHeight: 1.6,
-          }}
+          sx={{ color: "text.secondary", fontWeight: 400, maxWidth: "600px", mb: 5 }}
         >
           Planes personalizados, guía experta y acompañamiento 24/7 para que
           alcances tus metas físicas.
         </Typography>
 
-        {/* Botones de acción */}
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <MuiButton
-            component={Link}
-            to="/register"
-            variant="contained"
-            size="large"
-            sx={{ px: 4 }}
-          >
+          <MuiButton component={Link} to="/register" variant="contained" size="large" sx={{ px: 4 }}>
             Comenzar ahora
           </MuiButton>
-
-          <MuiButton
-            component={Link}
-            to="/login"
-            variant="outlined"
-            size="large"
-            sx={{ px: 4 }}
-          >
+          <MuiButton component={Link} to="/login" variant="outlined" size="large" sx={{ px: 4 }}>
             Ya tengo cuenta
           </MuiButton>
         </Stack>

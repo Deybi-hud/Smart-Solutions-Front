@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
+import { COLORS } from "../theme/theme";
 
 const cards = [
   { title: "Planes activos", desc: "Revisa tus planes y progreso desde tu perfil." },
@@ -21,28 +22,17 @@ const HomePage = () => {
   const [showAbout, setShowAbout] = useState(false);
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#FDF6F4",
-      }}
-    >
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "background.default" }}>
       <NavBar onAboutClick={() => setShowAbout(!showAbout)} />
 
       <Box component="main" sx={{ flex: 1, py: { xs: 4, sm: 6 }, px: 2 }}>
         {!showAbout ? (
           <Box sx={{ maxWidth: "900px", mx: "auto" }}>
-
             <Box sx={{ textAlign: "center", py: 6 }}>
-              <Typography
-                variant="h3"
-                sx={{ color: "#3D2B2B", fontWeight: 700, mb: 2 }}
-              >
+              <Typography variant="h3" sx={{ color: "text.primary", mb: 2 }}>
                 Bienvenido a Smart Solutions
               </Typography>
-              <Typography variant="h6" sx={{ color: "#9C7878", fontWeight: 400 }}>
+              <Typography variant="h6" sx={{ color: "text.secondary", fontWeight: 400 }}>
                 Soluciones inteligentes para tu físico.
               </Typography>
             </Box>
@@ -52,20 +42,18 @@ const HomePage = () => {
                 <Grid item xs={12} sm={4} key={card.title}>
                   <Box
                     sx={{
-                      backgroundColor: "#FFFFFF",
-                      border: "1px solid #EDD9D5",
+                      backgroundColor: "background.paper",
+                      border: "1px solid",
+                      borderColor: "divider",
                       borderRadius: "12px",
                       p: 3,
                       height: "100%",
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      sx={{ color: "#3D2B2B", fontWeight: 600, mb: 1 }}
-                    >
+                    <Typography variant="h6" sx={{ color: "text.primary", mb: 1 }}>
                       {card.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "#9C7878" }}>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
                       {card.desc}
                     </Typography>
                   </Box>
@@ -75,16 +63,10 @@ const HomePage = () => {
           </Box>
         ) : (
           <Box sx={{ maxWidth: "900px", mx: "auto" }}>
-            <Typography
-              variant="h4"
-              sx={{ color: "#3D2B2B", fontWeight: 700, mb: 3 }}
-            >
+            <Typography variant="h4" sx={{ color: "text.primary", mb: 3 }}>
               ¿Quiénes somos?
             </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: "#9C7878", lineHeight: 1.8, mb: 4 }}
-            >
+            <Typography variant="body1" sx={{ color: "text.secondary", lineHeight: 1.8, mb: 4 }}>
               Smart Solutions es una empresa orientada al cuidado físico de
               nuestros clientes a través de planes completos con guía, tutoría y
               atención 24/7.
@@ -95,19 +77,17 @@ const HomePage = () => {
                 <Grid item xs={12} sm={4} key={item.title}>
                   <Box
                     sx={{
-                      backgroundColor: "#FAF0EE",
-                      borderLeft: "3px solid #F4A896",
-                      borderRadius: "8px",
+                      backgroundColor: COLORS.bgPanel,
+                      borderLeft: "3px solid",
+                      borderLeftColor: "primary.light",
+                      borderRadius: "12px",
                       p: 3,
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      sx={{ color: "#D4627A", fontWeight: 700, mb: 1.5 }}
-                    >
+                    <Typography variant="h6" sx={{ color: "primary.main", mb: 1.5 }}>
                       {item.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "#9C7878" }}>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
                       {item.desc}
                     </Typography>
                   </Box>

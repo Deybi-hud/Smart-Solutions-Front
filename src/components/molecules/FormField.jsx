@@ -6,12 +6,8 @@ const FormField = ({ label, id, error, className, ...props }) => {
       id={id}
       label={label}
       error={!!error}
-      helperText={error || ""}
-      fullWidth
-      size="small"
-      variant="outlined"
+      helperText={error}
       className={className}
-      FormHelperTextProps={{ sx: { mx: 0 } }}
       {...props}
     />
   );

@@ -12,69 +12,39 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
   const isAdmin = user?.role === "ADMINISTRADOR";
 
   return (
-    <AppBar position="sticky" elevation={0}>
-      <Toolbar
-        sx={{
-          maxWidth: "900px",
-          width: "100%",
-          mx: "auto",
-          px: 2,
-        }}
-      >
+    <AppBar position="sticky">
+      <Toolbar sx={{ maxWidth: "900px", width: "100%", mx: "auto", px: 2 }}>
         <Typography
           component={Link}
           to="/home"
           variant="h6"
-          sx={{
-            color: "#D4627A",
-            fontWeight: 700,
-            textDecoration: "none",
-            flexGrow: 1,
-          }}
+          sx={{ color: "primary.main", textDecoration: "none", flexGrow: 1 }}
         >
           Smart Solutions
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {showAuthLinks ? (
             <>
-              <MuiButton
-                component={Link}
-                to="/login"
-                sx={{ color: "#9C7878" }}
-              >
+              <MuiButton component={Link} to="/login" variant="text">
                 Iniciar sesión
               </MuiButton>
-              <MuiButton
-                component={Link}
-                to="/register"
-                variant="contained"
-                color="primary"
-              >
+              <MuiButton component={Link} to="/register" variant="contained">
                 Registrarse
               </MuiButton>
             </>
           ) : (
             <>
               {onAboutClick && (
-                <MuiButton
-                  onClick={onAboutClick}
-                  sx={{ color: "#9C7878" }}
-                >
+                <MuiButton onClick={onAboutClick} variant="text">
                   ¿Quiénes somos?
                 </MuiButton>
               )}
               {isAdmin && (
-                <MuiButton
-                  onClick={() => navigate("/admin")}
-                  sx={{ color: "#9C7878" }}
-                >
+                <MuiButton onClick={() => navigate("/admin")} variant="text">
                   Admin
                 </MuiButton>
               )}
-              <MuiButton
-                onClick={() => navigate("/profile")}
-                sx={{ color: "#9C7878" }}
-              >
+              <MuiButton onClick={() => navigate("/profile")} variant="text">
                 Perfil
               </MuiButton>
             </>

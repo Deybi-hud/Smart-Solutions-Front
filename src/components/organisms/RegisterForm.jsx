@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import Stack from "@mui/material/Stack";
 import FormField from "../molecules/FormField";
 import LocationSelector from "../molecules/LocationSelector";
 import Button from "../atoms/Button";
@@ -28,26 +29,18 @@ const RegisterForm = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: null });
-    }
+    if (errors[e.target.name]) setErrors({ ...errors, [e.target.name]: null });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setGeneralError("");
-
     const validationErrors = validateRegisterForm(form);
-    if (validationErrors) {
-      setErrors(validationErrors);
-      return;
-    }
-
+    if (validationErrors) { setErrors(validationErrors); return; }
     if (!addressId) {
       setErrors((prev) => ({ ...prev, address: "Debes seleccionar una sucursal." }));
       return;
     }
-
     try {
       await register({
         name: form.name,
@@ -64,9 +57,7 @@ const RegisterForm = () => {
       const data = err?.data;
       if (data?.details) {
         const backendErrors = {};
-        Object.entries(data.details).forEach(([key, msg]) => {
-          backendErrors[key] = msg;
-        });
+        Object.entries(data.details).forEach(([key, msg]) => { backendErrors[key] = msg; });
         setErrors(backendErrors);
       } else {
         setGeneralError(data?.message || "Error al registrarse. Intenta de nuevo.");
@@ -75,9 +66,8 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
       {generalError && <ErrorMessage message={generalError} />}
-
       <FormField
         label="Nombre"
         id="name"
@@ -88,7 +78,6 @@ const RegisterForm = () => {
         error={errors.name}
         disabled={isLoading}
       />
-
       <FormField
         label="Apellido"
         id="lastName"
@@ -99,7 +88,6 @@ const RegisterForm = () => {
         error={errors.lastName}
         disabled={isLoading}
       />
-
       <FormField
         label="Correo"
         id="email"
@@ -111,7 +99,6 @@ const RegisterForm = () => {
         error={errors.email}
         disabled={isLoading}
       />
-
       <FormField
         label="Teléfono (9 dígitos)"
         id="phone"
@@ -122,7 +109,6 @@ const RegisterForm = () => {
         error={errors.phone}
         disabled={isLoading}
       />
-
       <FormField
         label="Contraseña"
         id="password"
@@ -134,7 +120,6 @@ const RegisterForm = () => {
         error={errors.password}
         disabled={isLoading}
       />
-
       <FormField
         label="Confirmar contraseña"
         id="confirmPassword"
@@ -146,7 +131,6 @@ const RegisterForm = () => {
         error={errors.confirmPassword}
         disabled={isLoading}
       />
-
       <LocationSelector
         onAddressSelect={(id) => {
           setAddressId(id);
@@ -155,11 +139,10 @@ const RegisterForm = () => {
         error={errors.address}
         disabled={isLoading}
       />
-
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" disabled={isLoading}>
         {isLoading ? "Registrando..." : "Registrarse"}
       </Button>
-    </form>
+    </Stack>
   );
 };
 

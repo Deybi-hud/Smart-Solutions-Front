@@ -25,9 +25,12 @@ import {
 } from "../../store/api/subscriptionsApi";
 import { useGetActivePlansQuery } from "../../store/api/plansApi";
 
+import { COLORS } from "../../theme/theme";
+
 const panelSx = {
-  backgroundColor: "#FFFFFF",
-  border: "1px solid #EDD9D5",
+  backgroundColor: "background.paper",
+  border: "1px solid",
+  borderColor: "divider",
   borderRadius: "10px",
   p: 3,
 };
@@ -40,32 +43,33 @@ const roleColor = (role) => {
 const UserCard = ({ user, onEdit, onViewSub }) => (
   <Box
     sx={{
-      backgroundColor: "#FAF0EE",
-      border: "1px solid #EDD9D5",
+      backgroundColor: COLORS.bgPanel,
+      border: "1px solid",
+      borderColor: "divider",
       borderRadius: "8px",
       p: 2,
     }}
   >
     <Stack direction="row" alignItems="flex-start" justifyContent="space-between" flexWrap="wrap" gap={1}>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 600, color: "#3D2B2B" }}>
+        <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>
           {user.name} {user.lastName}
         </Typography>
-        <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+        <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
           {user.email}
         </Typography>
-        <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+        <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
           {user.phone} · {user.sucursalName}
         </Typography>
       </Box>
       <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
         <Chip label={user.role} size="small" color={roleColor(user.role)} variant="outlined" />
         {onViewSub && (
-          <MuiButton size="small" onClick={() => onViewSub(user)} sx={{ color: "#7B8FC8", minWidth: 0 }}>
+          <MuiButton size="small" onClick={() => onViewSub(user)} sx={{ color: "primary.main", minWidth: 0 }}>
             Suscripción
           </MuiButton>
         )}
-        <MuiButton size="small" onClick={() => onEdit(user)} sx={{ color: "#D4627A", minWidth: 0 }}>
+        <MuiButton size="small" onClick={() => onEdit(user)} sx={{ color: "primary.main", minWidth: 0 }}>
           Editar
         </MuiButton>
       </Stack>
@@ -98,8 +102,8 @@ const EditUserDialog = ({ user, open, onClose, addresses }) => {
 
   return (
     <Dialog open={open} onClose={onClose} TransitionProps={{ onEnter: handleOpen }} maxWidth="xs" fullWidth
-      PaperProps={{ sx: { borderRadius: "14px", border: "1px solid #EDD9D5" } }}>
-      <DialogTitle sx={{ color: "#3D2B2B", fontWeight: 700 }}>Editar usuario</DialogTitle>
+>
+      <DialogTitle>Editar usuario</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           {error && <Alert severity="error" sx={{ borderRadius: "8px" }}>{error}</Alert>}
@@ -122,7 +126,7 @@ const EditUserDialog = ({ user, open, onClose, addresses }) => {
           ))}
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+      <DialogActions>
         <MuiButton onClick={onClose} variant="outlined" disabled={isLoading}>Cerrar</MuiButton>
         <MuiButton onClick={handleSave} variant="contained" disabled={isLoading}>
           {isLoading ? "Guardando..." : "Guardar"}
@@ -162,42 +166,42 @@ const SubscriptionDialog = ({ user, open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
-      PaperProps={{ sx: { borderRadius: "14px", border: "1px solid #EDD9D5" } }}>
-      <DialogTitle sx={{ color: "#3D2B2B", fontWeight: 700 }}>
+>
+      <DialogTitle>
         Suscripción — {user?.name} {user?.lastName}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           {error && <Alert severity="error" sx={{ borderRadius: "8px" }}>{error}</Alert>}
           {success && <Alert severity="success" sx={{ borderRadius: "8px" }}>{success}</Alert>}
-          {isLoading && <Typography variant="body2" sx={{ color: "#9C7878" }}>Cargando...</Typography>}
-          {isError && <Typography variant="body2" sx={{ color: "#9C7878" }}>Sin suscripción activa.</Typography>}
+          {isLoading && <Typography variant="body2" sx={{ color: "text.secondary" }}>Cargando...</Typography>}
+          {isError && <Typography variant="body2" sx={{ color: "text.secondary" }}>Sin suscripción activa.</Typography>}
           {sub && (
             <Box sx={{ backgroundColor: "#FAF0EE", borderRadius: "8px", p: 2 }}>
-              <Typography variant="body2" sx={{ fontWeight: 600, color: "#3D2B2B", mb: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 1 }}>
                 Plan: {sub.planName}
               </Typography>
               <Typography variant="caption" sx={{ color: statusColor[sub.status] || "#9C7878", display: "block" }}>
                 Estado: {sub.status}
               </Typography>
-              <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+              <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
                 Vence: {sub.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString("es-CL") : "—"}
               </Typography>
               {sub.cancelAtPeriodEnd && (
-                <Typography variant="caption" sx={{ color: "#C0392B", display: "block" }}>
+                <Typography variant="caption" sx={{ color: "error.main", display: "block" }}>
                   Cancelación programada al vencer.
                 </Typography>
               )}
               {!sub.cancelAtPeriodEnd && sub.status === "ACTIVE" && (
                 <MuiButton size="small" onClick={handleCancel} disabled={cancelling}
-                  sx={{ mt: 1, color: "#C0392B" }}>
+                  sx={{ mt: 1, color: "error.main" }}>
                   {cancelling ? "..." : "Cancelar renovación"}
                 </MuiButton>
               )}
             </Box>
           )}
           <Divider />
-          <Typography variant="body2" sx={{ fontWeight: 600, color: "#3D2B2B" }}>Activar / Renovar plan</Typography>
+          <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>Activar / Renovar plan</Typography>
           <TextField
             select
             label="Plan"
@@ -217,7 +221,7 @@ const SubscriptionDialog = ({ user, open, onClose }) => {
           </MuiButton>
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
+      <DialogActions>
         <MuiButton onClick={onClose} variant="outlined">Cerrar</MuiButton>
       </DialogActions>
     </Dialog>
@@ -231,7 +235,7 @@ const SearchByEmail = ({ onEdit, onViewSub }) => {
 
   return (
     <Box sx={panelSx}>
-      <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600, mb: 2 }}>
+      <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, mb: 2 }}>
         Buscar por correo
       </Typography>
       <Stack component="form" onSubmit={(e) => { e.preventDefault(); if (input.trim()) setQuery(input.trim()); }}
@@ -243,7 +247,7 @@ const SearchByEmail = ({ onEdit, onViewSub }) => {
         </MuiButton>
       </Stack>
       {isError && (
-        <Typography variant="body2" sx={{ color: "#C0392B", mt: 1 }}>
+        <Typography variant="body2" sx={{ color: "error.main", mt: 1 }}>
           {error?.data?.message || "Usuario no encontrado."}
         </Typography>
       )}
@@ -259,7 +263,7 @@ const SearchByPhone = ({ onEdit, onViewSub }) => {
 
   return (
     <Box sx={panelSx}>
-      <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600, mb: 2 }}>
+      <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, mb: 2 }}>
         Buscar por teléfono
       </Typography>
       <Stack component="form" onSubmit={(e) => { e.preventDefault(); if (input.trim()) setQuery(input.trim()); }}
@@ -271,7 +275,7 @@ const SearchByPhone = ({ onEdit, onViewSub }) => {
         </MuiButton>
       </Stack>
       {isError && (
-        <Typography variant="body2" sx={{ color: "#C0392B", mt: 1 }}>
+        <Typography variant="body2" sx={{ color: "error.main", mt: 1 }}>
           {error?.data?.message || "Usuario no encontrado."}
         </Typography>
       )}
@@ -285,11 +289,11 @@ const AllUsers = ({ onEdit, onViewSub }) => {
 
   return (
     <Box sx={panelSx}>
-      <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600, mb: 2 }}>
+      <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, mb: 2 }}>
         Todos los usuarios ({users.length})
       </Typography>
-      {isLoading && <Typography variant="body2" sx={{ color: "#9C7878" }}>Cargando...</Typography>}
-      {isError && <Typography variant="body2" sx={{ color: "#C0392B" }}>Error al cargar usuarios.</Typography>}
+      {isLoading && <Typography variant="body2" sx={{ color: "text.secondary" }}>Cargando...</Typography>}
+      {isError && <Typography variant="body2" sx={{ color: "error.main" }}>Error al cargar usuarios.</Typography>}
       <Stack spacing={1.5} divider={<Divider />}>
         {users.map((u) => (
           <UserCard key={u.email} user={u} onEdit={onEdit} onViewSub={onViewSub} />

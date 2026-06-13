@@ -12,10 +12,12 @@ import {
   useCreatePlanMutation,
   useUpdatePlanMutation,
 } from "../../store/api/plansApi";
+import { COLORS } from "../../theme/theme";
 
 const panelSx = {
-  backgroundColor: "#FFFFFF",
-  border: "1px solid #EDD9D5",
+  backgroundColor: "background.paper",
+  border: "1px solid",
+  borderColor: "divider",
   borderRadius: "10px",
   p: 3,
 };
@@ -42,9 +44,9 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ backgroundColor: "#FAF0EE", borderRadius: "8px", p: 2 }}
+      sx={{ backgroundColor: COLORS.bgPanel, borderRadius: "8px", p: 2 }}
     >
-      <Typography variant="body2" sx={{ fontWeight: 600, color: "#3D2B2B", mb: 1.5 }}>
+      <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 1.5 }}>
         {title}
       </Typography>
       <Stack spacing={1.5}>
@@ -60,7 +62,7 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
         <TextField label="Descripción" value={form.details} onChange={(e) => set("details", e.target.value)}
           multiline rows={2} size="small" fullWidth disabled={loading} />
         <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="body2" sx={{ color: "#9C7878" }}>Estado:</Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>Estado:</Typography>
           <MuiButton
             size="small"
             variant={form.isActive ? "contained" : "outlined"}
@@ -87,7 +89,7 @@ const PlanRow = ({ plan, onEdit }) => (
   <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, py: 1.5 }}>
     <Box sx={{ flex: 1, minWidth: 0 }}>
       <Stack direction="row" spacing={1} alignItems="center">
-        <Typography variant="body2" sx={{ fontWeight: 600, color: "#3D2B2B" }}>
+        <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>
           {plan.name}
         </Typography>
         <Chip
@@ -97,16 +99,16 @@ const PlanRow = ({ plan, onEdit }) => (
           variant="outlined"
         />
       </Stack>
-      <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+      <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
         ${plan.price} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""}
       </Typography>
       {plan.details && (
-        <Typography variant="caption" sx={{ color: "#9C7878", display: "block" }}>
+        <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
           {plan.details}
         </Typography>
       )}
     </Box>
-    <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: "#D4627A", minWidth: 0 }}>
+    <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: "primary.main", minWidth: 0 }}>
       Editar
     </MuiButton>
   </Box>
@@ -143,7 +145,7 @@ const PlansPanel = () => {
   return (
     <Box sx={panelSx}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-        <Typography variant="h6" sx={{ color: "#3D2B2B", fontWeight: 600 }}>
+        <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600 }}>
           Planes ({plans.length})
         </Typography>
         {!adding && !editingPlan && (
@@ -167,8 +169,8 @@ const PlansPanel = () => {
         </Box>
       )}
 
-      {isLoading && <Typography variant="body2" sx={{ color: "#9C7878" }}>Cargando planes...</Typography>}
-      {isError && <Typography variant="body2" sx={{ color: "#C0392B" }}>Error al cargar planes.</Typography>}
+      {isLoading && <Typography variant="body2" sx={{ color: "text.secondary" }}>Cargando planes...</Typography>}
+      {isError && <Typography variant="body2" sx={{ color: "error.main" }}>Error al cargar planes.</Typography>}
 
       <Stack divider={<Divider />}>
         {plans.map((p) => (

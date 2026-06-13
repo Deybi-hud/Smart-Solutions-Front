@@ -6,14 +6,15 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        backgroundColor: "#FFFFFF",
-        borderTop: "1px solid #EDD9D5",
+        backgroundColor: "background.paper",
+        borderTop: "1px solid",
+        borderTopColor: "divider",
         py: 3,
         mt: "auto",
       }}
     >
       <Box sx={{ maxWidth: "576px", mx: "auto", px: 2 }}>
-        <Typography variant="body2" sx={{ color: "#9C7878" }}>
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           © {new Date().getFullYear()} Smart Solutions
         </Typography>
       </Box>

@@ -90,7 +90,7 @@ const ProfilePage = () => {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FDF6F4",
+        backgroundColor: "background.default",
       }}
     >
       <NavBar />
@@ -100,12 +100,12 @@ const ProfilePage = () => {
 
           {/* Estado de carga */}
           {isLoading && (
-            <Typography sx={{ color: "#9C7878", textAlign: "center" }}>
+            <Typography sx={{ color: "text.secondary", textAlign: "center" }}>
               Cargando perfil...
             </Typography>
           )}
           {isError && (
-            <Typography sx={{ color: "#C0392B", textAlign: "center" }}>
+            <Typography sx={{ color: "error.main", textAlign: "center" }}>
               Error al cargar el perfil.
             </Typography>
           )}
@@ -113,15 +113,16 @@ const ProfilePage = () => {
           {profile && !editing && (
             <Box
               sx={{
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "background.paper",
                 borderRadius: "14px",
                 p: 3,
-                border: "1px solid #EDD9D5",
+                border: "1px solid",
+                borderColor: "divider",
               }}
             >
               <Typography
                 variant="h5"
-                sx={{ fontWeight: 700, color: "#3D2B2B", mb: 3 }}
+                sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}
               >
                 Mi Perfil
               </Typography>
@@ -136,12 +137,12 @@ const ProfilePage = () => {
                 {profileFields.map(({ label, value }, i) => (
                   <Box key={label}>
                     <Box sx={{ py: 2 }}>
-                      <Typography variant="caption" sx={{ color: "#9C7878" }}>
+                      <Typography variant="caption" sx={{ color: "text.secondary" }}>
                         {label}
                       </Typography>
                       <Typography
                         variant="body1"
-                        sx={{ fontWeight: 500, color: "#3D2B2B" }}
+                        sx={{ fontWeight: 500, color: "text.primary" }}
                       >
                         {value}
                       </Typography>
@@ -165,7 +166,7 @@ const ProfilePage = () => {
                   variant="contained"
                   fullWidth
                   sx={{
-                    backgroundColor: "#C0392B",
+                    backgroundColor: "error.main",
                     "&:hover": { backgroundColor: "#9B2A1E" },
                   }}
                 >
@@ -178,26 +179,27 @@ const ProfilePage = () => {
           {subscription && !editing && (
             <Box
               sx={{
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "background.paper",
                 borderRadius: "14px",
                 p: 3,
-                border: "1px solid #EDD9D5",
+                border: "1px solid",
+                borderColor: "divider",
                 mt: 3,
               }}
             >
-              <Typography variant="h5" sx={{ fontWeight: 700, color: "#3D2B2B", mb: 2 }}>
+              <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 2 }}>
                 Mi Suscripción
               </Typography>
               <Stack spacing={1.5}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <Typography variant="body2" sx={{ color: "#9C7878" }}>Plan</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#3D2B2B" }}>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>Plan</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>
                     {subscription.planName}
                   </Typography>
                 </Box>
                 <Divider />
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <Typography variant="body2" sx={{ color: "#9C7878" }}>Estado</Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>Estado</Typography>
                   <Chip
                     label={subscription.status}
                     size="small"
@@ -207,8 +209,8 @@ const ProfilePage = () => {
                 </Box>
                 <Divider />
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <Typography variant="body2" sx={{ color: "#9C7878" }}>Vence</Typography>
-                  <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>Vence</Typography>
+                  <Typography variant="body2" sx={{ color: "text.primary" }}>
                     {subscription.currentPeriodEnd
                       ? new Date(subscription.currentPeriodEnd).toLocaleDateString("es-CL")
                       : "—"}
@@ -217,7 +219,7 @@ const ProfilePage = () => {
                 {subscription.cancelAtPeriodEnd && (
                   <>
                     <Divider />
-                    <Typography variant="caption" sx={{ color: "#C0392B" }}>
+                    <Typography variant="caption" sx={{ color: "error.main" }}>
                       La renovación automática está cancelada.
                     </Typography>
                   </>
@@ -229,15 +231,16 @@ const ProfilePage = () => {
           {!subscription && profile && !editing && (
             <Box
               sx={{
-                backgroundColor: "#FAF0EE",
+                backgroundColor: "primary.light",
                 borderRadius: "14px",
                 p: 3,
-                border: "1px solid #EDD9D5",
+                border: "1px solid",
+                borderColor: "divider",
                 mt: 3,
                 textAlign: "center",
               }}
             >
-              <Typography variant="body2" sx={{ color: "#9C7878" }}>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 No tienes un plan activo. Contacta al administrador para activar uno.
               </Typography>
             </Box>
@@ -246,15 +249,16 @@ const ProfilePage = () => {
           {editing && (
             <Box
               sx={{
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "background.paper",
                 borderRadius: "14px",
                 p: 3,
-                border: "1px solid #EDD9D5",
+                border: "1px solid",
+                borderColor: "divider",
               }}
             >
               <Typography
                 variant="h5"
-                sx={{ fontWeight: 700, color: "#3D2B2B", mb: 3 }}
+                sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}
               >
                 Editar datos
               </Typography>
