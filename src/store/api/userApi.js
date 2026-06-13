@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws",
+  baseUrl: import.meta.env.VITE_API_URL,
   credentials: "include",
   prepareHeaders: (headers) => {
     headers.set("Content-Type", "application/json");
@@ -36,25 +36,25 @@ export const userApi = createApi({
     }),
 
     searchByEmail: builder.query({
-      query: (email) => `/api/v1/admin/users/search-email/${email}`,
+      query: (email) => `/api/v1 / admin / users / search - email / ${ email }`,
       providesTags: ["Users"],
     }),
 
-    searchByPhone: builder.query({
-      query: (phone) => `/api/v1/admin/users/search-phone/${phone}`,
-      providesTags: ["Users"],
+  searchByPhone: builder.query({
+    query: (phone) => `/api/v1 / admin / users / search - phone / ${ phone }`,
+    providesTags: ["Users"],
     }),
 
-    listUsers: builder.query({
-      query: () => "/api/v1/admin/users",
-      providesTags: ["Users"],
-    }),
+  listUsers: builder.query({
+    query: () => "/api/v1/admin/users",
+    providesTags: ["Users"],
+  }),
 
     updateUserByEmail: builder.mutation({
       query: ({ email, data }) => ({
-        url: `/api/v1/admin/users/update-by-email/${email}`,
-        method: "PATCH",
-        body: data,
+        url: `/api/v1 / admin / users / update - by - email / ${ email }`,
+      method: "PATCH",
+      body: data,
       }),
       invalidatesTags: ["Users"],
     }),
