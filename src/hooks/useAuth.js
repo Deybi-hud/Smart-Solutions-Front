@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { logout, clearError } from "../store/slices/authSlice";
+import { clearError } from "../store/slices/authSlice";
+import { useLogoutMutation } from "../store/api/userApi";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
@@ -7,8 +8,14 @@ export const useAuth = () => {
     (state) => state.auth
   );
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const [logoutServer] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logoutServer().unwrap();
+    } catch (err) {
+      console.error("Error al cerrar sesión", err);
+    }
   };
 
   const handleClearError = () => {

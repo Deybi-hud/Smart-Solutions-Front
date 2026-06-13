@@ -1,4 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useGetProfileQuery } from "./store/api/userApi";
+
 import LandingPage from "./pages/LandingPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -9,6 +12,19 @@ import PrivateRoute from "./components/organisms/PrivateRoute";
 import AdminRoute from "./components/organisms/AdminRoute";
 
 const App = () => {
+  useGetProfileQuery();
+
+  const { isLoading } = useSelector((state) => state.auth);
+
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#1a1a2e] text-white">
+        <p className="text-xl font-semibold">Cargando sesión...</p>
+      </div>
+    );
+  }
+
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
