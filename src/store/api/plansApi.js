@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const plansApi = createApi({
     reducerPath: "plansApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_API_URL,
+        baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws",
         credentials: "include",
         prepareHeaders: (headers) => {
             headers.set("Content-Type", "application/json");
@@ -19,28 +19,28 @@ export const plansApi = createApi({
         getPlanById: builder.query({
             query: (id) => `/api/v1/plans/${id}`,
             providesTags: ["Plans"],
-    }),
-    getAllPlansAdmin: builder.query({
-        query: () => "/api/v1/plans/admin/all",
-        providesTags: ["Plans"],
-    }),
-    createPlan: builder.mutation({
-        query: (data) => ({
-            url: "/api/v1/plans/create",
-            method: "POST",
-            body: data,
         }),
-        invalidatesTags: ["Plans"],
-    }),
-    updatePlan: builder.mutation({
-        query: ({ id, ...data }) => ({
-            url: `/api/v1/plans/${id}`,
-            method: "PUT",
-            body: data,
+        getAllPlansAdmin: builder.query({
+            query: () => "/api/v1/plans/admin/all",
+            providesTags: ["Plans"],
         }),
-        invalidatesTags: ["Plans"],
+        createPlan: builder.mutation({
+            query: (data) => ({
+                url: "/api/v1/plans/create",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["Plans"],
+        }),
+        updatePlan: builder.mutation({
+            query: ({ id, ...data }) => ({
+                url: `/api/v1/plans/${id}`,
+                method: "PUT",
+                body: data,
+            }),
+            invalidatesTags: ["Plans"],
+        }),
     }),
-  }),
 });
 
 export const {

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL,
+  baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws",
   credentials: "include",
   prepareHeaders: (headers) => {
     headers.set("Content-Type", "application/json");
@@ -20,10 +20,11 @@ export const locationApi = createApi({
       providesTags: ["Regions"],
     }),
     createRegion: builder.mutation({
-      query: (data) => ({ 
-        url: "/api/v1/regions", 
-        method: "POST", 
-        body: data }),
+      query: (data) => ({
+        url: "/api/v1/regions",
+        method: "POST",
+        body: data
+      }),
       invalidatesTags: ["Regions"],
     }),
     updateRegion: builder.mutation({

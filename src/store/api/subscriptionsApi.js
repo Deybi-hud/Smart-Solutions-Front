@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const subscriptionsApi = createApi({
     reducerPath: "subscriptionsApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_API_URL,
+        baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws",
         credentials: "include",
         prepareHeaders: (headers) => {
             headers.set("Content-Type", "application/json");
@@ -29,9 +29,9 @@ export const subscriptionsApi = createApi({
                 url: `/api/v1/subscriptions/${userId}/subscription/cancel`,
                 method: "POST",
             }),
-    invalidatesTags: ["Subscriptions"],
+            invalidatesTags: ["Subscriptions"],
+        }),
     }),
-  }),
 });
 
 export const {
