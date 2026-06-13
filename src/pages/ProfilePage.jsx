@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import MuiButton from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+import Chip from "@mui/material/Chip";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
 import {
@@ -15,6 +16,7 @@ import {
   useUpdateContactMutation,
   useLogoutMutation,
 } from "../store/api/userApi";
+import { useGetUserSubscriptionQuery } from "../store/api/subscriptionsApi";
 import { logout } from "../store/slices/authSlice";
 
 const ProfilePage = () => {
@@ -23,6 +25,7 @@ const ProfilePage = () => {
   const { data: profile, isLoading, isError } = useGetProfileQuery();
   const [updateContact, { isLoading: updating }] = useUpdateContactMutation();
   const [logoutApi] = useLogoutMutation();
+  const { data: subscription } = useGetUserSubscriptionQuery(profile?.id, { skip: !profile?.id });
 
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({ name: "", lastName: "", phone: "" });
@@ -169,6 +172,74 @@ const ProfilePage = () => {
                   Cerrar sesión
                 </MuiButton>
               </Stack>
+            </Box>
+          )}
+
+          {subscription && !editing && (
+            <Box
+              sx={{
+                backgroundColor: "#FFFFFF",
+                borderRadius: "14px",
+                p: 3,
+                border: "1px solid #EDD9D5",
+                mt: 3,
+              }}
+            >
+              <Typography variant="h5" sx={{ fontWeight: 700, color: "#3D2B2B", mb: 2 }}>
+                Mi Suscripción
+              </Typography>
+              <Stack spacing={1.5}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <Typography variant="body2" sx={{ color: "#9C7878" }}>Plan</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#3D2B2B" }}>
+                    {subscription.planName}
+                  </Typography>
+                </Box>
+                <Divider />
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <Typography variant="body2" sx={{ color: "#9C7878" }}>Estado</Typography>
+                  <Chip
+                    label={subscription.status}
+                    size="small"
+                    color={subscription.status === "ACTIVE" ? "success" : "default"}
+                    variant="outlined"
+                  />
+                </Box>
+                <Divider />
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <Typography variant="body2" sx={{ color: "#9C7878" }}>Vence</Typography>
+                  <Typography variant="body2" sx={{ color: "#3D2B2B" }}>
+                    {subscription.currentPeriodEnd
+                      ? new Date(subscription.currentPeriodEnd).toLocaleDateString("es-CL")
+                      : "—"}
+                  </Typography>
+                </Box>
+                {subscription.cancelAtPeriodEnd && (
+                  <>
+                    <Divider />
+                    <Typography variant="caption" sx={{ color: "#C0392B" }}>
+                      La renovación automática está cancelada.
+                    </Typography>
+                  </>
+                )}
+              </Stack>
+            </Box>
+          )}
+
+          {!subscription && profile && !editing && (
+            <Box
+              sx={{
+                backgroundColor: "#FAF0EE",
+                borderRadius: "14px",
+                p: 3,
+                border: "1px solid #EDD9D5",
+                mt: 3,
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="body2" sx={{ color: "#9C7878" }}>
+                No tienes un plan activo. Contacta al administrador para activar uno.
+              </Typography>
             </Box>
           )}
 
