@@ -1,9 +1,14 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import MuiButton from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
+import PaymentModal from "../components/organisms/PaymentModal";
+import { useGetActivePlansQuery } from "../store/api/plansApi";
 import { COLORS } from "../theme/theme";
 
 const cards = [
@@ -20,6 +25,10 @@ const aboutItems = [
 
 const HomePage = () => {
   const [showAbout, setShowAbout] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const user = useSelector((state) => state.auth.user);
+  const isAdmin = user?.role === "ADMINISTRADOR";
+  const { data: plans = [], isLoading: plansLoading } = useGetActivePlansQuery();
 
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "background.default" }}>
@@ -60,6 +69,67 @@ const HomePage = () => {
                 </Grid>
               ))}
             </Grid>
+            {!isAdmin && (
+              <Box sx={{ mt: 6 }}>
+                <Typography variant="h5" sx={{ color: "text.primary", fontWeight: 700, mb: 1 }}>
+                  Nuestros Planes
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
+                  Elige el plan que mejor se adapte a ti.
+                </Typography>
+
+                {plansLoading && (
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>Cargando planes...</Typography>
+                )}
+
+                <Grid container spacing={3}>
+                  {plans.map((plan) => (
+                    <Grid item xs={12} sm={4} key={plan.id}>
+                      <Box
+                        sx={{
+                          backgroundColor: "background.paper",
+                          border: "1px solid",
+                          borderColor: "divider",
+                          borderRadius: "12px",
+                          p: 3,
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1.5,
+                        }}
+                      >
+                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                          <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600 }}>
+                            {plan.name}
+                          </Typography>
+                          <Chip
+                            label={`${plan.durationMonths} mes${plan.durationMonths !== 1 ? "es" : ""}`}
+                            size="small"
+                            variant="outlined"
+                            color="primary"
+                          />
+                        </Box>
+                        {plan.details && (
+                          <Typography variant="body2" sx={{ color: "text.secondary", flex: 1 }}>
+                            {plan.details}
+                          </Typography>
+                        )}
+                        <Typography variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>
+                          ${plan.price}
+                        </Typography>
+                        <MuiButton
+                          variant="contained"
+                          fullWidth
+                          onClick={() => setSelectedPlan(plan)}
+                        >
+                          Comprar
+                        </MuiButton>
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            )}
           </Box>
         ) : (
           <Box sx={{ maxWidth: "900px", mx: "auto" }}>
@@ -95,6 +165,16 @@ const HomePage = () => {
               ))}
             </Grid>
           </Box>
+        )}
+
+        {selectedPlan && (
+          <PaymentModal
+            plan={selectedPlan}
+            open={Boolean(selectedPlan)}
+            onClose={() => setSelectedPlan(null)}
+            userId={user?.id}
+            userEmail={user?.email}
+          />
         )}
       </Box>
 
