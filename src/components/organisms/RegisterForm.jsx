@@ -71,7 +71,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 text-white">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {generalError && <ErrorMessage message={generalError} />}
 
       <FormField
