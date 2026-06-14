@@ -53,10 +53,9 @@ const HomePage = () => {
                 <Grid item xs={12} sm={4} key={card.title}>
                   <Box
                     sx={{
-                      backgroundColor: "background.paper",
-                      border: "1px solid",
-                      borderColor: "divider",
+                      backgroundColor: "#FFFFFF",
                       borderRadius: "12px",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                       p: 3,
                       height: "100%",
                     }}
@@ -89,10 +88,9 @@ const HomePage = () => {
                     <Grid item xs={12} sm={4} key={plan.id}>
                       <Box
                         sx={{
-                          backgroundColor: "background.paper",
-                          border: "1px solid",
-                          borderColor: "divider",
-                          borderRadius: 0,
+                          backgroundColor: "#FFFFFF",
+                          borderRadius: "12px",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                           p: 3,
                           height: "100%",
                           display: "flex",
@@ -116,8 +114,8 @@ const HomePage = () => {
                             {plan.details}
                           </Typography>
                         )}
-                        <Typography variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>
-                          ${plan.price}
+                        <Typography variant="h5" sx={{ color: "primary.dark", fontWeight: 700 }}>
+                          ${Number(plan.price).toLocaleString("es-CL")}
                         </Typography>
                         <MuiButton
                           variant="contained"
@@ -149,14 +147,15 @@ const HomePage = () => {
                 <Grid item xs={12} sm={4} key={item.title}>
                   <Box
                     sx={{
-                      backgroundColor: COLORS.bgPanel,
+                      backgroundColor: "#FFFFFF",
                       borderLeft: "3px solid",
-                      borderLeftColor: "primary.light",
+                      borderLeftColor: "primary.main",
                       borderRadius: "12px",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                       p: 3,
                     }}
                   >
-                    <Typography variant="h6" sx={{ color: "primary.main", mb: 1.5 }}>
+                    <Typography variant="h6" sx={{ color: "text.primary", mb: 1.5 }}>
                       {item.title}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "text.secondary" }}>

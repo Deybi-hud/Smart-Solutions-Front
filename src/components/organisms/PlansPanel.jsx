@@ -101,7 +101,7 @@ const PlanRow = ({ plan, onEdit, onDelete }) => (
         />
       </Stack>
       <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
-        ${plan.price} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""}
+        ${Number(plan.price).toLocaleString("es-CL")} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""}
       </Typography>
       {plan.details && (
         <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>

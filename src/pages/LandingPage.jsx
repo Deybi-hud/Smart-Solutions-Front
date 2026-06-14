@@ -80,11 +80,10 @@ const LandingPage = () => {
               <Box
                 key={plan.id}
                 sx={{
-                  backgroundColor: "background.default",
-                  borderRadius: 0,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                   p: 3,
-                  border: "1px solid",
-                  borderColor: "divider",
                   width: { xs: "100%", sm: "260px" },
                   display: "flex",
                   flexDirection: "column",
@@ -109,7 +108,7 @@ const LandingPage = () => {
                     {plan.details}
                   </Typography>
                 )}
-                <Typography variant="h5" sx={{ fontWeight: 700, color: "primary.main", mt: "auto", pt: 1 }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, color: "primary.dark", mt: "auto", pt: 1 }}>
                   ${Number(plan.price).toLocaleString("es-CL")}
                 </Typography>
                 <MuiButton component={Link} to="/register" variant="contained" size="small" fullWidth>

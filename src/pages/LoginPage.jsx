@@ -23,7 +23,7 @@ const LoginPage = () => {
             sx={{
               display: "block",
               textAlign: "center",
-              color: "primary.main",
+              color: "text.primary",
               textDecoration: "none",
               mb: 3,
             }}
@@ -44,10 +44,10 @@ const LoginPage = () => {
               to="/register"
               variant="body2"
               sx={{
-                color: "primary.main",
+                color: "primary.dark",
                 fontWeight: 600,
                 textDecoration: "none",
-                "&:hover": { color: "primary.dark" },
+                "&:hover": { color: "text.primary" },
               }}
             >
               Regístrate aquí

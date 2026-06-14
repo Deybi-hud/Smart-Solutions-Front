@@ -218,7 +218,7 @@ const SubscriptionDialog = ({ user, open, onClose }) => {
           >
             <option value="">Seleccionar...</option>
             {plans.map((p) => (
-              <option key={p.id} value={p.id}>{p.name} — ${p.price}</option>
+              <option key={p.id} value={p.id}>{p.name} — ${Number(p.price).toLocaleString("es-CL")}</option>
             ))}
           </TextField>
           <MuiButton variant="contained" onClick={handleActivate} disabled={activating}>

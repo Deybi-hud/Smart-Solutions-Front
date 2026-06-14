@@ -175,7 +175,7 @@ const ProfilePage = () => {
           )}
 
           {profile && editMode === null && (
-            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider" }}>
+            <Box sx={{ backgroundColor: "#FFFFFF", borderRadius: "14px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", p: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Mi Perfil</Typography>
 
               <Stack sx={{ mb: 4 }}>
@@ -213,7 +213,7 @@ const ProfilePage = () => {
           )}
 
           {editMode === "contact" && (
-            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider" }}>
+            <Box sx={{ backgroundColor: "#FFFFFF", borderRadius: "14px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", p: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Editar datos de contacto</Typography>
               {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
               <Stack component="form" onSubmit={handleSaveContact} spacing={2}>
@@ -235,7 +235,7 @@ const ProfilePage = () => {
           )}
 
           {editMode === "email" && (
-            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider" }}>
+            <Box sx={{ backgroundColor: "#FFFFFF", borderRadius: "14px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", p: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Cambiar correo</Typography>
               {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
               <Stack component="form" onSubmit={handleSaveEmail} spacing={2}>
@@ -257,7 +257,7 @@ const ProfilePage = () => {
           )}
 
           {editMode === "password" && (
-            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider" }}>
+            <Box sx={{ backgroundColor: "#FFFFFF", borderRadius: "14px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", p: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Cambiar contraseña</Typography>
               {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
               <Stack component="form" onSubmit={handleSavePassword} spacing={2}>
@@ -279,7 +279,7 @@ const ProfilePage = () => {
           )}
 
           {subscription && editMode === null && (
-            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider", mt: 3 }}>
+            <Box sx={{ backgroundColor: "#FFFFFF", borderRadius: "14px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", p: 3, mt: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 2 }}>Mi Suscripción</Typography>
               <Stack spacing={1.5}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -339,7 +339,7 @@ const ProfilePage = () => {
           )}
 
           {!subscription && profile && editMode === null && (
-            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider", mt: 3, textAlign: "center" }}>
+            <Box sx={{ backgroundColor: "#FFFFFF", borderRadius: "14px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", p: 3, mt: 3, textAlign: "center" }}>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 No tienes un plan activo. Contacta al administrador para activar uno.
               </Typography>
@@ -347,7 +347,7 @@ const ProfilePage = () => {
           )}
 
           {history && history.length > 0 && editMode === null && (
-            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider", mt: 3 }}>
+            <Box sx={{ backgroundColor: "#FFFFFF", borderRadius: "14px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", p: 3, mt: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 2 }}>Historial de suscripción</Typography>
               <Stack spacing={0}>
                 {history.map((entry, i) => (

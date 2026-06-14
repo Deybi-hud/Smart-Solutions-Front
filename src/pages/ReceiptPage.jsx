@@ -81,8 +81,8 @@ const ReceiptPage = () => {
                             <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
                                 Total pagado
                             </Typography>
-                            <Typography variant="h6" sx={{ fontWeight: 700, color: "primary.main" }}>
-                                ${plan.price}
+                            <Typography variant="h6" sx={{ fontWeight: 700, color: "primary.dark" }}>
+                                ${Number(plan.price).toLocaleString("es-CL")}
                             </Typography>
                         </Box>
 

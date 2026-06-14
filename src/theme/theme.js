@@ -36,11 +36,11 @@ const theme = createTheme({
 
   typography: {
     fontFamily: "'Inter', sans-serif",
-    h1: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.1 },
-    h2: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.15 },
-    h3: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.2 },
-    h4: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.25 },
-    h5: { fontFamily: "'Playfair Display', serif", fontWeight: 600, lineHeight: 1.3 },
+    h1: { fontFamily: "'Inter', sans-serif", fontWeight: 700, lineHeight: 1.1 },
+    h2: { fontFamily: "'Inter', sans-serif", fontWeight: 700, lineHeight: 1.15 },
+    h3: { fontFamily: "'Inter', sans-serif", fontWeight: 700, lineHeight: 1.2 },
+    h4: { fontFamily: "'Inter', sans-serif", fontWeight: 700, lineHeight: 1.25 },
+    h5: { fontFamily: "'Inter', sans-serif", fontWeight: 600, lineHeight: 1.3 },
     h6: { fontFamily: "'Inter', sans-serif", fontWeight: 600, lineHeight: 1.4 },
     body1:   { fontFamily: "'Inter', sans-serif", lineHeight: 1.6 },
     body2:   { fontFamily: "'Inter', sans-serif", lineHeight: 1.5 },
@@ -87,16 +87,16 @@ const theme = createTheme({
     MuiPaper: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
-        root:      { backgroundImage: "none", backgroundColor: COLORS.bgPaper },
-        outlined:  { border: `1px solid ${COLORS.divider}`, boxShadow: "none" },
-        elevation1:{ boxShadow: "0 1px 4px rgba(27,38,50,0.10)" },
+        root:      { backgroundImage: "none", backgroundColor: "#FFFFFF" },
+        outlined:  { border: "1px solid rgba(0,0,0,0.08)", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" },
+        elevation1:{ boxShadow: "0 4px 12px rgba(0,0,0,0.05)" },
       },
     },
 
     MuiCard: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
-        root: { border: `1px solid ${COLORS.divider}`, borderRadius: "6px", boxShadow: "none" },
+        root: { backgroundColor: "#FFFFFF", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" },
       },
     },
 
@@ -137,12 +137,19 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: "6px",
-          backgroundColor: COLORS.bgPaper,
-          "& fieldset": { borderColor: COLORS.divider },
+          borderRadius: "8px",
+          backgroundColor: "#FFFFFF",
+          "& fieldset": { borderColor: "#E5E5E5" },
           "&:hover:not(.Mui-disabled) fieldset": { borderColor: COLORS.navy },
           "&.Mui-focused fieldset": { borderColor: COLORS.primary, borderWidth: "1.5px" },
           "&.Mui-error fieldset": { borderColor: COLORS.error },
+          "&.Mui-disabled": {
+            backgroundColor: "#F5F4F1",
+            "& fieldset": { borderColor: "#E0DED9 !important" },
+          },
+          "& .MuiOutlinedInput-input.Mui-disabled": {
+            WebkitTextFillColor: COLORS.textSecondary,
+          },
         },
       },
     },
