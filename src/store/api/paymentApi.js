@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const paymentApi = createApi({
     reducerPath: "paymentApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://smartsolutions-payment-alb-42793780.sa-east-1.elb.amazonaws.com/",
+        baseUrl: "http://smartsolutions-payment-alb-42793780.sa-east-1.elb.amazonaws.com",
         credentials: "include",
         prepareHeaders: (headers) => {
             headers.set("Content-Type", "application/json");
