@@ -1,16 +1,16 @@
 import { createTheme } from "@mui/material/styles";
 
 export const COLORS = {
-  bgDefault: "#FDF6F4",
-  bgPaper: "#FFFFFF",
-  bgPanel: "#FAF0EE",
-  bgRow: "#F5E5E2",
-  primary: "#D4627A",
-  primaryDark: "#B8455E",
-  primaryLight: "#F4A896",
-  textPrimary: "#3D2B2B",
-  textSecondary: "#9C7878",
-  divider: "#EDD9D5",
+  bgDefault: "#E6E2C5",
+  bgPaper: "#EDEACC",
+  bgPanel: "#E0DDB8",
+  bgRow: "#D8D4A8",
+  primary: "#2B4593",
+  primaryDark: "#1E3270",
+  primaryLight: "#4A63B8",
+  textPrimary: "#1A2A5E",
+  textSecondary: "#4A5A8A",
+  divider: "#C8C4A0",
   error: "#C0392B",
 };
 
@@ -46,14 +46,12 @@ const theme = createTheme({
   },
 
   components: {
-    // ─── Base ──────────────────────────────────────────────────────
     MuiCssBaseline: {
       styleOverrides: {
         body: { backgroundColor: COLORS.bgDefault, color: COLORS.textPrimary },
       },
     },
 
-    // ─── Button (MD3: pill shape) ──────────────────────────────────
     MuiButton: {
       defaultProps: { disableElevation: true },
       styleOverrides: {
@@ -83,17 +81,15 @@ const theme = createTheme({
       },
     },
 
-    // ─── Paper ─────────────────────────────────────────────────────
     MuiPaper: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
         root: { backgroundImage: "none", backgroundColor: COLORS.bgPaper },
         outlined: { border: `1px solid ${COLORS.divider}`, boxShadow: "none" },
-        elevation1: { boxShadow: "0 1px 4px rgba(180,100,100,0.08)" },
+        elevation1: { boxShadow: "0 1px 4px rgba(43,69,147,0.08)" },
       },
     },
 
-    // ─── Card ──────────────────────────────────────────────────────
     MuiCard: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
@@ -101,7 +97,6 @@ const theme = createTheme({
       },
     },
 
-    // ─── AppBar ────────────────────────────────────────────────────
     MuiAppBar: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
@@ -114,7 +109,6 @@ const theme = createTheme({
       },
     },
 
-    // ─── Tabs ──────────────────────────────────────────────────────
     MuiTabs: {
       styleOverrides: {
         indicator: {
@@ -138,7 +132,6 @@ const theme = createTheme({
       },
     },
 
-    // ─── Text fields ───────────────────────────────────────────────
     MuiTextField: {
       defaultProps: { size: "small", fullWidth: true, variant: "outlined" },
     },
@@ -169,7 +162,6 @@ const theme = createTheme({
       },
     },
 
-    // ─── Select / Menu ─────────────────────────────────────────────
     MuiSelect: {
       styleOverrides: {
         icon: { color: COLORS.textSecondary },
@@ -187,34 +179,30 @@ const theme = createTheme({
       },
     },
 
-    // ─── Divider ───────────────────────────────────────────────────
     MuiDivider: {
       styleOverrides: {
         root: { borderColor: COLORS.divider },
       },
     },
 
-    // ─── Chip (MD3: tonal) ─────────────────────────────────────────
     MuiChip: {
       styleOverrides: {
         root: { borderRadius: "8px", fontWeight: 500, fontSize: "0.75rem" },
       },
     },
 
-    // ─── Alert ─────────────────────────────────────────────────────
     MuiAlert: {
       styleOverrides: {
         root: { borderRadius: "10px", fontSize: "0.875rem" },
       },
     },
 
-    // ─── Dialog ────────────────────────────────────────────────────
     MuiDialog: {
       styleOverrides: {
         paper: {
           borderRadius: "20px",
           border: `1px solid ${COLORS.divider}`,
-          boxShadow: "0 8px 32px rgba(61,43,43,0.12)",
+          boxShadow: "0 8px 32px rgba(43,69,147,0.12)",
         },
       },
     },
