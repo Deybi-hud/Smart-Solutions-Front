@@ -16,6 +16,11 @@ import {
   useUpdatePasswordMutation,
 } from "../../store/api/userApi";
 import { logout } from "../../store/slices/authSlice";
+import {
+  validateContactForm,
+  validateEmailChangeForm,
+  validatePasswordChangeForm,
+} from "../../utils/validations";
 
 const cardSx = {
   backgroundColor: "#FFFFFF",
@@ -35,12 +40,17 @@ const ProfileCard = () => {
 
   const [editMode, setEditMode] = useState(null);
   const [form, setForm] = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [apiError, setApiError] = useState("");
   const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
 
-  const resetMessages = () => { setSuccess(""); setError(""); };
-  const closeEdit = () => { setEditMode(null); resetMessages(); };
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const resetState = () => { setFieldErrors({}); setApiError(""); setSuccess(""); };
+  const closeEdit = () => { setEditMode(null); resetState(); };
+
+  const handleChange = (e) => {
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    if (fieldErrors[e.target.name]) setFieldErrors((fe) => ({ ...fe, [e.target.name]: null }));
+  };
 
   const openEdit = (mode) => {
     setForm(mode === "contact"
@@ -48,48 +58,43 @@ const ProfileCard = () => {
       : {}
     );
     setEditMode(mode);
-    resetMessages();
+    resetState();
   };
 
   const handleSaveContact = async (e) => {
     e.preventDefault();
-    resetMessages();
-    if (!form.name?.trim() || !form.lastName?.trim() || !form.phone?.trim()) {
-      setError("Todos los campos son obligatorios."); return;
-    }
+    resetState();
+    const errors = validateContactForm(form);
+    if (errors) { setFieldErrors(errors); return; }
     try {
       await updateContact(form).unwrap();
       setSuccess("Datos actualizados correctamente.");
       setEditMode(null);
-    } catch (err) { setError(err?.data?.message || "Error al actualizar."); }
+    } catch (err) { setApiError(err?.data?.message || "Error al actualizar."); }
   };
 
   const handleSaveEmail = async (e) => {
     e.preventDefault();
-    resetMessages();
-    if (!form.newEmail?.trim() || !form.confirmNewEmail?.trim() || !form.password?.trim()) {
-      setError("Todos los campos son obligatorios."); return;
-    }
-    if (form.newEmail !== form.confirmNewEmail) { setError("Los correos no coinciden."); return; }
+    resetState();
+    const errors = validateEmailChangeForm(form);
+    if (errors) { setFieldErrors(errors); return; }
     try {
       await updateEmail({ newEmail: form.newEmail, confirmNewEmail: form.confirmNewEmail, password: form.password }).unwrap();
       setSuccess("Correo actualizado correctamente.");
       setEditMode(null);
-    } catch (err) { setError(err?.data?.message || "Error al actualizar el correo."); }
+    } catch (err) { setApiError(err?.data?.message || "Error al actualizar el correo."); }
   };
 
   const handleSavePassword = async (e) => {
     e.preventDefault();
-    resetMessages();
-    if (!form.currentPassword?.trim() || !form.newPassword?.trim() || !form.confirmNewPassword?.trim()) {
-      setError("Todos los campos son obligatorios."); return;
-    }
-    if (form.newPassword !== form.confirmNewPassword) { setError("Las contraseñas no coinciden."); return; }
+    resetState();
+    const errors = validatePasswordChangeForm(form);
+    if (errors) { setFieldErrors(errors); return; }
     try {
       await updatePassword({ currentPassword: form.currentPassword, newPassword: form.newPassword, confirmNewPassword: form.confirmNewPassword }).unwrap();
       setSuccess("Contraseña actualizada correctamente.");
       setEditMode(null);
-    } catch (err) { setError(err?.data?.message || "Error al actualizar la contraseña."); }
+    } catch (err) { setApiError(err?.data?.message || "Error al actualizar la contraseña."); }
   };
 
   const handleLogout = async () => {
@@ -142,10 +147,25 @@ const ProfileCard = () => {
       {editMode === "contact" && (
         <Box sx={cardSx}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Editar datos de contacto</Typography>
-          {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
+          {apiError && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{apiError}</Alert>}
           <Stack component="form" onSubmit={handleSaveContact} spacing={2}>
-            {[{ label: "Nombre", name: "name" }, { label: "Apellido", name: "lastName" }, { label: "Teléfono", name: "phone" }].map(({ label, name }) => (
-              <TextField key={name} label={label} name={name} value={form[name] || ""} onChange={handleChange} disabled={updatingContact} size="small" fullWidth />
+            {[
+              { label: "Nombre", name: "name" },
+              { label: "Apellido", name: "lastName" },
+              { label: "Teléfono (ej: 912345678)", name: "phone" },
+            ].map(({ label, name }) => (
+              <TextField
+                key={name}
+                label={label}
+                name={name}
+                value={form[name] || ""}
+                onChange={handleChange}
+                disabled={updatingContact}
+                size="small"
+                fullWidth
+                error={!!fieldErrors[name]}
+                helperText={fieldErrors[name] || ""}
+              />
             ))}
             <Stack direction="row" spacing={1.5} sx={{ pt: 1 }}>
               <MuiButton type="submit" disabled={updatingContact} variant="contained" fullWidth>{updatingContact ? "Guardando..." : "Guardar"}</MuiButton>
@@ -158,14 +178,26 @@ const ProfileCard = () => {
       {editMode === "email" && (
         <Box sx={cardSx}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Cambiar correo</Typography>
-          {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
+          {apiError && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{apiError}</Alert>}
           <Stack component="form" onSubmit={handleSaveEmail} spacing={2}>
             {[
               { label: "Nuevo correo", name: "newEmail", type: "email" },
               { label: "Confirmar correo", name: "confirmNewEmail", type: "email" },
               { label: "Contraseña actual", name: "password", type: "password" },
             ].map(({ label, name, type }) => (
-              <TextField key={name} label={label} name={name} type={type} value={form[name] || ""} onChange={handleChange} disabled={updatingEmail} size="small" fullWidth />
+              <TextField
+                key={name}
+                label={label}
+                name={name}
+                type={type}
+                value={form[name] || ""}
+                onChange={handleChange}
+                disabled={updatingEmail}
+                size="small"
+                fullWidth
+                error={!!fieldErrors[name]}
+                helperText={fieldErrors[name] || ""}
+              />
             ))}
             <Stack direction="row" spacing={1.5} sx={{ pt: 1 }}>
               <MuiButton type="submit" disabled={updatingEmail} variant="contained" fullWidth>{updatingEmail ? "Guardando..." : "Guardar"}</MuiButton>
@@ -178,14 +210,26 @@ const ProfileCard = () => {
       {editMode === "password" && (
         <Box sx={cardSx}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Cambiar contraseña</Typography>
-          {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
+          {apiError && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{apiError}</Alert>}
           <Stack component="form" onSubmit={handleSavePassword} spacing={2}>
             {[
               { label: "Contraseña actual", name: "currentPassword" },
               { label: "Nueva contraseña", name: "newPassword" },
               { label: "Confirmar contraseña", name: "confirmNewPassword" },
             ].map(({ label, name }) => (
-              <TextField key={name} label={label} name={name} type="password" value={form[name] || ""} onChange={handleChange} disabled={updatingPassword} size="small" fullWidth />
+              <TextField
+                key={name}
+                label={label}
+                name={name}
+                type="password"
+                value={form[name] || ""}
+                onChange={handleChange}
+                disabled={updatingPassword}
+                size="small"
+                fullWidth
+                error={!!fieldErrors[name]}
+                helperText={fieldErrors[name] || ""}
+              />
             ))}
             <Stack direction="row" spacing={1.5} sx={{ pt: 1 }}>
               <MuiButton type="submit" disabled={updatingPassword} variant="contained" fullWidth>{updatingPassword ? "Guardando..." : "Guardar"}</MuiButton>

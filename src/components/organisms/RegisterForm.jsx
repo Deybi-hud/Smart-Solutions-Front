@@ -100,12 +100,12 @@ const RegisterForm = () => {
         disabled={isLoading}
       />
       <FormField
-        label="Teléfono (9 dígitos)"
+        label="Teléfono"
         id="phone"
         name="phone"
         value={form.phone}
         onChange={handleChange}
-        placeholder="912345678"
+        placeholder="912345678 (9 dígitos, comenzando con 9 o 2)"
         error={errors.phone}
         disabled={isLoading}
       />
