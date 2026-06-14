@@ -9,6 +9,7 @@ import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
 import PaymentModal from "../components/organisms/PaymentModal";
 import { useGetActivePlansQuery } from "../store/api/plansApi";
+import { useGetProfileQuery } from "../store/api/userApi";
 import { COLORS } from "../theme/theme";
 
 const cards = [
@@ -28,6 +29,7 @@ const HomePage = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const user = useSelector((state) => state.auth.user);
   const isAdmin = user?.role === "ADMINISTRADOR";
+  const { data: profile } = useGetProfileQuery();
   const { data: plans = [], isLoading: plansLoading } = useGetActivePlansQuery();
 
   return (
@@ -172,8 +174,8 @@ const HomePage = () => {
             plan={selectedPlan}
             open={Boolean(selectedPlan)}
             onClose={() => setSelectedPlan(null)}
-            userId={user?.id}
-            userEmail={user?.email}
+            userId={profile?.id}
+            userEmail={profile?.email}
           />
         )}
       </Box>
