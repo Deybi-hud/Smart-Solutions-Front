@@ -339,7 +339,7 @@ const ProfilePage = () => {
           )}
 
           {!subscription && profile && editMode === null && (
-            <Box sx={{ backgroundColor: "primary.light", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider", mt: 3, textAlign: "center" }}>
+            <Box sx={{ backgroundColor: "background.paper", borderRadius: "14px", p: 3, border: "1px solid", borderColor: "divider", mt: 3, textAlign: "center" }}>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 No tienes un plan activo. Contacta al administrador para activar uno.
               </Typography>
