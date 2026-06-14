@@ -94,22 +94,17 @@ const LandingPage = () => {
                   <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
                     {plan.name}
                   </Typography>
-                  {plan.durationDays && (
-                    <Chip label={`${plan.durationDays} días`} size="small" variant="outlined" />
+                  {plan.durationMonths && (
+                    <Chip label={`${plan.durationMonths} mes${plan.durationMonths !== 1 ? "es" : ""}`} size="small" variant="outlined" />
                   )}
                 </Box>
-                {plan.description && (
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {plan.description}
-                  </Typography>
-                )}
                 {plan.details && (
                   <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {plan.details}
                   </Typography>
                 )}
                 <Typography variant="h5" sx={{ fontWeight: 700, color: "primary.dark", mt: "auto", pt: 1 }}>
-                  ${Number(plan.price).toLocaleString("es-CL")}
+                  ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })}
                 </Typography>
                 <MuiButton component={Link} to="/register" variant="contained" size="small" fullWidth>
                   Comenzar ahora

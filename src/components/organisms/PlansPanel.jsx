@@ -16,10 +16,9 @@ import {
 import { COLORS } from "../../theme/theme";
 
 const panelSx = {
-  backgroundColor: "background.paper",
-  border: "1px solid",
-  borderColor: "divider",
-  borderRadius: "10px",
+  backgroundColor: "#FFFFFF",
+  borderRadius: "12px",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
   p: 3,
 };
 
@@ -45,41 +44,45 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ backgroundColor: COLORS.bgPanel, borderRadius: "8px", p: 2 }}
+      sx={{ backgroundColor: "#F8F7F5", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.06)", p: 3 }}
     >
-      <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary", mb: 1.5 }}>
+      <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary", mb: 3, fontSize: "1rem" }}>
         {title}
       </Typography>
-      <Stack spacing={1.5}>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
-          <TextField label="Nombre" value={form.name} onChange={(e) => set("name", e.target.value)}
-            required size="small" fullWidth disabled={loading} />
-          <TextField label="Precio ($)" value={form.price} onChange={(e) => set("price", e.target.value)}
-            required type="number" size="small" sx={{ maxWidth: "140px" }} disabled={loading} />
+      <Stack spacing={2.5}>
+        <TextField label="Nombre" value={form.name} onChange={(e) => set("name", e.target.value)}
+          required size="small" fullWidth disabled={loading} />
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <TextField label="Precio (CLP)" value={form.price} onChange={(e) => set("price", e.target.value)}
+            required type="number" size="small" fullWidth disabled={loading} />
           <TextField label="Duración (meses)" value={form.durationMonths}
             onChange={(e) => set("durationMonths", e.target.value)}
-            required type="number" size="small" sx={{ maxWidth: "140px" }} disabled={loading} />
+            required type="number" size="small" fullWidth disabled={loading} />
         </Stack>
         <TextField label="Descripción" value={form.details} onChange={(e) => set("details", e.target.value)}
-          multiline rows={2} size="small" fullWidth disabled={loading} />
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>Estado:</Typography>
-          <MuiButton
-            size="small"
-            variant={form.isActive ? "contained" : "outlined"}
-            onClick={() => set("isActive", !form.isActive)}
-            disabled={loading}
-          >
-            {form.isActive ? "Activo" : "Inactivo"}
-          </MuiButton>
-        </Stack>
-        <Stack direction="row" spacing={1} justifyContent="flex-end">
-          <MuiButton onClick={onCancel} variant="outlined" size="small" disabled={loading}>
-            Cancelar
-          </MuiButton>
-          <MuiButton type="submit" variant="contained" size="small" disabled={loading}>
-            {loading ? "..." : "Guardar"}
-          </MuiButton>
+          multiline rows={3} size="small" fullWidth disabled={loading} />
+        <Divider />
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: "100%", pt: 0.5 }}>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>Estado:</Typography>
+            <MuiButton
+              size="small"
+              variant={form.isActive ? "contained" : "outlined"}
+              onClick={() => set("isActive", !form.isActive)}
+              disabled={loading}
+              sx={{ minWidth: "90px" }}
+            >
+              {form.isActive ? "Activo" : "Inactivo"}
+            </MuiButton>
+          </Stack>
+          <Stack direction="row" spacing={1.5}>
+            <MuiButton onClick={onCancel} variant="outlined" size="small" disabled={loading}>
+              Cancelar
+            </MuiButton>
+            <MuiButton type="submit" variant="contained" size="small" disabled={loading} sx={{ minWidth: "90px" }}>
+              {loading ? "Guardando..." : "Guardar"}
+            </MuiButton>
+          </Stack>
         </Stack>
       </Stack>
     </Box>
@@ -101,7 +104,7 @@ const PlanRow = ({ plan, onEdit, onDelete }) => (
         />
       </Stack>
       <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
-        ${Number(plan.price).toLocaleString("es-CL")} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""}
+        ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""}
       </Typography>
       {plan.details && (
         <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
@@ -110,7 +113,7 @@ const PlanRow = ({ plan, onEdit, onDelete }) => (
       )}
     </Box>
     <Stack direction="row" spacing={0.5}>
-      <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: "primary.main", minWidth: 0 }}>
+      <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: COLORS.navy, minWidth: 0 }}>
         Editar
       </MuiButton>
       <MuiButton size="small" onClick={() => onDelete(plan.id)} sx={{ color: "error.main", minWidth: 0 }}>
@@ -159,16 +162,22 @@ const PlansPanel = () => {
 
   return (
     <Box sx={panelSx}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-        <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600 }}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1.5}>
+        <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, flex: 1 }}>
           Planes ({plans.length})
         </Typography>
         {!adding && !editingPlan && (
-          <MuiButton onClick={() => setAdding(true)} variant="contained" size="small">
+          <MuiButton
+            onClick={() => setAdding(true)}
+            variant="outlined"
+            size="small"
+            sx={{ borderColor: COLORS.navy, color: COLORS.navy, "&:hover": { borderColor: COLORS.navyDark, backgroundColor: "rgba(44,59,77,0.04)" } }}
+          >
             + Nuevo plan
           </MuiButton>
         )}
       </Stack>
+      <Divider sx={{ mb: 2 }} />
 
       {error && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2, borderRadius: "8px" }}>{success}</Alert>}

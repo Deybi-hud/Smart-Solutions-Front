@@ -139,7 +139,7 @@ const theme = createTheme({
         root: {
           borderRadius: "8px",
           backgroundColor: "#FFFFFF",
-          "& fieldset": { borderColor: "#E5E5E5" },
+          "& fieldset": { borderColor: COLORS.divider },
           "&:hover:not(.Mui-disabled) fieldset": { borderColor: COLORS.navy },
           "&.Mui-focused fieldset": { borderColor: COLORS.primary, borderWidth: "1.5px" },
           "&.Mui-error fieldset": { borderColor: COLORS.error },

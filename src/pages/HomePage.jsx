@@ -115,7 +115,7 @@ const HomePage = () => {
                           </Typography>
                         )}
                         <Typography variant="h5" sx={{ color: "primary.dark", fontWeight: 700 }}>
-                          ${Number(plan.price).toLocaleString("es-CL")}
+                          ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })}
                         </Typography>
                         <MuiButton
                           variant="contained"

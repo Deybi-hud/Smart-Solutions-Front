@@ -119,7 +119,7 @@ const PaymentModal = ({ plan, open, onClose, userId, userEmail }) => {
                             {plan?.name}
                         </Typography>
                         <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                            ${Number(plan?.price).toLocaleString("es-CL")} · {plan?.durationMonths} mes{plan?.durationMonths !== 1 ? "es" : ""}
+                            ${Number(plan?.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })} · {plan?.durationMonths} mes{plan?.durationMonths !== 1 ? "es" : ""}
                         </Typography>
                     </Box>
 
