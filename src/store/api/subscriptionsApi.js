@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const subscriptionsApi = createApi({
     reducerPath: "subscriptionsApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws",
+        baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws/",
         credentials: "include",
         prepareHeaders: (headers) => {
             headers.set("Content-Type", "application/json");
@@ -31,6 +31,14 @@ export const subscriptionsApi = createApi({
             }),
             invalidatesTags: ["Subscriptions"],
         }),
+        getSubscriptionHistory: builder.query({
+            query: (userId) => "/api/v1/subscriptions/" + userId + "/subscription/history",
+            providesTags: ["Subscriptions"],
+        }),
+        getAllSubscriptionsAdmin: builder.query({
+            query: () => "/api/v1/subscriptions/admin/all",
+            providesTags: ["Subscriptions"],
+        }),
     }),
 });
 
@@ -38,4 +46,6 @@ export const {
     useGetUserSubscriptionQuery,
     useActivateSubscriptionMutation,
     useCancelSubscriptionMutation,
+    useGetSubscriptionHistoryQuery,
+    useGetAllSubscriptionsAdminQuery,
 } = subscriptionsApi;

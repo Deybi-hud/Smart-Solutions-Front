@@ -58,6 +58,23 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["Users"],
     }),
+
+    updateEmail: builder.mutation({
+      query: (data) => ({
+        url: "/api/v1/users/email",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
+
+    updatePassword: builder.mutation({
+      query: (data) => ({
+        url: "/api/v1/users/password",
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -69,4 +86,6 @@ export const {
   useSearchByPhoneQuery,
   useListUsersQuery,
   useUpdateUserByEmailMutation,
+  useUpdateEmailMutation,
+  useUpdatePasswordMutation,
 } = userApi;
