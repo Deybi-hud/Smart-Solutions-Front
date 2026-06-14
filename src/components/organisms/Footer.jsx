@@ -13,7 +13,7 @@ const Footer = () => {
         mt: "auto",
       }}
     >
-      <Box sx={{ maxWidth: "576px", mx: "auto", px: 2 }}>
+      <Box sx={{ maxWidth: "576px", mx: "auto", px: 2, textAlign: "center" }}>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           © {new Date().getFullYear()} Smart Solutions
         </Typography>

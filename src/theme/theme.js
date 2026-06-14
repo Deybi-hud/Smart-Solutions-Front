@@ -1,48 +1,51 @@
 import { createTheme } from "@mui/material/styles";
 
 export const COLORS = {
-  bgDefault: "#E6E2C5",
-  bgPaper: "#EDEACC",
-  bgPanel: "#E0DDB8",
-  bgRow: "#D8D4A8",
-  primary: "#2B4593",
-  primaryDark: "#1E3270",
-  primaryLight: "#4A63B8",
-  textPrimary: "#1A2A5E",
-  textSecondary: "#4A5A8A",
-  divider: "#C8C4A0",
-  error: "#C0392B",
+  bgDefault: "#EEE9DF",
+  bgPaper:   "#E5DFD3",
+  bgPanel:   "#C9C1B1",
+  bgRow:     "#B8B0A1",
+  primary:     "#FFB162",
+  primaryDark: "#A35139",
+  primaryLight:"#FFC98A",
+  navy:     "#2C3B4D",
+  navyDark: "#1B2632",
+  textPrimary:   "#1B2632",
+  textSecondary: "#2C3B4D",
+  divider: "#C9C1B1",
+  error:   "#A35139",
 };
 
 const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: COLORS.primary,
-      dark: COLORS.primaryDark,
-      light: COLORS.primaryLight,
-      contrastText: "#FFFFFF",
+      main:          COLORS.primary,
+      dark:          COLORS.primaryDark,
+      light:         COLORS.primaryLight,
+      contrastText:  COLORS.navyDark,
     },
-    error: { main: COLORS.error },
+    error:   { main: COLORS.error },
     success: { main: "#2e7d32" },
     background: { default: COLORS.bgDefault, paper: COLORS.bgPaper },
     text: { primary: COLORS.textPrimary, secondary: COLORS.textSecondary },
     divider: COLORS.divider,
   },
 
-  shape: { borderRadius: 12 },
+  shape: { borderRadius: 6 },
 
   typography: {
-    fontFamily: "inherit",
-    h2: { fontWeight: 700, lineHeight: 1.15 },
-    h3: { fontWeight: 700, lineHeight: 1.2 },
-    h4: { fontWeight: 700, lineHeight: 1.25 },
-    h5: { fontWeight: 700, lineHeight: 1.3 },
-    h6: { fontWeight: 600, lineHeight: 1.4 },
-    body1: { lineHeight: 1.6 },
-    body2: { lineHeight: 1.5 },
-    caption: { lineHeight: 1.4 },
-    button: { textTransform: "none", fontWeight: 600, letterSpacing: "0.015em" },
+    fontFamily: "'Inter', sans-serif",
+    h1: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.1 },
+    h2: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.15 },
+    h3: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.2 },
+    h4: { fontFamily: "'Playfair Display', serif", fontWeight: 700, lineHeight: 1.25 },
+    h5: { fontFamily: "'Playfair Display', serif", fontWeight: 600, lineHeight: 1.3 },
+    h6: { fontFamily: "'Inter', sans-serif", fontWeight: 600, lineHeight: 1.4 },
+    body1:   { fontFamily: "'Inter', sans-serif", lineHeight: 1.6 },
+    body2:   { fontFamily: "'Inter', sans-serif", lineHeight: 1.5 },
+    caption: { fontFamily: "'Inter', sans-serif", lineHeight: 1.4 },
+    button:  { fontFamily: "'Inter', sans-serif", textTransform: "none", fontWeight: 600, letterSpacing: "0.01em" },
   },
 
   components: {
@@ -56,23 +59,23 @@ const theme = createTheme({
       defaultProps: { disableElevation: true },
       styleOverrides: {
         root: {
-          borderRadius: "100px",
+          borderRadius: "4px",
           boxShadow: "none",
           "&:hover": { boxShadow: "none" },
         },
-        sizeSmall: { padding: "4px 16px", fontSize: "0.8125rem" },
+        sizeSmall:  { padding: "4px 16px", fontSize: "0.8125rem" },
         sizeMedium: { padding: "8px 24px" },
-        sizeLarge: { padding: "12px 32px", fontSize: "1rem" },
+        sizeLarge:  { padding: "12px 32px", fontSize: "1rem" },
         contained: {
           backgroundColor: COLORS.primary,
-          color: "#FFFFFF",
-          "&:hover": { backgroundColor: COLORS.primaryDark },
-          "&.Mui-disabled": { backgroundColor: COLORS.divider, color: COLORS.textSecondary },
+          color: COLORS.navyDark,
+          "&:hover": { backgroundColor: COLORS.primaryDark, color: "#FFFFFF" },
+          "&.Mui-disabled": { backgroundColor: COLORS.bgPanel, color: COLORS.textSecondary },
         },
         outlined: {
-          borderColor: COLORS.divider,
-          color: COLORS.primary,
-          "&:hover": { borderColor: COLORS.primary, backgroundColor: COLORS.bgPanel },
+          borderColor: COLORS.navy,
+          color: COLORS.navy,
+          "&:hover": { borderColor: COLORS.navyDark, backgroundColor: COLORS.bgPanel, color: COLORS.navyDark },
         },
         text: {
           color: COLORS.textSecondary,
@@ -84,16 +87,16 @@ const theme = createTheme({
     MuiPaper: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
-        root: { backgroundImage: "none", backgroundColor: COLORS.bgPaper },
-        outlined: { border: `1px solid ${COLORS.divider}`, boxShadow: "none" },
-        elevation1: { boxShadow: "0 1px 4px rgba(43,69,147,0.08)" },
+        root:      { backgroundImage: "none", backgroundColor: COLORS.bgPaper },
+        outlined:  { border: `1px solid ${COLORS.divider}`, boxShadow: "none" },
+        elevation1:{ boxShadow: "0 1px 4px rgba(27,38,50,0.10)" },
       },
     },
 
     MuiCard: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
-        root: { border: `1px solid ${COLORS.divider}`, borderRadius: "14px", boxShadow: "none" },
+        root: { border: `1px solid ${COLORS.divider}`, borderRadius: "6px", boxShadow: "none" },
       },
     },
 
@@ -111,11 +114,7 @@ const theme = createTheme({
 
     MuiTabs: {
       styleOverrides: {
-        indicator: {
-          backgroundColor: COLORS.primary,
-          height: 3,
-          borderRadius: "3px 3px 0 0",
-        },
+        indicator: { backgroundColor: COLORS.primary, height: 3, borderRadius: "3px 3px 0 0" },
       },
     },
     MuiTab: {
@@ -138,10 +137,10 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: "10px",
+          borderRadius: "6px",
           backgroundColor: COLORS.bgPaper,
           "& fieldset": { borderColor: COLORS.divider },
-          "&:hover:not(.Mui-disabled) fieldset": { borderColor: COLORS.primaryLight },
+          "&:hover:not(.Mui-disabled) fieldset": { borderColor: COLORS.navy },
           "&.Mui-focused fieldset": { borderColor: COLORS.primary, borderWidth: "1.5px" },
           "&.Mui-error fieldset": { borderColor: COLORS.error },
         },
@@ -151,7 +150,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: COLORS.textSecondary,
-          "&.Mui-focused": { color: COLORS.primary },
+          "&.Mui-focused": { color: COLORS.navy },
           "&.Mui-error": { color: COLORS.error },
         },
       },
@@ -173,7 +172,7 @@ const theme = createTheme({
           color: COLORS.textPrimary,
           fontSize: "0.9375rem",
           "&:hover": { backgroundColor: COLORS.bgPanel },
-          "&.Mui-selected": { backgroundColor: COLORS.bgRow, color: COLORS.primary },
+          "&.Mui-selected": { backgroundColor: COLORS.bgRow, color: COLORS.navyDark },
           "&.Mui-selected:hover": { backgroundColor: COLORS.bgRow },
         },
       },
@@ -187,33 +186,28 @@ const theme = createTheme({
 
     MuiChip: {
       styleOverrides: {
-        root: { borderRadius: "8px", fontWeight: 500, fontSize: "0.75rem" },
+        root: { borderRadius: "4px", fontWeight: 500, fontSize: "0.75rem" },
       },
     },
 
     MuiAlert: {
       styleOverrides: {
-        root: { borderRadius: "10px", fontSize: "0.875rem" },
+        root: { borderRadius: "6px", fontSize: "0.875rem" },
       },
     },
 
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: "20px",
+          borderRadius: "8px",
           border: `1px solid ${COLORS.divider}`,
-          boxShadow: "0 8px 32px rgba(43,69,147,0.12)",
+          boxShadow: "0 8px 32px rgba(27,38,50,0.15)",
         },
       },
     },
     MuiDialogTitle: {
       styleOverrides: {
-        root: {
-          color: COLORS.textPrimary,
-          fontWeight: 700,
-          fontSize: "1.125rem",
-          padding: "20px 24px 8px",
-        },
+        root: { color: COLORS.textPrimary, fontWeight: 700, fontSize: "1.125rem", padding: "20px 24px 8px" },
       },
     },
     MuiDialogContent: {

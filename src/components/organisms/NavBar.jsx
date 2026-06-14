@@ -18,7 +18,7 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
           component={Link}
           to="/home"
           variant="h6"
-          sx={{ color: "primary.main", textDecoration: "none", flexGrow: 1 }}
+          sx={{ color: "text.primary", textDecoration: "none", flexGrow: 1 }}
         >
           Smart Solutions
         </Typography>

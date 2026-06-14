@@ -92,7 +92,7 @@ const HomePage = () => {
                           backgroundColor: "background.paper",
                           border: "1px solid",
                           borderColor: "divider",
-                          borderRadius: "12px",
+                          borderRadius: 0,
                           p: 3,
                           height: "100%",
                           display: "flex",

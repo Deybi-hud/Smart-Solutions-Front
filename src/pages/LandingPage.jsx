@@ -81,7 +81,7 @@ const LandingPage = () => {
                 key={plan.id}
                 sx={{
                   backgroundColor: "background.default",
-                  borderRadius: "14px",
+                  borderRadius: 0,
                   p: 3,
                   border: "1px solid",
                   borderColor: "divider",
