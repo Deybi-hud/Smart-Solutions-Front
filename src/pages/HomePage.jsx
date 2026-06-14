@@ -84,7 +84,7 @@ const HomePage = () => {
                 )}
 
                 <Grid container spacing={3}>
-                  {plans.map((plan) => (
+                  {[...plans].sort((a, b) => b.price - a.price).map((plan) => (
                     <Grid item xs={12} sm={4} key={plan.id}>
                       <Box
                         sx={{

@@ -76,7 +76,7 @@ const LandingPage = () => {
               mx: "auto",
             }}
           >
-            {plans.map((plan) => (
+            {[...plans].sort((a, b) => b.price - a.price).map((plan) => (
               <Box
                 key={plan.id}
                 sx={{
