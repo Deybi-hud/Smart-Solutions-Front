@@ -11,6 +11,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Alert from "@mui/material/Alert";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 import {
   useSearchByEmailQuery,
   useSearchByPhoneQuery,
@@ -22,6 +26,7 @@ import {
   useGetUserSubscriptionQuery,
   useActivateSubscriptionMutation,
   useCancelSubscriptionMutation,
+  useGetAllSubscriptionsAdminQuery,
 } from "../../store/api/subscriptionsApi";
 import { useGetActivePlansQuery } from "../../store/api/plansApi";
 
@@ -286,16 +291,52 @@ const SearchByPhone = ({ onEdit, onViewSub }) => {
 
 const AllUsers = ({ onEdit, onViewSub }) => {
   const { data: users = [], isLoading, isError } = useListUsersQuery();
+  const { data: allSubs = [] } = useGetAllSubscriptionsAdminQuery();
+  const [nameFilter, setNameFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+
+  const subMap = allSubs.reduce((acc, s) => { acc[s.userId] = s; return acc; }, {});
+
+  const filtered = users.filter((u) => {
+    const fullName = `${u.name} ${u.lastName}`.toLowerCase();
+    if (nameFilter && !fullName.includes(nameFilter.toLowerCase())) return false;
+    if (statusFilter === "ALL") return true;
+    if (statusFilter === "NONE") return !subMap[u.id];
+    return subMap[u.id]?.status === statusFilter;
+  });
 
   return (
     <Box sx={panelSx}>
       <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, mb: 2 }}>
-        Todos los usuarios ({users.length})
+        Todos los usuarios ({filtered.length})
       </Typography>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ mb: 2 }}>
+        <TextField
+          label="Buscar por nombre"
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value)}
+          size="small"
+          fullWidth
+        />
+        <FormControl size="small" sx={{ minWidth: 160 }}>
+          <InputLabel>Estado suscripción</InputLabel>
+          <Select
+            value={statusFilter}
+            label="Estado suscripción"
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <MenuItem value="ALL">Todos</MenuItem>
+            <MenuItem value="ACTIVE">Activo</MenuItem>
+            <MenuItem value="CANCELED">Cancelado</MenuItem>
+            <MenuItem value="EXPIRED">Expirado</MenuItem>
+            <MenuItem value="NONE">Sin plan</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
       {isLoading && <Typography variant="body2" sx={{ color: "text.secondary" }}>Cargando...</Typography>}
       {isError && <Typography variant="body2" sx={{ color: "error.main" }}>Error al cargar usuarios.</Typography>}
       <Stack spacing={1.5} divider={<Divider />}>
-        {users.map((u) => (
+        {filtered.map((u) => (
           <UserCard key={u.email} user={u} onEdit={onEdit} onViewSub={onViewSub} />
         ))}
       </Stack>

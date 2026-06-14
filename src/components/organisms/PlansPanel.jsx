@@ -11,6 +11,7 @@ import {
   useGetAllPlansAdminQuery,
   useCreatePlanMutation,
   useUpdatePlanMutation,
+  useDeletePlanMutation,
 } from "../../store/api/plansApi";
 import { COLORS } from "../../theme/theme";
 
@@ -85,7 +86,7 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
   );
 };
 
-const PlanRow = ({ plan, onEdit }) => (
+const PlanRow = ({ plan, onEdit, onDelete }) => (
   <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, py: 1.5 }}>
     <Box sx={{ flex: 1, minWidth: 0 }}>
       <Stack direction="row" spacing={1} alignItems="center">
@@ -108,9 +109,14 @@ const PlanRow = ({ plan, onEdit }) => (
         </Typography>
       )}
     </Box>
-    <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: "primary.main", minWidth: 0 }}>
-      Editar
-    </MuiButton>
+    <Stack direction="row" spacing={0.5}>
+      <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: "primary.main", minWidth: 0 }}>
+        Editar
+      </MuiButton>
+      <MuiButton size="small" onClick={() => onDelete(plan.id)} sx={{ color: "error.main", minWidth: 0 }}>
+        Eliminar
+      </MuiButton>
+    </Stack>
   </Box>
 );
 
@@ -118,6 +124,7 @@ const PlansPanel = () => {
   const { data: plans = [], isLoading, isError } = useGetAllPlansAdminQuery();
   const [createPlan, { isLoading: creating }] = useCreatePlanMutation();
   const [updatePlan, { isLoading: updating }] = useUpdatePlanMutation();
+  const [deletePlan] = useDeletePlanMutation();
 
   const [adding, setAdding] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
@@ -140,6 +147,14 @@ const PlansPanel = () => {
       setEditingPlan(null);
       setSuccess("Plan actualizado.");
     } catch (e) { setError(e?.data?.message || "Error al actualizar el plan."); }
+  };
+
+  const handleDelete = async (id) => {
+    setError(""); setSuccess("");
+    try {
+      await deletePlan(id).unwrap();
+      setSuccess("Plan eliminado.");
+    } catch (e) { setError(e?.data?.message || "Error al eliminar el plan."); }
   };
 
   return (
@@ -192,7 +207,7 @@ const PlansPanel = () => {
                 />
               </Box>
             ) : (
-              <PlanRow plan={p} onEdit={setEditingPlan} />
+              <PlanRow plan={p} onEdit={setEditingPlan} onDelete={handleDelete} />
             )}
           </Box>
         ))}
