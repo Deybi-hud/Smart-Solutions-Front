@@ -20,11 +20,15 @@ export const locationApi = createApi({
       providesTags: ["Regions"],
     }),
     createRegion: builder.mutation({
-      query: (data) => ({ url: "/api/v1/regions", method: "POST", body: data }),
+      query: (data) => ({
+        url: "/api/v1/regions",
+        method: "POST",
+        body: data
+      }),
       invalidatesTags: ["Regions"],
     }),
     updateRegion: builder.mutation({
-      query: ({ id, data }) => ({ url: `/api/v1/regions/${id}`, method: "PUT", body: data }),
+      query: ({ id, data }) => ({ url: `/api/v1/regions/${id}`, method: "PATCH", body: data }),
       invalidatesTags: ["Regions"],
     }),
     deleteRegion: builder.mutation({

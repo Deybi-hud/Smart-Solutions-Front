@@ -1,31 +1,63 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import LoginForm from "../components/organisms/LoginForm";
 import Footer from "../components/organisms/Footer";
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-950">
-      <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <section className="w-full max-w-md rounded-xl bg-gray-900 p-6 shadow-lg">
-          <Link to="/" className="block text-center text-blue-400 font-bold text-xl mb-6">
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "background.default" }}>
+      <Box
+        component="main"
+        sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", px: 2, py: 6 }}
+      >
+        <Paper
+          variant="outlined"
+          sx={{ width: "100%", maxWidth: "448px", borderRadius: "14px", p: 4 }}
+        >
+          <Typography
+            component={Link}
+            to="/"
+            variant="h6"
+            sx={{
+              display: "block",
+              textAlign: "center",
+              color: "text.primary",
+              textDecoration: "none",
+              mb: 3,
+            }}
+          >
             Smart Solutions
-          </Link>
-          <h1 className="text-2xl font-bold text-white mb-6 text-center">
+          </Typography>
+
+          <Typography variant="h5" sx={{ color: "text.primary", mb: 3, textAlign: "center" }}>
             Iniciar sesión
-          </h1>
+          </Typography>
+
           <LoginForm />
-          <div className="mt-6 text-center text-gray-400">
-            <p className="text-sm">
-              ¿No tienes cuenta?{" "}
-              <Link to="/register" className="text-white font-semibold hover:text-blue-400 transition">
-                Regístrate aquí
-              </Link>
-            </p>
-          </div>
-        </section>
-      </main>
+
+          <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "center", mt: 3 }}>
+            ¿No tienes cuenta?{" "}
+            <Typography
+              component={Link}
+              to="/register"
+              variant="body2"
+              sx={{
+                color: "primary.dark",
+                fontWeight: 600,
+                textDecoration: "none",
+                "&:hover": { color: "text.primary" },
+              }}
+            >
+              Regístrate aquí
+            </Typography>
+          </Typography>
+        </Paper>
+      </Box>
+
       <Footer />
-    </div>
+    </Box>
   );
 };
 

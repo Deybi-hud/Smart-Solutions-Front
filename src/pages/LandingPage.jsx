@@ -1,36 +1,122 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import MuiButton from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import { Link } from "react-router-dom";
 import NavBar from "../components/organisms/NavBar";
 import Footer from "../components/organisms/Footer";
+import { useGetActivePlansQuery } from "../store/api/plansApi";
 
 const LandingPage = () => {
+  const { data: plans } = useGetActivePlansQuery();
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-950">
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "background.default" }}>
       <NavBar showAuthLinks />
-        <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-20">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Soluciones inteligentes <br />
-            <span className="text-blue-400">para tu bienestar</span>
-          </h1>
-          <p className="text-gray-300 text-lg sm:text-xl max-w-2xl mb-10">
-            Planes personalizados, guía experta y acompañamiento 24/7 para que alcances tus metas físicas.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              to="/register"
-              className="bg-blue-600 text-white px-8 py-3 rounded-md text-base font-semibold hover:bg-blue-500 transition"
-            >
-              Comenzar ahora
-            </Link>
-            <Link
-              to="/login"
-              className="border border-gray-600 text-gray-300 px-8 py-3 rounded-md text-base font-semibold hover:border-blue-500 hover:text-white transition"
-            >
-              Ya tengo cuenta
-            </Link>
-          </div>
-        </section>
+
+      <Box
+        component="section"
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          px: 2,
+          py: 10,
+        }}
+      >
+        <Typography
+          variant="h2"
+          sx={{
+            color: "text.primary",
+            mb: 3,
+            fontSize: { xs: "2.25rem", sm: "3rem", lg: "3.75rem" },
+          }}
+        >
+          Soluciones inteligentes{" "}
+          <Box component="br" sx={{ display: { xs: "none", sm: "block" } }} />
+          <Box component="span" sx={{ color: "primary.main" }}>
+            para tu bienestar
+          </Box>
+        </Typography>
+
+        <Typography
+          variant="h6"
+          sx={{ color: "text.secondary", fontWeight: 400, maxWidth: "600px", mb: 5 }}
+        >
+          Planes personalizados, guía experta y acompañamiento 24/7 para que
+          alcances tus metas físicas.
+        </Typography>
+
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <MuiButton component={Link} to="/register" variant="contained" size="large" sx={{ px: 4 }}>
+            Comenzar ahora
+          </MuiButton>
+          <MuiButton component={Link} to="/login" variant="outlined" size="large" sx={{ px: 4 }}>
+            Ya tengo cuenta
+          </MuiButton>
+        </Stack>
+      </Box>
+
+      {plans && plans.length > 0 && (
+        <Box component="section" sx={{ py: 8, px: 2, backgroundColor: "background.paper" }}>
+          <Typography variant="h4" sx={{ textAlign: "center", fontWeight: 700, color: "text.primary", mb: 6 }}>
+            Nuestros planes
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 3,
+              justifyContent: "center",
+              maxWidth: "900px",
+              mx: "auto",
+            }}
+          >
+            {[...plans].sort((a, b) => b.price - a.price).map((plan) => (
+              <Box
+                key={plan.id}
+                sx={{
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                  p: 3,
+                  width: { xs: "100%", sm: "260px" },
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1.5,
+                }}
+              >
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
+                    {plan.name}
+                  </Typography>
+                  {plan.durationMonths && (
+                    <Chip label={`${plan.durationMonths} mes${plan.durationMonths !== 1 ? "es" : ""}`} size="small" variant="outlined" />
+                  )}
+                </Box>
+                {plan.details && (
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {plan.details}
+                  </Typography>
+                )}
+                <Typography variant="h5" sx={{ fontWeight: 700, color: "primary.dark", mt: "auto", pt: 1 }}>
+                  ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })}
+                </Typography>
+                <MuiButton component={Link} to="/register" variant="contained" size="small" fullWidth>
+                  Comenzar ahora
+                </MuiButton>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
+
       <Footer />
-    </div>
+    </Box>
   );
 };
 

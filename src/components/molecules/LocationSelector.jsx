@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Stack from "@mui/material/Stack";
 import Dropdown from "../atoms/Dropdown";
 import {
   useGetRegionsQuery,
@@ -16,11 +17,11 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
   const { data: addresses = [], isLoading: loadingAddresses } = useGetAddressesQuery();
 
   const filteredCommunes = communes.filter(
-    (c) => String(c.regionId) === String(regionId)
+    (c) => String(c.region?.id || c.regionId) === String(regionId)
   );
 
   const filteredAddresses = addresses.filter(
-    (a) => String(a.communeId) === String(communeId)
+    (a) => String(a.commune?.id || a.communeId) === String(communeId)
   );
 
   useEffect(() => {
@@ -40,23 +41,15 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
     onAddressSelect(val ? Number(val) : null);
   };
 
-  const regionOptions = regions.map((r) => ({
-    value: String(r.id),
-    label: r.regionName,
-  }));
-
-  const communeOptions = filteredCommunes.map((c) => ({
-    value: String(c.id),
-    label: c.communeName,
-  }));
-
+  const regionOptions = regions.map((r) => ({ value: String(r.id), label: r.regionName }));
+  const communeOptions = filteredCommunes.map((c) => ({ value: String(c.id), label: c.communeName }));
   const addressOptions = filteredAddresses.map((a) => ({
     value: String(a.id),
     label: `${a.sucursalName} — ${a.street} ${a.number}`,
   }));
 
   return (
-    <div className="flex flex-col gap-4">
+    <Stack spacing={2}>
       <Dropdown
         label="Región"
         id="region"
@@ -66,7 +59,6 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
         placeholder={loadingRegions ? "Cargando regiones..." : "Selecciona una región"}
         disabled={disabled || loadingRegions}
       />
-
       <Dropdown
         label="Comuna"
         id="commune"
@@ -82,7 +74,6 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
         }
         disabled={disabled || !regionId || loadingCommunes}
       />
-
       <Dropdown
         label="Sucursal"
         id="address"
@@ -99,7 +90,7 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
         disabled={disabled || !communeId || loadingAddresses}
         error={error}
       />
-    </div>
+    </Stack>
   );
 };
 

@@ -1,27 +1,31 @@
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+
 const Dropdown = ({ label, id, value, onChange, options, placeholder, disabled = false, error }) => {
   return (
-    <div className="flex flex-col gap-1">
-      {label && (
-        <label htmlFor={id} className="text-sm font-medium text-gray-200">
-          {label}
-        </label>
-      )}
-      <select
+    <FormControl fullWidth disabled={disabled} error={!!error}>
+      {label && <InputLabel id={`${id}-label`}>{label}</InputLabel>}
+      <Select
+        labelId={`${id}-label`}
         id={id}
         value={value}
+        label={label}
         onChange={onChange}
-        disabled={disabled}
-        className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-sm text-white outline-none focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <option value="">{placeholder || "Selecciona una opción"}</option>
+        <MenuItem value="" disabled>
+          <em>{placeholder || "Selecciona una opción"}</em>
+        </MenuItem>
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
+          <MenuItem key={opt.value} value={opt.value}>
             {opt.label}
-          </option>
+          </MenuItem>
         ))}
-      </select>
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-    </div>
+      </Select>
+      {error && <FormHelperText>{error}</FormHelperText>}
+    </FormControl>
   );
 };
 
