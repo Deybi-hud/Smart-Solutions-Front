@@ -17,6 +17,7 @@ import {
   useDeleteCommuneMutation,
 } from "../../store/api/locationApi";
 import { panelSx, rowSx, addBtnSx } from "./RegionsPanel";
+import { validateCommuneForm } from "../../utils/validations";
 
 const selectMenuSx = { PaperProps: { sx: { backgroundColor: "#FAF0EE" } } };
 
@@ -43,10 +44,14 @@ const CommunesPanel = () => {
   const [editName, setEditName] = useState("");
   const [editRegionId, setEditRegionId] = useState("");
   const [error, setError] = useState("");
+  const [newErrors, setNewErrors] = useState({});
+  const [editErrors, setEditErrors] = useState({});
 
   const handleCreate = async () => {
     setError("");
-    if (!newName.trim() || !newRegionId) { setError("Nombre y región son obligatorios."); return; }
+    const errors = validateCommuneForm({ communeName: newName, regionId: newRegionId });
+    if (errors) { setNewErrors(errors); return; }
+    setNewErrors({});
     try {
       await createCommune({ communeName: newName, regionId: Number(newRegionId) }).unwrap();
       setAdding(false); setNewName(""); setNewRegionId("");
@@ -55,7 +60,9 @@ const CommunesPanel = () => {
 
   const handleUpdate = async (id) => {
     setError("");
-    if (!editName.trim() || !editRegionId) { setError("Nombre y región son obligatorios."); return; }
+    const errors = validateCommuneForm({ communeName: editName, regionId: editRegionId });
+    if (errors) { setEditErrors(errors); return; }
+    setEditErrors({});
     try {
       await updateCommune({ id, data: { communeName: editName, regionId: Number(editRegionId) } }).unwrap();
       setEditingId(null);
@@ -68,50 +75,54 @@ const CommunesPanel = () => {
     catch (e) { setError(e?.data?.message || "Error al eliminar."); }
   };
 
-  const startEdit = (c) => { setEditingId(c.id); setEditName(c.communeName); setEditRegionId(String(c.regionId)); };
+  const startEdit = (c) => { setEditingId(c.id); setEditName(c.communeName); setEditRegionId(String(c.regionId)); setEditErrors({}); };
 
   return (
     <Box sx={panelSx}>
       <Stack direction="row" alignItems="center" mb={1.5}>
         <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, flex: 1 }}>Comunas</Typography>
-        <MuiButton onClick={() => setAdding(true)} variant="outlined" size="small" sx={addBtnSx}>+ Agregar</MuiButton>
+        <MuiButton onClick={() => { setAdding(true); setNewErrors({}); }} variant="outlined" size="small" sx={addBtnSx}>+ Agregar</MuiButton>
       </Stack>
       <Divider sx={{ mb: 2 }} />
       {error && <Typography variant="body2" sx={{ color: "#C0392B", mb: 1 }}>{error}</Typography>}
       {adding && (
-        <Stack direction="row" spacing={1} mb={2} flexWrap="wrap">
+        <Stack direction="row" spacing={1} mb={2} flexWrap="wrap" alignItems="flex-start">
           <TextField
             value={newName}
-            onChange={(e) => setNewName(e.target.value)}
+            onChange={(e) => { setNewName(e.target.value); setNewErrors((er) => ({ ...er, communeName: null })); }}
             placeholder="Nombre de comuna"
             disabled={creating}
+            error={!!newErrors.communeName}
+            helperText={newErrors.communeName || ""}
             size="small"
             sx={{ flex: 1, minWidth: "160px" }}
           />
-          <RegionSelect regions={regions} value={newRegionId} onChange={(e) => setNewRegionId(e.target.value)} />
+          <RegionSelect regions={regions} value={newRegionId} onChange={(e) => { setNewRegionId(e.target.value); setNewErrors((er) => ({ ...er, regionId: null })); }} />
           <MuiButton onClick={handleCreate} disabled={creating} variant="contained" size="small">
             {creating ? "..." : "Guardar"}
           </MuiButton>
-          <MuiButton onClick={() => setAdding(false)} variant="outlined" size="small">Cancelar</MuiButton>
+          <MuiButton onClick={() => { setAdding(false); setNewErrors({}); }} variant="outlined" size="small">Cancelar</MuiButton>
         </Stack>
       )}
       <Stack divider={<Divider />}>
         {communes.map((c) => (
           <Box key={c.id} sx={rowSx}>
             {editingId === c.id ? (
-              <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ flex: 1 }}>
+              <Stack direction="row" spacing={1} flexWrap="wrap" alignItems="flex-start" sx={{ flex: 1 }}>
                 <TextField
                   value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
+                  onChange={(e) => { setEditName(e.target.value); setEditErrors((er) => ({ ...er, communeName: null })); }}
                   disabled={updating}
+                  error={!!editErrors.communeName}
+                  helperText={editErrors.communeName || ""}
                   size="small"
                   sx={{ flex: 1, minWidth: "160px" }}
                 />
-                <RegionSelect regions={regions} value={editRegionId} onChange={(e) => setEditRegionId(e.target.value)} />
+                <RegionSelect regions={regions} value={editRegionId} onChange={(e) => { setEditRegionId(e.target.value); setEditErrors((er) => ({ ...er, regionId: null })); }} />
                 <MuiButton onClick={() => handleUpdate(c.id)} disabled={updating} variant="contained" size="small">
                   {updating ? "..." : "Guardar"}
                 </MuiButton>
-                <MuiButton onClick={() => setEditingId(null)} variant="outlined" size="small">Cancelar</MuiButton>
+                <MuiButton onClick={() => { setEditingId(null); setEditErrors({}); }} variant="outlined" size="small">Cancelar</MuiButton>
               </Stack>
             ) : (
               <>

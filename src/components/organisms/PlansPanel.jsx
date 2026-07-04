@@ -14,6 +14,7 @@ import {
   useDeletePlanMutation,
 } from "../../store/api/plansApi";
 import { COLORS } from "../../theme/theme";
+import { validatePlanForm } from "../../utils/validations";
 
 const panelSx = {
   backgroundColor: "#FFFFFF",
@@ -26,11 +27,14 @@ const emptyForm = { name: "", details: "", price: "", durationMonths: "", isActi
 
 const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => {
   const [form, setForm] = useState(initial);
+  const [errors, setErrors] = useState({});
 
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  const set = (k, v) => { setForm((f) => ({ ...f, [k]: v })); setErrors((er) => ({ ...er, [k]: null })); };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationErrors = validatePlanForm(form);
+    if (validationErrors) { setErrors(validationErrors); return; }
     onSave({
       name: form.name,
       details: form.details,
@@ -51,16 +55,20 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
       </Typography>
       <Stack spacing={2.5}>
         <TextField label="Nombre" value={form.name} onChange={(e) => set("name", e.target.value)}
-          required size="small" fullWidth disabled={loading} />
+          required size="small" fullWidth disabled={loading}
+          error={!!errors.name} helperText={errors.name || ""} />
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
           <TextField label="Precio (CLP)" value={form.price} onChange={(e) => set("price", e.target.value)}
-            required type="number" size="small" fullWidth disabled={loading} />
+            required type="number" size="small" fullWidth disabled={loading}
+            error={!!errors.price} helperText={errors.price || ""} />
           <TextField label="Duración (meses)" value={form.durationMonths}
             onChange={(e) => set("durationMonths", e.target.value)}
-            required type="number" size="small" fullWidth disabled={loading} />
+            required type="number" size="small" fullWidth disabled={loading}
+            error={!!errors.durationMonths} helperText={errors.durationMonths || ""} />
         </Stack>
         <TextField label="Descripción" value={form.details} onChange={(e) => set("details", e.target.value)}
-          multiline rows={3} size="small" fullWidth disabled={loading} />
+          multiline rows={3} size="small" fullWidth disabled={loading}
+          error={!!errors.details} helperText={errors.details || ""} />
         <Divider />
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: "100%", pt: 0.5 }}>
           <Stack direction="row" spacing={1.5} alignItems="center">

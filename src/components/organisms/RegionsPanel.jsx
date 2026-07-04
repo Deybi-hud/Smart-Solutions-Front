@@ -12,6 +12,7 @@ import {
   useUpdateRegionMutation,
   useDeleteRegionMutation,
 } from "../../store/api/locationApi";
+import { validateRegionForm } from "../../utils/validations";
 
 export const panelSx = {
   backgroundColor: "#FFFFFF",
@@ -34,19 +35,25 @@ export const addBtnSx = {
   "&:hover": { borderColor: COLORS.navyDark, backgroundColor: "rgba(44,59,77,0.04)" },
 };
 
-export const EditableRow = ({ label, onSave, onCancel, initialValue = "", isLoading }) => {
+export const EditableRow = ({ label, onSave, onCancel, initialValue = "", isLoading, error, onChange }) => {
   const [value, setValue] = useState(initialValue);
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    onChange?.();
+  };
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} alignItems="flex-start">
       <TextField
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={handleChange}
         placeholder={label}
         disabled={isLoading}
+        error={!!error}
+        helperText={error || ""}
         size="small"
         fullWidth
       />
-      <MuiButton onClick={() => onSave(value)} disabled={isLoading || !value.trim()} variant="contained" size="small" sx={{ whiteSpace: "nowrap" }}>
+      <MuiButton onClick={() => onSave(value)} disabled={isLoading} variant="contained" size="small" sx={{ whiteSpace: "nowrap" }}>
         {isLoading ? "..." : "Guardar"}
       </MuiButton>
       <MuiButton onClick={onCancel} disabled={isLoading} variant="outlined" size="small" sx={{ whiteSpace: "nowrap" }}>
@@ -64,16 +71,21 @@ const RegionsPanel = () => {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
+  const [fieldError, setFieldError] = useState("");
 
   const handleCreate = async (value) => {
     setError("");
-    try { await createRegion({ regionName: value }).unwrap(); setAdding(false); }
+    const errors = validateRegionForm({ regionName: value });
+    if (errors) { setFieldError(errors.regionName); return; }
+    try { await createRegion({ regionName: value }).unwrap(); setAdding(false); setFieldError(""); }
     catch (e) { setError(e?.data?.message || "Error al crear región."); }
   };
 
   const handleUpdate = async (id, value) => {
     setError("");
-    try { await updateRegion({ id, data: { regionName: value } }).unwrap(); setEditingId(null); }
+    const errors = validateRegionForm({ regionName: value });
+    if (errors) { setFieldError(errors.regionName); return; }
+    try { await updateRegion({ id, data: { regionName: value } }).unwrap(); setEditingId(null); setFieldError(""); }
     catch (e) { setError(e?.data?.message || "Error al actualizar."); }
   };
 
@@ -87,13 +99,20 @@ const RegionsPanel = () => {
     <Box sx={panelSx}>
       <Stack direction="row" alignItems="center" mb={1.5}>
         <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, flex: 1 }}>Regiones</Typography>
-        <MuiButton onClick={() => setAdding(true)} variant="outlined" size="small" sx={addBtnSx}>+ Agregar</MuiButton>
+        <MuiButton onClick={() => { setAdding(true); setFieldError(""); }} variant="outlined" size="small" sx={addBtnSx}>+ Agregar</MuiButton>
       </Stack>
       <Divider sx={{ mb: 2 }} />
       {error && <Typography variant="body2" sx={{ color: "#C0392B", mb: 1 }}>{error}</Typography>}
       {adding && (
         <Box mb={2}>
-          <EditableRow label="Nombre de región" onSave={handleCreate} onCancel={() => setAdding(false)} isLoading={creating} />
+          <EditableRow
+            label="Nombre de región"
+            onSave={handleCreate}
+            onCancel={() => { setAdding(false); setFieldError(""); }}
+            isLoading={creating}
+            error={fieldError}
+            onChange={() => setFieldError("")}
+          />
         </Box>
       )}
       <Stack divider={<Divider />}>
@@ -104,14 +123,16 @@ const RegionsPanel = () => {
                 label="Nombre de región"
                 initialValue={r.regionName}
                 onSave={(v) => handleUpdate(r.id, v)}
-                onCancel={() => setEditingId(null)}
+                onCancel={() => { setEditingId(null); setFieldError(""); }}
                 isLoading={updating}
+                error={fieldError}
+                onChange={() => setFieldError("")}
               />
             ) : (
               <>
                 <Typography variant="body2" sx={{ color: "text.primary" }}>{r.regionName}</Typography>
                 <Stack direction="row" spacing={1}>
-                  <MuiButton size="small" onClick={() => setEditingId(r.id)} sx={{ color: "#7B8FC8", minWidth: 0 }}>Editar</MuiButton>
+                  <MuiButton size="small" onClick={() => { setEditingId(r.id); setFieldError(""); }} sx={{ color: "#7B8FC8", minWidth: 0 }}>Editar</MuiButton>
                   <MuiButton size="small" onClick={() => handleDelete(r.id)} sx={{ color: "#C0392B", minWidth: 0 }}>Eliminar</MuiButton>
                 </Stack>
               </>
