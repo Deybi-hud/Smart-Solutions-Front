@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const subscriptionsApi = createApi({
     reducerPath: "subscriptionsApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_CORE_API_URL || "http://localhost:8082",
+        baseUrl: import.meta.env.VITE_CORE_API_URL || "http://localhost:8080",
         credentials: "include",
         prepareHeaders: (headers) => {
             headers.set("Content-Type", "application/json");

@@ -155,3 +155,28 @@ export const validatePlanForm = (formData) => {
 
   return Object.keys(errors).length === 0 ? null : errors;
 };
+
+// ---- Propuesta de servicio del cliente ("Adquirir servicios") ----
+// Mismas reglas que validatePlanForm, más la exigencia de sucursal cuando
+// el servicio es presencial o mixto (espejo de Validations.validatePlanDetails en Core API).
+
+export const validateServiceProposalForm = (formData) => {
+  const errors = validatePlanForm(formData) || {};
+
+  if (!formData.serviceType) {
+    errors.serviceType = "Debes indicar si el servicio es virtual, presencial o ambas";
+  } else if (formData.serviceType !== "VIRTUAL") {
+    if (!formData.regionId) errors.regionId = "Debes seleccionar una región";
+    if (!formData.communeId) errors.communeId = "Debes seleccionar una comuna";
+
+    const addressErrors = validateAddressForm({
+      sucursalName: formData.sucursalName,
+      street: formData.street,
+      number: formData.number,
+      communeId: formData.communeId,
+    });
+    if (addressErrors) Object.assign(errors, addressErrors);
+  }
+
+  return Object.keys(errors).length === 0 ? null : errors;
+};

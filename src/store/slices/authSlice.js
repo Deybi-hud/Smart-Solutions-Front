@@ -28,29 +28,28 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
+      // Nota: login/register NO tocan `isLoading` — ese flag controla si App.jsx
+      // muestra la pantalla completa de "Cargando sesión..." (desmontando toda la
+      // app) mientras se verifica la sesión al cargar la página. Si se pusiera en
+      // true aquí también, cada submit de login/registro desmontaría el formulario
+      // a mitad de la petición, perdiendo los datos ingresados y el mensaje de error
+      // (que terminaría seteándose sobre una instancia ya desmontada). El loading
+      // propio de estos formularios ya lo entrega useLoginMutation()/useRegisterMutation().
       .addMatcher(authApi.endpoints.login.matchPending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
       .addMatcher(authApi.endpoints.login.matchFulfilled, (state, action) => {
-        state.isLoading = false;
         state.isAuthenticated = true;
         state.user = action.payload;
       })
       .addMatcher(authApi.endpoints.login.matchRejected, (state, action) => {
-        state.isLoading = false;
         state.error = action.payload?.message || "Error al iniciar sesión";
       })
 
       .addMatcher(authApi.endpoints.register.matchPending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
-      .addMatcher(authApi.endpoints.register.matchFulfilled, (state) => {
-        state.isLoading = false;
-      })
       .addMatcher(authApi.endpoints.register.matchRejected, (state, action) => {
-        state.isLoading = false;
         state.error = action.payload?.message || "Error al registrarse";
       })
 
