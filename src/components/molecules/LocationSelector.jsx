@@ -16,8 +16,6 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
   const { data: communes = [], isLoading: loadingCommunes } = useGetCommunesQuery();
   const { data: addresses = [], isLoading: loadingAddresses } = useGetAddressesQuery();
 
-  // Solo regiones/comunas activas: si el admin desactivó una, deja de estar
-  // disponible para registrar nuevos usuarios (pero no afecta a quienes ya la usaban).
   const activeRegions = regions.filter((r) => r.active);
 
   const filteredCommunes = communes.filter(

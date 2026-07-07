@@ -14,7 +14,6 @@ export const locationApi = createApi({
   baseQuery,
   tagTypes: ["Regions", "Communes", "Addresses"],
   endpoints: (builder) => ({
-    // Regiones (se precargan en el backend; el admin solo edita el nombre o activa/desactiva)
     getRegions: builder.query({
       query: () => "/api/v1/regions",
       providesTags: ["Regions"],
@@ -28,7 +27,6 @@ export const locationApi = createApi({
       invalidatesTags: ["Regions", "Communes", "Addresses"],
     }),
 
-    // Comunas (se precargan en el backend; el admin solo edita el nombre/región o activa/desactiva)
     getCommunes: builder.query({
       query: () => "/api/v1/communes",
       providesTags: ["Communes"],
@@ -42,7 +40,6 @@ export const locationApi = createApi({
       invalidatesTags: ["Communes", "Addresses"],
     }),
 
-    // Addresses (sucursales)
     getAddresses: builder.query({
       query: () => "/api/v1/addresses",
       providesTags: ["Addresses"],

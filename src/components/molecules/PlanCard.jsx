@@ -9,8 +9,6 @@ const SERVICE_TYPE_LABELS = {
   AMBAS: "Virtual y presencial",
 };
 
-// Tarjeta estandarizada: misma altura y estructura sin importar cuánto varíe
-// el nombre, la descripción o el tipo de servicio de cada plan.
 const PlanCard = ({ plan, onSelect }) => (
   <Box
     sx={{

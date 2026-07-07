@@ -94,9 +94,6 @@ export const validatePasswordChangeForm = (formData) => {
   return Object.keys(errors).length === 0 ? null : errors;
 };
 
-// ---- Ubicaciones (regiones, comunas, sucursales) ----
-// Reglas espejo de RegionDTO/CommuneDTO/AddressDTO en Smart-Solutions-Auth-API
-
 const validatePlaceName = (name, label, min = 2, max = 100) => {
   if (!name?.trim()) return `El nombre de ${label} es obligatorio`;
   if (name.trim().length < min || name.trim().length > max) return `El nombre de ${label} debe tener entre ${min} y ${max} caracteres`;
@@ -133,9 +130,6 @@ export const validateAddressForm = (formData) => {
   return Object.keys(errors).length === 0 ? null : errors;
 };
 
-// ---- Planes de suscripción ----
-// Reglas espejo de Validations.validatePlanDetails en Smart-Solutions-Core-API
-
 export const validatePlanForm = (formData) => {
   const errors = {};
 
@@ -155,10 +149,6 @@ export const validatePlanForm = (formData) => {
 
   return Object.keys(errors).length === 0 ? null : errors;
 };
-
-// ---- Propuesta de servicio del cliente ("Adquirir servicios") ----
-// Mismas reglas que validatePlanForm, más la exigencia de sucursal cuando
-// el servicio es presencial o mixto (espejo de Validations.validatePlanDetails en Core API).
 
 export const validateServiceProposalForm = (formData) => {
   const errors = validatePlanForm(formData) || {};

@@ -7,8 +7,6 @@ export default defineConfig({
   ],
   server: {
     watch: {
-      // Bind mounts desde Windows hacia Docker Desktop no propagan eventos
-      // inotify de forma confiable: sin polling, Vite no detecta cambios de archivo.
       usePolling: true,
       interval: 300,
     },

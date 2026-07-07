@@ -48,7 +48,6 @@ export const plansApi = createApi({
             invalidatesTags: ["Plans"],
         }),
 
-        // Un cliente propone "hostear" su propio servicio; queda pendiente de aprobación.
         proposePlan: builder.mutation({
             query: (data) => ({
                 url: "/api/v1/plans/propose",
@@ -76,7 +75,6 @@ export const plansApi = createApi({
             invalidatesTags: ["Plans"],
         }),
 
-        // Planes propuestos por el cliente logueado (dueño), en cualquier estado.
         getMyPlans: builder.query({
             query: () => "/api/v1/plans/mine",
             providesTags: ["Plans"],
