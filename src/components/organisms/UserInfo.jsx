@@ -24,6 +24,7 @@ import {
 } from "../../store/api/subscriptionsApi";
 import { useGetActivePlansQuery } from "../../store/api/plansApi";
 import { extractApiErrorMessage } from "../../utils/apiError";
+import { validateAdminUserForm } from "../../utils/validations";
 
 const roleColor = (role) => (role === "ADMINISTRADOR" ? "error" : "default");
 
@@ -67,17 +68,26 @@ export const UserCard = ({ user, onEdit, onViewSub }) => (
 export const EditUserDialog = ({ user, open, onClose }) => {
   const [updateUser, { isLoading }] = useUpdateUserByEmailMutation();
   const [form, setForm] = useState({ name: "", lastName: "", phone: "", email: "" });
+  const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleOpen = () => {
     setForm({ name: user?.name || "", lastName: user?.lastName || "", phone: user?.phone || "", email: user?.email || "" });
+    setFieldErrors({});
     setError("");
     setSuccess("");
   };
 
+  const handleChange = (key, value) => {
+    setForm((f) => ({ ...f, [key]: value }));
+    if (fieldErrors[key]) setFieldErrors((fe) => ({ ...fe, [key]: null }));
+  };
+
   const handleSave = async () => {
     setError(""); setSuccess("");
+    const validationErrors = validateAdminUserForm(form);
+    if (validationErrors) { setFieldErrors(validationErrors); return; }
     try {
       await updateUser({ email: user.email, data: form }).unwrap();
       setSuccess("Usuario actualizado.");
@@ -103,10 +113,12 @@ export const EditUserDialog = ({ user, open, onClose }) => {
               key={key}
               label={label}
               value={form[key]}
-              onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+              onChange={(e) => handleChange(key, e.target.value)}
               size="small"
               fullWidth
               disabled={isLoading}
+              error={!!fieldErrors[key]}
+              helperText={fieldErrors[key] || ""}
             />
           ))}
         </Stack>

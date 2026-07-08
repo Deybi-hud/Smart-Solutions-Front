@@ -16,6 +16,7 @@ import {
   useUpdatePasswordMutation,
 } from "../../store/api/userApi";
 import { logout } from "../../store/slices/authSlice";
+import { resetAllApiCaches } from "../../store/resetAllApis";
 import {
   validateContactForm,
   validateEmailChangeForm,
@@ -101,6 +102,7 @@ const ProfileCard = () => {
   const handleLogout = async () => {
     try { await logoutApi().unwrap(); } catch {}
     dispatch(logout());
+    resetAllApiCaches(dispatch);
     navigate("/login");
   };
 

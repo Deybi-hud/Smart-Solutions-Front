@@ -9,6 +9,8 @@ import Chip from "@mui/material/Chip";
 import Alert from "@mui/material/Alert";
 import { useGetMyPlansQuery, useUpdatePlanMutation } from "../../store/api/plansApi";
 import { validatePlanForm } from "../../utils/validations";
+import { extractApiErrorMessage } from "../../utils/apiError";
+import { COLORS } from "../../theme/theme";
 
 const STATUS_CHIP = {
   PENDING: { label: "Pendiente de aprobación", color: "warning" },
@@ -34,22 +36,25 @@ const PlanRow = ({ plan, onEdit }) => {
   const status = STATUS_CHIP[plan.approvalStatus] || { label: plan.approvalStatus, color: "default" };
   return (
     <Box sx={{ py: 1.5 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1}>
-        <Box>
-          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-            <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>{plan.name}</Typography>
-            <Chip label={status.label} size="small" color={status.color} variant="outlined" />
-            <Chip label={plan.isActive ? "Activo" : "Inactivo"} size="small" variant="outlined" />
-          </Stack>
-          <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
-            ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""} · {SERVICE_TYPE_LABELS[plan.serviceType] || plan.serviceType}
-          </Typography>
-          {plan.details && (
-            <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>{plan.details}</Typography>
-          )}
-        </Box>
-        <MuiButton size="small" onClick={() => onEdit(plan)}>Editar</MuiButton>
+      <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>{plan.name}</Typography>
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center", justifyContent: "flex-end", flexWrap: "wrap", mt: 0.5 }}>
+        <Chip label={status.label} size="small" color={status.color} variant="outlined" />
+        <Chip
+          label={plan.isActive ? "Activo" : "Inactivo"}
+          size="small"
+          color={plan.isActive ? "success" : "default"}
+          variant="outlined"
+        />
+        <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: COLORS.navy, minWidth: 0 }}>
+          Editar
+        </MuiButton>
       </Stack>
+      <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 0.5 }}>
+        ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""} · {SERVICE_TYPE_LABELS[plan.serviceType] || plan.serviceType}
+      </Typography>
+      {plan.details && (
+        <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>{plan.details}</Typography>
+      )}
     </Box>
   );
 };
@@ -87,7 +92,7 @@ const EditPlanForm = ({ plan, onCancel, onSaved }) => {
       }).unwrap();
       onSaved();
     } catch (err) {
-      setError(err?.data?.message || err?.data?.error || "Error al actualizar el servicio.");
+      setError(extractApiErrorMessage(err, "Error al actualizar el servicio."));
     }
   };
 
@@ -105,7 +110,7 @@ const EditPlanForm = ({ plan, onCancel, onSaved }) => {
           <TextField label="Duración (meses)" type="number" value={form.durationMonths} onChange={(e) => set("durationMonths", e.target.value)}
             error={!!errors.durationMonths} helperText={errors.durationMonths || ""} size="small" fullWidth disabled={isLoading} />
         </Stack>
-        <Stack direction="row" alignItems="center" spacing={1.5}>
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>Estado:</Typography>
           <MuiButton size="small" variant={form.isActive ? "contained" : "outlined"} onClick={() => set("isActive", !form.isActive)} disabled={isLoading}>
             {form.isActive ? "Activo" : "Inactivo"}
