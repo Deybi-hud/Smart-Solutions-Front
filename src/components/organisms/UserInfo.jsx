@@ -23,6 +23,8 @@ import {
   useCancelSubscriptionMutation,
 } from "../../store/api/subscriptionsApi";
 import { useGetActivePlansQuery } from "../../store/api/plansApi";
+import { extractApiErrorMessage } from "../../utils/apiError";
+import { validateAdminUserForm } from "../../utils/validations";
 
 const roleColor = (role) => (role === "ADMINISTRADOR" ? "error" : "default");
 
@@ -66,22 +68,31 @@ export const UserCard = ({ user, onEdit, onViewSub }) => (
 export const EditUserDialog = ({ user, open, onClose }) => {
   const [updateUser, { isLoading }] = useUpdateUserByEmailMutation();
   const [form, setForm] = useState({ name: "", lastName: "", phone: "", email: "" });
+  const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleOpen = () => {
     setForm({ name: user?.name || "", lastName: user?.lastName || "", phone: user?.phone || "", email: user?.email || "" });
+    setFieldErrors({});
     setError("");
     setSuccess("");
   };
 
+  const handleChange = (key, value) => {
+    setForm((f) => ({ ...f, [key]: value }));
+    if (fieldErrors[key]) setFieldErrors((fe) => ({ ...fe, [key]: null }));
+  };
+
   const handleSave = async () => {
     setError(""); setSuccess("");
+    const validationErrors = validateAdminUserForm(form);
+    if (validationErrors) { setFieldErrors(validationErrors); return; }
     try {
       await updateUser({ email: user.email, data: form }).unwrap();
       setSuccess("Usuario actualizado.");
     } catch (e) {
-      setError(e?.data?.message || "Error al actualizar.");
+      setError(extractApiErrorMessage(e, "Error al actualizar."));
     }
   };
 
@@ -102,10 +113,12 @@ export const EditUserDialog = ({ user, open, onClose }) => {
               key={key}
               label={label}
               value={form[key]}
-              onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+              onChange={(e) => handleChange(key, e.target.value)}
               size="small"
               fullWidth
               disabled={isLoading}
+              error={!!fieldErrors[key]}
+              helperText={fieldErrors[key] || ""}
             />
           ))}
         </Stack>
@@ -135,7 +148,7 @@ export const SubscriptionDialog = ({ user, open, onClose }) => {
     try {
       await activateSub({ userId: user.id, planId: Number(selectedPlan) }).unwrap();
       setSuccess("Suscripción activada.");
-    } catch (e) { setError(e?.data?.message || "Error al activar."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al activar.")); }
   };
 
   const handleCancel = async () => {
@@ -143,7 +156,7 @@ export const SubscriptionDialog = ({ user, open, onClose }) => {
     try {
       await cancelSub(user.id).unwrap();
       setSuccess("Renovación cancelada.");
-    } catch (e) { setError(e?.data?.message || "Error al cancelar."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al cancelar.")); }
   };
 
   const statusColor = { ACTIVE: "#2e7d32", CANCELLED: "#C0392B", EXPIRED: "#9C7878" };

@@ -7,8 +7,8 @@ import LocationSelector from "../molecules/LocationSelector";
 import Button from "../atoms/Button";
 import ErrorMessage from "../atoms/ErrorMessage";
 import { useRegisterMutation } from "../../store/api/authApi";
-import { userApi } from "../../store/api/userApi";
 import { validateRegisterForm } from "../../utils/validations";
+import { resetAllApiCaches } from "../../store/resetAllApis";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const RegisterForm = () => {
         phone: form.phone,
         addressId,
       }).unwrap();
-      dispatch(userApi.util.invalidateTags(["Profile"]));
+      resetAllApiCaches(dispatch);
       navigate("/home");
     } catch (err) {
       const data = err?.data;
@@ -66,7 +66,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
+    <Stack component="form" onSubmit={handleSubmit} noValidate spacing={2}>
       {generalError && <ErrorMessage message={generalError} />}
       <FormField
         label="Nombre"

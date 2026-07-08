@@ -6,8 +6,8 @@ import FormField from "../molecules/FormField";
 import Button from "../atoms/Button";
 import ErrorMessage from "../atoms/ErrorMessage";
 import { useLoginMutation } from "../../store/api/authApi";
-import { userApi } from "../../store/api/userApi";
 import { validateLoginForm } from "../../utils/validations";
+import { resetAllApiCaches } from "../../store/resetAllApis";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const LoginForm = () => {
     if (validationErrors) { setErrors(validationErrors); return; }
     try {
       await login({ email: form.email, password: form.password }).unwrap();
-      dispatch(userApi.util.invalidateTags(["Profile"]));
+      resetAllApiCaches(dispatch);
       navigate("/home");
     } catch (err) {
       setGeneralError(err?.data?.message || "Error al iniciar sesión. Intenta de nuevo.");
@@ -38,7 +38,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
+    <Stack component="form" onSubmit={handleSubmit} noValidate spacing={2}>
       {generalError && <ErrorMessage message={generalError} />}
       <FormField
         label="Correo"

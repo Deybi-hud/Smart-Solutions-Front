@@ -1,6 +1,9 @@
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
 const phoneRegex = /^[92]\d{8}$/;
+const placeNameRegex = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s0-9]+$/;
+const streetRegex = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s0-9.-]+$/;
+const numberRegex = /^[a-zA-Z0-9\-\s]+$/;
 
 const validateName = (name) => {
   if (!name?.trim()) return "El nombre es obligatorio";
@@ -36,6 +39,7 @@ const validatePhone = (phone) => {
 const validatePassword = (password) => {
   if (!password) return "La contraseña es obligatoria";
   if (password.length < 8) return "La contraseña debe tener al menos 8 caracteres";
+  if (!/[a-z]/.test(password)) return "La contraseña debe incluir al menos una minúscula";
   if (!/[A-Z]/.test(password)) return "La contraseña debe incluir al menos una mayúscula";
   if (!/\d/.test(password)) return "La contraseña debe incluir al menos un número";
   return null;
@@ -73,6 +77,15 @@ export const validateContactForm = (formData) => {
   return Object.keys(errors).length === 0 ? null : errors;
 };
 
+export const validateAdminUserForm = (formData) => {
+  const errors = {};
+  const n = validateName(formData.name); if (n) errors.name = n;
+  const l = validateLastName(formData.lastName); if (l) errors.lastName = l;
+  const ph = validatePhone(formData.phone); if (ph) errors.phone = ph;
+  const e = validateEmail(formData.email); if (e) errors.email = e;
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+
 export const validateEmailChangeForm = (formData) => {
   const errors = {};
   const e = validateEmail(formData.newEmail); if (e) errors.newEmail = e;
@@ -87,5 +100,94 @@ export const validatePasswordChangeForm = (formData) => {
   if (!formData.currentPassword?.trim()) errors.currentPassword = "La contraseña actual es obligatoria";
   const p = validatePassword(formData.newPassword); if (p) errors.newPassword = p;
   const pm = validatePasswordMatch(formData.newPassword, formData.confirmNewPassword); if (pm) errors.confirmNewPassword = pm;
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+
+const validatePlaceName = (name, label, min = 3, max = 100) => {
+  if (!name?.trim()) return `El nombre de ${label} es obligatorio`;
+  if (name.trim().length < min || name.trim().length > max) return `El nombre de ${label} debe tener entre ${min} y ${max} caracteres`;
+  if (!placeNameRegex.test(name.trim())) return `El nombre de ${label} contiene caracteres inválidos`;
+  return null;
+};
+
+export const validateRegionForm = (formData) => {
+  const errors = {};
+  const n = validatePlaceName(formData.regionName, "la región", 3, 100); if (n) errors.regionName = n;
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+
+export const validateCommuneForm = (formData) => {
+  const errors = {};
+  const n = validatePlaceName(formData.communeName, "la comuna", 3, 100); if (n) errors.communeName = n;
+  if (!formData.regionId) errors.regionId = "Debes seleccionar una región";
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+
+export const validateAddressForm = (formData) => {
+  const errors = {};
+  const s = validatePlaceName(formData.sucursalName, "la sucursal", 3, 50); if (s) errors.sucursalName = s;
+
+  if (!formData.street?.trim()) errors.street = "La calle es obligatoria";
+  else if (formData.street.trim().length < 3 || formData.street.trim().length > 150) errors.street = "La calle debe tener entre 3 y 150 caracteres";
+  else if (!streetRegex.test(formData.street.trim())) errors.street = "La calle contiene caracteres inválidos";
+
+  if (!formData.number?.trim()) errors.number = "El número es obligatorio";
+  else if (formData.number.trim().length > 20) errors.number = "El número no puede superar los 20 caracteres";
+  else if (!numberRegex.test(formData.number.trim())) errors.number = "El número de calle contiene caracteres inválidos";
+
+  if (!formData.communeId) errors.communeId = "Debes seleccionar una comuna";
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+
+export const validatePlanForm = (formData) => {
+  const errors = {};
+
+  if (!formData.name?.trim()) errors.name = "El nombre del plan es obligatorio";
+  else if (formData.name.trim().length < 3 || formData.name.trim().length > 100) errors.name = "El nombre del plan debe tener entre 3 y 100 caracteres";
+
+  if (!formData.details?.trim()) errors.details = "La descripción del plan es obligatoria";
+  else if (formData.details.trim().length > 255) errors.details = "La descripción no puede superar los 255 caracteres";
+
+  const price = Number(formData.price);
+  if (formData.price === "" || formData.price === null || formData.price === undefined || Number.isNaN(price)) errors.price = "El precio es obligatorio";
+  else if (price < 0) errors.price = "El precio no puede ser negativo";
+
+  const duration = Number(formData.durationMonths);
+  if (formData.durationMonths === "" || formData.durationMonths === null || formData.durationMonths === undefined || !Number.isInteger(duration)) errors.durationMonths = "La duración es obligatoria";
+  else if (duration < 1) errors.durationMonths = "La duración debe ser de al menos 1 mes";
+
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+
+export const validateAdminPlanForm = (formData) => {
+  const errors = validatePlanForm(formData) || {};
+
+  if (!formData.serviceType) {
+    errors.serviceType = "Debes indicar si el servicio es virtual, presencial o ambas";
+  } else if (formData.serviceType !== "VIRTUAL" && !formData.addressId) {
+    errors.addressId = "Debes seleccionar una sucursal para un servicio presencial o mixto";
+  }
+
+  return Object.keys(errors).length === 0 ? null : errors;
+};
+
+export const validateServiceProposalForm = (formData) => {
+  const errors = validatePlanForm(formData) || {};
+
+  if (!formData.serviceType) {
+    errors.serviceType = "Debes indicar si el servicio es virtual, presencial o ambas";
+  } else if (formData.serviceType !== "VIRTUAL") {
+    if (!formData.regionId) errors.regionId = "Debes seleccionar una región";
+    if (!formData.communeId) errors.communeId = "Debes seleccionar una comuna";
+
+    const addressErrors = validateAddressForm({
+      sucursalName: formData.sucursalName,
+      street: formData.street,
+      number: formData.number,
+      communeId: formData.communeId,
+    });
+    if (addressErrors) Object.assign(errors, addressErrors);
+  }
+
   return Object.keys(errors).length === 0 ? null : errors;
 };

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const plansApi = createApi({
     reducerPath: "plansApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "https://ap-916a8432b2994023864bb12867d8c2df.ecs.sa-east-1.on.aws",
+        baseUrl: import.meta.env.VITE_CORE_API_URL || "http://localhost:8080",
         credentials: "include",
         prepareHeaders: (headers) => {
             headers.set("Content-Type", "application/json");
@@ -47,6 +47,38 @@ export const plansApi = createApi({
             }),
             invalidatesTags: ["Plans"],
         }),
+
+        proposePlan: builder.mutation({
+            query: (data) => ({
+                url: "/api/v1/plans/propose",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["Plans"],
+        }),
+        getPendingPlans: builder.query({
+            query: () => "/api/v1/plans/admin/pending",
+            providesTags: ["Plans"],
+        }),
+        approvePlan: builder.mutation({
+            query: (id) => ({
+                url: "/api/v1/plans/admin/" + id + "/approve",
+                method: "POST",
+            }),
+            invalidatesTags: ["Plans"],
+        }),
+        rejectPlan: builder.mutation({
+            query: (id) => ({
+                url: "/api/v1/plans/admin/" + id + "/reject",
+                method: "POST",
+            }),
+            invalidatesTags: ["Plans"],
+        }),
+
+        getMyPlans: builder.query({
+            query: () => "/api/v1/plans/mine",
+            providesTags: ["Plans"],
+        }),
     }),
 });
 
@@ -57,4 +89,9 @@ export const {
     useCreatePlanMutation,
     useUpdatePlanMutation,
     useDeletePlanMutation,
+    useProposePlanMutation,
+    useGetPendingPlansQuery,
+    useApprovePlanMutation,
+    useRejectPlanMutation,
+    useGetMyPlansQuery,
 } = plansApi;

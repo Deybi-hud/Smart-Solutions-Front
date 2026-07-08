@@ -1,15 +1,22 @@
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import MuiButton from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import AcquireServiceModal from "./AcquireServiceModal";
 
 const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useSelector((state) => state.auth.user);
   const isAdmin = user?.role === "ADMINISTRADOR";
+  const isClient = user?.role === "CLIENTE";
+  const showAcquireButton = isClient && location.pathname !== "/profile";
+  const isOnProfile = location.pathname === "/profile";
+  const [acquireOpen, setAcquireOpen] = useState(false);
 
   return (
     <AppBar position="sticky">
@@ -44,13 +51,21 @@ const NavBar = ({ onAboutClick, showAuthLinks = false }) => {
                   Admin
                 </MuiButton>
               )}
-              <MuiButton onClick={() => navigate("/profile")} variant="text">
+              {showAcquireButton && (
+                <MuiButton onClick={() => setAcquireOpen(true)} variant="text">
+                  Adquirir servicios
+                </MuiButton>
+              )}
+              <MuiButton onClick={() => navigate(isOnProfile ? "/home" : "/profile")} variant="text">
                 Perfil
               </MuiButton>
             </>
           )}
         </Box>
       </Toolbar>
+      {isClient && (
+        <AcquireServiceModal open={acquireOpen} onClose={() => setAcquireOpen(false)} />
+      )}
     </AppBar>
   );
 };

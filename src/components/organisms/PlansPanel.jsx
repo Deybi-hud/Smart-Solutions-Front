@@ -7,13 +7,22 @@ import MuiButton from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Alert from "@mui/material/Alert";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 import {
   useGetAllPlansAdminQuery,
   useCreatePlanMutation,
   useUpdatePlanMutation,
   useDeletePlanMutation,
 } from "../../store/api/plansApi";
+import { useGetAddressesQuery } from "../../store/api/locationApi";
 import { COLORS } from "../../theme/theme";
+import { validateAdminPlanForm } from "../../utils/validations";
+import { extractApiErrorMessage } from "../../utils/apiError";
+import Dropdown from "../atoms/Dropdown";
 
 const panelSx = {
   backgroundColor: "#FFFFFF",
@@ -22,21 +31,39 @@ const panelSx = {
   p: 3,
 };
 
-const emptyForm = { name: "", details: "", price: "", durationMonths: "", isActive: true };
+const SERVICE_TYPE_LABELS = {
+  VIRTUAL: "Virtual",
+  PRESENCIAL: "Presencial",
+  AMBAS: "Virtual y presencial",
+};
+
+const emptyForm = { name: "", details: "", price: "", durationMonths: "", isActive: true, serviceType: "", addressId: "" };
 
 const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => {
   const [form, setForm] = useState(initial);
+  const [errors, setErrors] = useState({});
+  const { data: addresses = [] } = useGetAddressesQuery();
 
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  const set = (k, v) => { setForm((f) => ({ ...f, [k]: v })); setErrors((er) => ({ ...er, [k]: null })); };
+
+  const needsLocation = form.serviceType === "PRESENCIAL" || form.serviceType === "AMBAS";
+  const addressOptions = addresses.map((a) => ({
+    value: String(a.id),
+    label: `${a.sucursalName} — ${a.street} ${a.number}`,
+  }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationErrors = validateAdminPlanForm(form);
+    if (validationErrors) { setErrors(validationErrors); return; }
     onSave({
       name: form.name,
       details: form.details,
       price: parseFloat(form.price),
       durationMonths: parseInt(form.durationMonths, 10),
       isActive: form.isActive,
+      serviceType: form.serviceType,
+      addressId: needsLocation ? Number(form.addressId) : null,
     });
   };
 
@@ -44,6 +71,7 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
     <Box
       component="form"
       onSubmit={handleSubmit}
+      noValidate
       sx={{ backgroundColor: "#F8F7F5", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.06)", p: 3 }}
     >
       <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary", mb: 3, fontSize: "1rem" }}>
@@ -51,19 +79,50 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
       </Typography>
       <Stack spacing={2.5}>
         <TextField label="Nombre" value={form.name} onChange={(e) => set("name", e.target.value)}
-          required size="small" fullWidth disabled={loading} />
+          required size="small" fullWidth disabled={loading}
+          error={!!errors.name} helperText={errors.name || ""} />
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
           <TextField label="Precio (CLP)" value={form.price} onChange={(e) => set("price", e.target.value)}
-            required type="number" size="small" fullWidth disabled={loading} />
+            required type="number" size="small" fullWidth disabled={loading}
+            error={!!errors.price} helperText={errors.price || ""} />
           <TextField label="Duración (meses)" value={form.durationMonths}
             onChange={(e) => set("durationMonths", e.target.value)}
-            required type="number" size="small" fullWidth disabled={loading} />
+            required type="number" size="small" fullWidth disabled={loading}
+            error={!!errors.durationMonths} helperText={errors.durationMonths || ""} />
         </Stack>
         <TextField label="Descripción" value={form.details} onChange={(e) => set("details", e.target.value)}
-          multiline rows={3} size="small" fullWidth disabled={loading} />
+          multiline rows={3} size="small" fullWidth disabled={loading}
+          error={!!errors.details} helperText={errors.details || ""} />
+        <FormControl error={!!errors.serviceType}>
+          <FormLabel sx={{ fontSize: "0.9rem" }}>¿El servicio es virtual, presencial o ambas?</FormLabel>
+          <RadioGroup
+            row
+            value={form.serviceType}
+            onChange={(e) => { set("serviceType", e.target.value); set("addressId", ""); }}
+          >
+            <FormControlLabel value="VIRTUAL" control={<Radio size="small" disabled={loading} />} label="Virtual" />
+            <FormControlLabel value="PRESENCIAL" control={<Radio size="small" disabled={loading} />} label="Presencial" />
+            <FormControlLabel value="AMBAS" control={<Radio size="small" disabled={loading} />} label="Ambas" />
+          </RadioGroup>
+          {errors.serviceType && (
+            <Typography variant="caption" sx={{ color: "error.main" }}>{errors.serviceType}</Typography>
+          )}
+        </FormControl>
+        {needsLocation && (
+          <Dropdown
+            label="Sucursal"
+            id="plan-address"
+            value={form.addressId}
+            onChange={(e) => set("addressId", e.target.value)}
+            options={addressOptions}
+            placeholder="Selecciona una sucursal"
+            disabled={loading}
+            error={errors.addressId}
+          />
+        )}
         <Divider />
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: "100%", pt: 0.5 }}>
-          <Stack direction="row" spacing={1.5} alignItems="center">
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", justifyContent: "space-between", width: "100%", pt: 0.5 }}>
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>Estado:</Typography>
             <MuiButton
               size="small"
@@ -90,29 +149,17 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
 };
 
 const PlanRow = ({ plan, onEdit, onDelete }) => (
-  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, py: 1.5 }}>
-    <Box sx={{ flex: 1, minWidth: 0 }}>
-      <Stack direction="row" spacing={1} alignItems="center">
-        <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>
-          {plan.name}
-        </Typography>
-        <Chip
-          label={plan.isActive ? "Activo" : "Inactivo"}
-          size="small"
-          color={plan.isActive ? "success" : "default"}
-          variant="outlined"
-        />
-      </Stack>
-      <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
-        ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""}
-      </Typography>
-      {plan.details && (
-        <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
-          {plan.details}
-        </Typography>
-      )}
-    </Box>
-    <Stack direction="row" spacing={0.5}>
+  <Box sx={{ py: 1.5 }}>
+    <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>
+      {plan.name}
+    </Typography>
+    <Stack direction="row" spacing={1} sx={{ alignItems: "center", justifyContent: "flex-end", flexWrap: "wrap", mt: 0.5 }}>
+      <Chip
+        label={plan.isActive ? "Activo" : "Inactivo"}
+        size="small"
+        color={plan.isActive ? "success" : "default"}
+        variant="outlined"
+      />
       <MuiButton size="small" onClick={() => onEdit(plan)} sx={{ color: COLORS.navy, minWidth: 0 }}>
         Editar
       </MuiButton>
@@ -120,6 +167,14 @@ const PlanRow = ({ plan, onEdit, onDelete }) => (
         Eliminar
       </MuiButton>
     </Stack>
+    <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 0.5 }}>
+      ${Number(plan.price).toLocaleString("es-CL", { maximumFractionDigits: 0 })} · {plan.durationMonths} mes{plan.durationMonths !== 1 ? "es" : ""} · {SERVICE_TYPE_LABELS[plan.serviceType] || plan.serviceType}
+    </Typography>
+    {plan.details && (
+      <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
+        {plan.details}
+      </Typography>
+    )}
   </Box>
 );
 
@@ -140,7 +195,7 @@ const PlansPanel = () => {
       await createPlan(data).unwrap();
       setAdding(false);
       setSuccess("Plan creado exitosamente.");
-    } catch (e) { setError(e?.data?.message || "Error al crear el plan."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al crear el plan.")); }
   };
 
   const handleUpdate = async (data) => {
@@ -149,20 +204,21 @@ const PlansPanel = () => {
       await updatePlan({ id: editingPlan.id, ...data }).unwrap();
       setEditingPlan(null);
       setSuccess("Plan actualizado.");
-    } catch (e) { setError(e?.data?.message || "Error al actualizar el plan."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al actualizar el plan.")); }
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("¿Eliminar este plan?")) return;
     setError(""); setSuccess("");
     try {
       await deletePlan(id).unwrap();
       setSuccess("Plan eliminado.");
-    } catch (e) { setError(e?.data?.message || "Error al eliminar el plan."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al eliminar el plan.")); }
   };
 
   return (
     <Box sx={panelSx}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1.5}>
+      <Stack direction="row" sx={{ alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
         <Typography variant="h6" sx={{ color: "text.primary", fontWeight: 600, flex: 1 }}>
           Planes ({plans.length})
         </Typography>
@@ -209,6 +265,8 @@ const PlansPanel = () => {
                     price: String(p.price),
                     durationMonths: String(p.durationMonths),
                     isActive: p.isActive,
+                    serviceType: p.serviceType || "",
+                    addressId: p.addressId ? String(p.addressId) : "",
                   }}
                   onSave={handleUpdate}
                   onCancel={() => setEditingPlan(null)}

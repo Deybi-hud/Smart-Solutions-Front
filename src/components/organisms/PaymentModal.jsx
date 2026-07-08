@@ -127,7 +127,7 @@ const PaymentModal = ({ plan, open, onClose, userId, userEmail }) => {
 
                     {serverError && <Alert severity="error">{serverError}</Alert>}
 
-                    <Stack component="form" id="payment-form" onSubmit={handleSubmit} spacing={2}>
+                    <Stack component="form" id="payment-form" onSubmit={handleSubmit} noValidate spacing={2}>
                         <TextField
                             label="Número de tarjeta"
                             value={form.number}

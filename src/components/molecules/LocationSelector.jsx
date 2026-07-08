@@ -16,8 +16,10 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
   const { data: communes = [], isLoading: loadingCommunes } = useGetCommunesQuery();
   const { data: addresses = [], isLoading: loadingAddresses } = useGetAddressesQuery();
 
+  const activeRegions = regions.filter((r) => r.active);
+
   const filteredCommunes = communes.filter(
-    (c) => String(c.region?.id || c.regionId) === String(regionId)
+    (c) => c.active && String(c.region?.id || c.regionId) === String(regionId)
   );
 
   const filteredAddresses = addresses.filter(
@@ -41,7 +43,7 @@ const LocationSelector = ({ onAddressSelect, error, disabled = false }) => {
     onAddressSelect(val ? Number(val) : null);
   };
 
-  const regionOptions = regions.map((r) => ({ value: String(r.id), label: r.regionName }));
+  const regionOptions = activeRegions.map((r) => ({ value: String(r.id), label: r.regionName }));
   const communeOptions = filteredCommunes.map((c) => ({ value: String(c.id), label: c.communeName }));
   const addressOptions = filteredAddresses.map((a) => ({
     value: String(a.id),

@@ -13,12 +13,13 @@ import {
   useGetSubscriptionHistoryQuery,
 } from "../../store/api/subscriptionsApi";
 import { useGetProfileQuery } from "../../store/api/userApi";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const ACTION_LABELS = {
-  CREATION: "Alta",
+  CREATION: "Compra de plan",
   RENEWAL: "Renovación",
   PLAN_CHANGE: "Cambio de plan",
-  CANCELLATION: "Cancelación",
+  CANCELLATION: "Cancelación de plan",
   EXPIRATION: "Expiración",
 };
 
@@ -45,7 +46,7 @@ const SubscriptionCard = () => {
       await cancelSubscription(profile.id).unwrap();
       setSuccess("Suscripción cancelada.");
     } catch (err) {
-      setError(err?.data?.message || "Error al cancelar la suscripción.");
+      setError(extractApiErrorMessage(err, "Error al cancelar la suscripción."));
     }
   };
 
@@ -130,9 +131,11 @@ const SubscriptionCard = () => {
                   </Box>
                   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 0.5 }}>
                     <Typography variant="caption" sx={{ color: "text.secondary" }}>{entry.subscriptionName}</Typography>
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                      ${Number(entry.subscriptionPrice).toLocaleString("es-CL", { maximumFractionDigits: 0 })}
-                    </Typography>
+                    {entry.action !== "CANCELLATION" && (
+                      <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                        ${Number(entry.subscriptionPrice).toLocaleString("es-CL", { maximumFractionDigits: 0 })}
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
                 {i < history.length - 1 && <Divider />}

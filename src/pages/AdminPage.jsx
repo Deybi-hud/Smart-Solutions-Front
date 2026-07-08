@@ -8,6 +8,7 @@ import Footer from "../components/organisms/Footer";
 import LocationPanel from "../components/organisms/LocationPanel";
 import UsersPanel from "../components/organisms/UsersPanel";
 import PlansPanel from "../components/organisms/PlansPanel";
+import PendingPlansPanel from "../components/organisms/PendingPlansPanel";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -32,11 +33,13 @@ const AdminPage = () => {
             <Tab label="Regiones / Comunas / Sucursales" />
             <Tab label="Usuarios" />
             <Tab label="Planes" />
+            <Tab label="Solicitudes de clientes" />
           </Tabs>
 
           {activeTab === 0 && <LocationPanel />}
           {activeTab === 1 && <UsersPanel />}
           {activeTab === 2 && <PlansPanel />}
+          {activeTab === 3 && <PendingPlansPanel />}
         </Box>
       </Box>
 

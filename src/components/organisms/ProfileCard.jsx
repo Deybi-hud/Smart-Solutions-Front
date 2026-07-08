@@ -16,11 +16,13 @@ import {
   useUpdatePasswordMutation,
 } from "../../store/api/userApi";
 import { logout } from "../../store/slices/authSlice";
+import { resetAllApiCaches } from "../../store/resetAllApis";
 import {
   validateContactForm,
   validateEmailChangeForm,
   validatePasswordChangeForm,
 } from "../../utils/validations";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const cardSx = {
   backgroundColor: "#FFFFFF",
@@ -70,7 +72,7 @@ const ProfileCard = () => {
       await updateContact(form).unwrap();
       setSuccess("Datos actualizados correctamente.");
       setEditMode(null);
-    } catch (err) { setApiError(err?.data?.message || "Error al actualizar."); }
+    } catch (err) { setApiError(extractApiErrorMessage(err, "Error al actualizar.")); }
   };
 
   const handleSaveEmail = async (e) => {
@@ -82,7 +84,7 @@ const ProfileCard = () => {
       await updateEmail({ newEmail: form.newEmail, confirmNewEmail: form.confirmNewEmail, password: form.password }).unwrap();
       setSuccess("Correo actualizado correctamente.");
       setEditMode(null);
-    } catch (err) { setApiError(err?.data?.message || "Error al actualizar el correo."); }
+    } catch (err) { setApiError(extractApiErrorMessage(err, "Error al actualizar el correo.")); }
   };
 
   const handleSavePassword = async (e) => {
@@ -94,12 +96,13 @@ const ProfileCard = () => {
       await updatePassword({ currentPassword: form.currentPassword, newPassword: form.newPassword, confirmNewPassword: form.confirmNewPassword }).unwrap();
       setSuccess("Contraseña actualizada correctamente.");
       setEditMode(null);
-    } catch (err) { setApiError(err?.data?.message || "Error al actualizar la contraseña."); }
+    } catch (err) { setApiError(extractApiErrorMessage(err, "Error al actualizar la contraseña.")); }
   };
 
   const handleLogout = async () => {
     try { await logoutApi().unwrap(); } catch {}
     dispatch(logout());
+    resetAllApiCaches(dispatch);
     navigate("/login");
   };
 
@@ -148,7 +151,7 @@ const ProfileCard = () => {
         <Box sx={cardSx}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Editar datos de contacto</Typography>
           {apiError && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{apiError}</Alert>}
-          <Stack component="form" onSubmit={handleSaveContact} spacing={2}>
+          <Stack component="form" onSubmit={handleSaveContact} noValidate spacing={2}>
             {[
               { label: "Nombre", name: "name" },
               { label: "Apellido", name: "lastName" },
@@ -179,7 +182,7 @@ const ProfileCard = () => {
         <Box sx={cardSx}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Cambiar correo</Typography>
           {apiError && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{apiError}</Alert>}
-          <Stack component="form" onSubmit={handleSaveEmail} spacing={2}>
+          <Stack component="form" onSubmit={handleSaveEmail} noValidate spacing={2}>
             {[
               { label: "Nuevo correo", name: "newEmail", type: "email" },
               { label: "Confirmar correo", name: "confirmNewEmail", type: "email" },
@@ -211,7 +214,7 @@ const ProfileCard = () => {
         <Box sx={cardSx}>
           <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary", mb: 3 }}>Cambiar contraseña</Typography>
           {apiError && <Alert severity="error" sx={{ mb: 2, borderRadius: "8px" }}>{apiError}</Alert>}
-          <Stack component="form" onSubmit={handleSavePassword} spacing={2}>
+          <Stack component="form" onSubmit={handleSavePassword} noValidate spacing={2}>
             {[
               { label: "Contraseña actual", name: "currentPassword" },
               { label: "Nueva contraseña", name: "newPassword" },
