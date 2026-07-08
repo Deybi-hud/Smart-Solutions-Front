@@ -7,7 +7,7 @@ const numberRegex = /^[a-zA-Z0-9\-\s]+$/;
 
 const validateName = (name) => {
   if (!name?.trim()) return "El nombre es obligatorio";
-  if (name.trim().length < 10) return "El nombre debe tener al menos 10 caracteres";
+  if (name.trim().length < 3) return "El nombre debe tener al menos 3 caracteres";
   if (name.trim().length > 50) return "El nombre no puede superar los 50 caracteres";
   if (!nameRegex.test(name.trim())) return "El nombre solo puede contener letras";
   return null;
@@ -15,7 +15,7 @@ const validateName = (name) => {
 
 const validateLastName = (lastName) => {
   if (!lastName?.trim()) return "El apellido es obligatorio";
-  if (lastName.trim().length < 10) return "El apellido debe tener al menos 10 caracteres";
+  if (lastName.trim().length < 3) return "El apellido debe tener al menos 3 caracteres";
   if (lastName.trim().length > 50) return "El apellido no puede superar los 50 caracteres";
   if (!nameRegex.test(lastName.trim())) return "El apellido solo puede contener letras";
   return null;
@@ -103,7 +103,7 @@ export const validatePasswordChangeForm = (formData) => {
   return Object.keys(errors).length === 0 ? null : errors;
 };
 
-const validatePlaceName = (name, label, min = 10, max = 100) => {
+const validatePlaceName = (name, label, min = 3, max = 100) => {
   if (!name?.trim()) return `El nombre de ${label} es obligatorio`;
   if (name.trim().length < min || name.trim().length > max) return `El nombre de ${label} debe tener entre ${min} y ${max} caracteres`;
   if (!placeNameRegex.test(name.trim())) return `El nombre de ${label} contiene caracteres inválidos`;
@@ -112,23 +112,23 @@ const validatePlaceName = (name, label, min = 10, max = 100) => {
 
 export const validateRegionForm = (formData) => {
   const errors = {};
-  const n = validatePlaceName(formData.regionName, "la región", 10, 100); if (n) errors.regionName = n;
+  const n = validatePlaceName(formData.regionName, "la región", 3, 100); if (n) errors.regionName = n;
   return Object.keys(errors).length === 0 ? null : errors;
 };
 
 export const validateCommuneForm = (formData) => {
   const errors = {};
-  const n = validatePlaceName(formData.communeName, "la comuna", 10, 100); if (n) errors.communeName = n;
+  const n = validatePlaceName(formData.communeName, "la comuna", 3, 100); if (n) errors.communeName = n;
   if (!formData.regionId) errors.regionId = "Debes seleccionar una región";
   return Object.keys(errors).length === 0 ? null : errors;
 };
 
 export const validateAddressForm = (formData) => {
   const errors = {};
-  const s = validatePlaceName(formData.sucursalName, "la sucursal", 10, 50); if (s) errors.sucursalName = s;
+  const s = validatePlaceName(formData.sucursalName, "la sucursal", 3, 50); if (s) errors.sucursalName = s;
 
   if (!formData.street?.trim()) errors.street = "La calle es obligatoria";
-  else if (formData.street.trim().length < 10 || formData.street.trim().length > 150) errors.street = "La calle debe tener entre 10 y 150 caracteres";
+  else if (formData.street.trim().length < 3 || formData.street.trim().length > 150) errors.street = "La calle debe tener entre 3 y 150 caracteres";
   else if (!streetRegex.test(formData.street.trim())) errors.street = "La calle contiene caracteres inválidos";
 
   if (!formData.number?.trim()) errors.number = "El número es obligatorio";
@@ -143,7 +143,7 @@ export const validatePlanForm = (formData) => {
   const errors = {};
 
   if (!formData.name?.trim()) errors.name = "El nombre del plan es obligatorio";
-  else if (formData.name.trim().length < 10 || formData.name.trim().length > 100) errors.name = "El nombre del plan debe tener entre 10 y 100 caracteres";
+  else if (formData.name.trim().length < 3 || formData.name.trim().length > 100) errors.name = "El nombre del plan debe tener entre 3 y 100 caracteres";
 
   if (!formData.details?.trim()) errors.details = "La descripción del plan es obligatoria";
   else if (formData.details.trim().length > 255) errors.details = "La descripción no puede superar los 255 caracteres";
