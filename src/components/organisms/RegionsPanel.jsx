@@ -13,6 +13,7 @@ import {
   useSetRegionActiveMutation,
 } from "../../store/api/locationApi";
 import { validateRegionForm } from "../../utils/validations";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 export const panelSx = {
   backgroundColor: "#FFFFFF",
@@ -76,13 +77,13 @@ const RegionsPanel = () => {
     const errors = validateRegionForm({ regionName: value });
     if (errors) { setFieldError(errors.regionName); return; }
     try { await updateRegion({ id, data: { regionName: value } }).unwrap(); setEditingId(null); setFieldError(""); }
-    catch (e) { setError(e?.data?.message || "Error al actualizar."); }
+    catch (e) { setError(extractApiErrorMessage(e, "Error al actualizar.")); }
   };
 
   const handleToggleActive = async (r) => {
     setError("");
     try { await setRegionActive({ id: r.id, active: !r.active }).unwrap(); }
-    catch (e) { setError(e?.data?.message || "Error al cambiar el estado."); }
+    catch (e) { setError(extractApiErrorMessage(e, "Error al cambiar el estado.")); }
   };
 
   return (

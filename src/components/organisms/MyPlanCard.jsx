@@ -92,7 +92,7 @@ const EditPlanForm = ({ plan, onCancel, onSaved }) => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ py: 1.5 }}>
+    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ py: 1.5 }}>
       <Stack spacing={2}>
         {error && <Alert severity="error">{error}</Alert>}
         <TextField label="Nombre" value={form.name} onChange={(e) => set("name", e.target.value)}

@@ -13,6 +13,7 @@ import {
   useGetSubscriptionHistoryQuery,
 } from "../../store/api/subscriptionsApi";
 import { useGetProfileQuery } from "../../store/api/userApi";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const ACTION_LABELS = {
   CREATION: "Alta",
@@ -45,7 +46,7 @@ const SubscriptionCard = () => {
       await cancelSubscription(profile.id).unwrap();
       setSuccess("Suscripción cancelada.");
     } catch (err) {
-      setError(err?.data?.message || "Error al cancelar la suscripción.");
+      setError(extractApiErrorMessage(err, "Error al cancelar la suscripción."));
     }
   };
 

@@ -139,7 +139,7 @@ const AcquireServiceModal = ({ open, onClose }) => {
 
             <Divider />
 
-            <Stack component="form" id="acquire-service-form" onSubmit={handleSubmit} spacing={2}>
+            <Stack component="form" id="acquire-service-form" onSubmit={handleSubmit} noValidate spacing={2}>
               <TextField
                 label="Nombre del servicio"
                 value={form.name}

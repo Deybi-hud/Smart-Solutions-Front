@@ -13,6 +13,7 @@ import {
 } from "../../store/api/plansApi";
 import { useGetAddressesQuery } from "../../store/api/locationApi";
 import { panelSx, rowSx } from "./RegionsPanel";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const SERVICE_TYPE_LABELS = {
   VIRTUAL: "Virtual",
@@ -39,7 +40,7 @@ const PendingPlansPanel = () => {
     try {
       await approvePlan(id).unwrap();
       setSuccess("Propuesta aprobada. Ya aparece en el catálogo.");
-    } catch (e) { setError(e?.data?.message || "Error al aprobar la propuesta."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al aprobar la propuesta.")); }
   };
 
   const handleReject = async (id) => {
@@ -47,7 +48,7 @@ const PendingPlansPanel = () => {
     try {
       await rejectPlan(id).unwrap();
       setSuccess("Propuesta rechazada.");
-    } catch (e) { setError(e?.data?.message || "Error al rechazar la propuesta."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al rechazar la propuesta.")); }
   };
 
   return (

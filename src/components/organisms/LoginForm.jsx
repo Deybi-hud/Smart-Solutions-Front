@@ -38,7 +38,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
+    <Stack component="form" onSubmit={handleSubmit} noValidate spacing={2}>
       {generalError && <ErrorMessage message={generalError} />}
       <FormField
         label="Correo"

@@ -15,6 +15,7 @@ import {
 } from "../../store/api/plansApi";
 import { COLORS } from "../../theme/theme";
 import { validatePlanForm } from "../../utils/validations";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const panelSx = {
   backgroundColor: "#FFFFFF",
@@ -48,6 +49,7 @@ const PlanForm = ({ initial = emptyForm, onSave, onCancel, loading, title }) => 
     <Box
       component="form"
       onSubmit={handleSubmit}
+      noValidate
       sx={{ backgroundColor: "#F8F7F5", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.06)", p: 3 }}
     >
       <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary", mb: 3, fontSize: "1rem" }}>
@@ -148,7 +150,7 @@ const PlansPanel = () => {
       await createPlan(data).unwrap();
       setAdding(false);
       setSuccess("Plan creado exitosamente.");
-    } catch (e) { setError(e?.data?.message || "Error al crear el plan."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al crear el plan.")); }
   };
 
   const handleUpdate = async (data) => {
@@ -157,7 +159,7 @@ const PlansPanel = () => {
       await updatePlan({ id: editingPlan.id, ...data }).unwrap();
       setEditingPlan(null);
       setSuccess("Plan actualizado.");
-    } catch (e) { setError(e?.data?.message || "Error al actualizar el plan."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al actualizar el plan.")); }
   };
 
   const handleDelete = async (id) => {
@@ -165,7 +167,7 @@ const PlansPanel = () => {
     try {
       await deletePlan(id).unwrap();
       setSuccess("Plan eliminado.");
-    } catch (e) { setError(e?.data?.message || "Error al eliminar el plan."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al eliminar el plan.")); }
   };
 
   return (

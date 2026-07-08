@@ -23,6 +23,7 @@ import {
   useCancelSubscriptionMutation,
 } from "../../store/api/subscriptionsApi";
 import { useGetActivePlansQuery } from "../../store/api/plansApi";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const roleColor = (role) => (role === "ADMINISTRADOR" ? "error" : "default");
 
@@ -81,7 +82,7 @@ export const EditUserDialog = ({ user, open, onClose }) => {
       await updateUser({ email: user.email, data: form }).unwrap();
       setSuccess("Usuario actualizado.");
     } catch (e) {
-      setError(e?.data?.message || "Error al actualizar.");
+      setError(extractApiErrorMessage(e, "Error al actualizar."));
     }
   };
 
@@ -135,7 +136,7 @@ export const SubscriptionDialog = ({ user, open, onClose }) => {
     try {
       await activateSub({ userId: user.id, planId: Number(selectedPlan) }).unwrap();
       setSuccess("Suscripción activada.");
-    } catch (e) { setError(e?.data?.message || "Error al activar."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al activar.")); }
   };
 
   const handleCancel = async () => {
@@ -143,7 +144,7 @@ export const SubscriptionDialog = ({ user, open, onClose }) => {
     try {
       await cancelSub(user.id).unwrap();
       setSuccess("Renovación cancelada.");
-    } catch (e) { setError(e?.data?.message || "Error al cancelar."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al cancelar.")); }
   };
 
   const statusColor = { ACTIVE: "#2e7d32", CANCELLED: "#C0392B", EXPIRED: "#9C7878" };

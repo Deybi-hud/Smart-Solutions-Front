@@ -49,7 +49,9 @@ const authSlice = createSlice({
       })
 
       .addMatcher(userApi.endpoints.getProfile.matchPending, (state) => {
-        state.isLoading = true;
+        if (!state.isAuthenticated) {
+          state.isLoading = true;
+        }
       })
       .addMatcher(userApi.endpoints.getProfile.matchFulfilled, (state, action) => {
         state.isLoading = false;

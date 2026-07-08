@@ -18,6 +18,7 @@ import {
 } from "../../store/api/locationApi";
 import { panelSx, rowSx, addBtnSx } from "./RegionsPanel";
 import { validateAddressForm } from "../../utils/validations";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const selectMenuSx = { PaperProps: { sx: { backgroundColor: "#FAF0EE" } } };
 
@@ -84,7 +85,7 @@ const AddressesPanel = () => {
     try {
       await createAddress({ ...form, communeId: Number(form.communeId) }).unwrap();
       setAdding(false); setForm(emptyForm);
-    } catch (e) { setError(e?.data?.message || "Error al crear."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al crear.")); }
   };
 
   const handleUpdate = async (id) => {
@@ -95,13 +96,13 @@ const AddressesPanel = () => {
     try {
       await updateAddress({ id, data: { ...editForm, communeId: Number(editForm.communeId) } }).unwrap();
       setEditingId(null);
-    } catch (e) { setError(e?.data?.message || "Error al actualizar."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al actualizar.")); }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar esta sucursal?")) return;
     try { await deleteAddress(id).unwrap(); }
-    catch (e) { setError(e?.data?.message || "Error al eliminar."); }
+    catch (e) { setError(extractApiErrorMessage(e, "Error al eliminar.")); }
   };
 
   const startEdit = (a) => {

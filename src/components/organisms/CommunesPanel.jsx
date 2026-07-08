@@ -18,6 +18,7 @@ import {
 } from "../../store/api/locationApi";
 import { panelSx, rowSx } from "./RegionsPanel";
 import { validateCommuneForm } from "../../utils/validations";
+import { extractApiErrorMessage } from "../../utils/apiError";
 
 const selectMenuSx = { PaperProps: { sx: { backgroundColor: "#FAF0EE" } } };
 
@@ -50,13 +51,13 @@ const CommunesPanel = () => {
     try {
       await updateCommune({ id, data: { communeName: editName, regionId: Number(editRegionId) } }).unwrap();
       setEditingId(null);
-    } catch (e) { setError(e?.data?.message || "Error al actualizar."); }
+    } catch (e) { setError(extractApiErrorMessage(e, "Error al actualizar.")); }
   };
 
   const handleToggleActive = async (c) => {
     setError("");
     try { await setCommuneActive({ id: c.id, active: !c.active }).unwrap(); }
-    catch (e) { setError(e?.data?.message || "Error al cambiar el estado."); }
+    catch (e) { setError(extractApiErrorMessage(e, "Error al cambiar el estado.")); }
   };
 
   const startEdit = (c) => {
